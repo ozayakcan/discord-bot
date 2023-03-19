@@ -1,6 +1,21 @@
 ## Secrets
 
+- Define in .env file. For replit define in secrets tab.
+- For replit don't forget to remove quotes. Example:
+* key
+```
+AI_BRAINSHOP_TOKEN
+```
+* value
+```
+VG......W1
+```
 
-AI_BRAINSHOP_TOKEN = Brainshop.ai api token
+- Remove comments or it can cause error.
+```
+AI_BRAINSHOP_TOKEN = 'VG......W1' // Brainshop.ai api token. Get it from https://brainshop.ai/
 
-DISCORD_BOT_SECRET = Discord bot secret token
+DISCORD_BOT_SECRET = 'MTA.......86CQ' // Discord bot secret token
+
+CHANNEL_IDS = '["1234567890123", "1234567890456"]' // Channel ids where you want the bot to run. Don't forget to define inside quotes.
+```
