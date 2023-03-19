@@ -3,11 +3,11 @@
 - Define in .env file. For replit define in secrets tab.
 
 - For replit don't forget to remove quotes. Example:
-  - key
+- key
 ```
 AI_BRAINSHOP_TOKEN
 ```
-  - value
+- value
 ```
 VG......W1
 ```
