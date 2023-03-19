@@ -1,11 +1,13 @@
 import os
 import requests
-
+import translators as ts
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
   resp = resp.json()
   return resp['cnt']
+
+language_code = os.environ.get("LANGUAGE_CODE")
 
 apis = {
   "brainshop" : {
@@ -15,8 +17,14 @@ apis = {
 }
 async def ai_message(message, api = "brainshop"):
   resp = ""
-  if api in apis:
-    resp = apis[api]["function"](message.content, message.author.id, apis[api]["token"])
-  await message.channel.send(f"{message.author.mention}, {resp}")
-  #for resp in resps['choices']:
-    #await message.channel.send(resp['message']['content'])
+  try:
+    if api in apis:
+      resp = apis[api]["function"](message.content, message.author.id, apis[api]["token"])
+    if language_code is not None:
+      resp = ts.translate_text(resp, translator= "google", to_language=language_code) 
+    await message.channel.send(f"{message.author.mention}, {resp}")
+    #for resp in resps['choices']:
+      #await message.channel.send(resp['message']['content'])
+  except Exception as e:
+    print(str(e))
+    await message.channel.send(f"{message.author.mention}, An error occurred please contact with my developer!")

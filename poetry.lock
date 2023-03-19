@@ -161,6 +161,17 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "dill"
+version = "0.3.6"
+description = "serialize all of python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+graph = ["objgraph (>=1.7.2)"]
+
+[[package]]
 name = "discord"
 version = "2.2.2"
 description = "A mirror package for discord.py. Please install that instead."
@@ -216,11 +227,11 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "idna"
-version = "3.4"
+version = "2.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "iso8601"
@@ -269,6 +280,20 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "lxml"
+version = "4.9.2"
+description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, != 3.4.*"
+
+[package.extras]
+cssselect = ["cssselect (>=0.7)"]
+html5 = ["html5lib"]
+htmlsoup = ["beautifulsoup4"]
+source = ["Cython (>=0.29.7)"]
+
+[[package]]
 name = "markupsafe"
 version = "2.1.2"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -283,6 +308,17 @@ description = "multidict implementation"
 category = "main"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "multiprocess"
+version = "0.70.14"
+description = "better multiprocessing and multithreading in python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+dill = ">=0.3.6"
 
 [[package]]
 name = "numpy"
@@ -330,6 +366,20 @@ build_docs = ["sphinx (>=1.6)", "sphinxcontrib-fulltoc (>=1.2.0)", "cloud-spthem
 totp = ["cryptography"]
 
 [[package]]
+name = "pathos"
+version = "0.3.0"
+description = "parallel graph management and execution in heterogeneous computing"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+dill = ">=0.3.6"
+multiprocess = ">=0.70.14"
+pox = ">=0.3.2"
+ppft = ">=1.7.6.6"
+
+[[package]]
 name = "platformdirs"
 version = "2.6.2"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -354,6 +404,25 @@ testing = ["pytest-benchmark", "pytest"]
 dev = ["tox", "pre-commit"]
 
 [[package]]
+name = "pox"
+version = "0.3.2"
+description = "utilities for filesystem exploration and automated builds"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "ppft"
+version = "1.7.6.6"
+description = "distributed and parallel python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+dill = ["dill (>=0.3.6)"]
+
+[[package]]
 name = "protobuf"
 version = "4.21.12"
 description = ""
@@ -376,6 +445,17 @@ description = "Cryptographic library for Python"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "pyexecjs"
+version = "1.5.1"
+description = "Run JavaScript code from Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.10.0"
 
 [[package]]
 name = "pyflakes"
@@ -519,6 +599,14 @@ dev = ["pytest (>=7.0.1)", "pytest-timeout (>=2.1.0)", "build (>=0.7.0)", "pre-c
 doc = ["pytoolconfig", "sphinx (>=4.5.0)", "sphinx-autodoc-typehints (>=1.18.1)", "sphinx-rtd-theme (>=1.0.0)"]
 
 [[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -533,6 +621,42 @@ description = "A lil' TOML parser"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "tqdm"
+version = "4.65.0"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+notebook = ["ipywidgets (>=6)"]
+slack = ["slack-sdk"]
+telegram = ["requests"]
+
+[[package]]
+name = "translators"
+version = "5.6.3"
+description = "Translators is a library which aims to bring free, multiple, enjoyable translation to individuals and students in Python."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+cryptography = ">=38.0.1"
+lxml = ">=4.9.1"
+pathos = ">=0.2.9"
+PyExecJS = ">=1.5.1"
+requests = ">=2.28.1"
+tqdm = ">=4.65.0"
+
+[package.extras]
+pypi = ["build (>=0.8.0)", "twine (>=4.0.1)"]
 
 [[package]]
 name = "typing-extensions"
@@ -608,7 +732,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "2162499605e8da0ec2dfbeea78c6663148bac09e6c4a62782260dd247919e5df"
+content-hash = "d790ba76b9e42ea50afa240770170942c170bf6dc6bface66bb4fc8d0cbe475b"
 
 [metadata.files]
 aiohttp = []
@@ -624,6 +748,7 @@ click = []
 colorama = []
 cryptography = []
 debugpy = []
+dill = []
 discord = []
 "discord.py" = []
 flask = []
@@ -633,17 +758,23 @@ iso8601 = []
 itsdangerous = []
 jedi = []
 jinja2 = []
+lxml = []
 markupsafe = []
 multidict = []
+multiprocess = []
 numpy = []
 packaging = []
 parso = []
 passlib = []
+pathos = []
 platformdirs = []
 pluggy = []
+pox = []
+ppft = []
 protobuf = []
 pycparser = []
 pycryptodomex = []
+pyexecjs = []
 pyflakes = []
 pyseto = []
 python-lsp-jsonrpc = []
@@ -652,8 +783,11 @@ replit = []
 replit-python-lsp-server = []
 requests = []
 rope = []
+six = []
 toml = []
 tomli = []
+tqdm = []
+translators = []
 typing-extensions = []
 ujson = []
 urllib3 = []

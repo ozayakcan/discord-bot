@@ -21,6 +21,8 @@ async def on_message(message):
         return
     if str(message.channel.id) in channel_ids:
       await ai_message(message)
+    else:
+      return
 
 keep_alive()
 token = os.environ.get("DISCORD_BOT_SECRET") 
