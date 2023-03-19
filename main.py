@@ -19,8 +19,8 @@ channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
 async def on_message(message):
     if message.author == client.user:
         return
-    if str(message.channel.id) in channel_ids:
-      await ai_message(message)
+    if str(message.channel.id) in channel_ids or not message.guild:
+      await ai_message(message, mention = message.guild)
     else:
       return
 
