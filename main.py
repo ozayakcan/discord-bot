@@ -12,11 +12,17 @@ client = discord.Client(intents=intents)
 async def on_ready():
     print(f'We have logged in as {client.user}')
 
+channel_ids = [
+  "1086768970926936140",
+  "1086982975494819931"
+]
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-    await ai_message(message)
+    if str(message.channel.id) in channel_ids:
+      await ai_message(message)
 
 keep_alive()
 token = os.environ.get("DISCORD_BOT_SECRET") 
