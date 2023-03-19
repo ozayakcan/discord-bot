@@ -1,6 +1,7 @@
 import os
 from keep_alive import keep_alive
 import discord
+from ai_message import ai_message
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -15,9 +16,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    await ai_message(message)
 
 keep_alive()
 token = os.environ.get("DISCORD_BOT_SECRET") 
