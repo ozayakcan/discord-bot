@@ -10,7 +10,7 @@ node -e "console.log(require('ffmpeg-static'))"
 ```
 - copy result to variable in main.py: 
 ```
-FFMPEG_PATH = '/home/runner/Discord-Chat-Bot/node_modules/ffmpeg-static/ffmpeg'
+FFMPEG_PATH = '/home/runner/your_repl_name/node_modules/ffmpeg-static/ffmpeg'
 ```
 
 ## Secrets
