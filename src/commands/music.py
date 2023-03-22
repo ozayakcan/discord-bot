@@ -261,7 +261,17 @@ class Music(commands.Cog, name= lang["music"]):
             self.voice_states[ctx.guild.id] = state
 
         return state
+    async def clear_music(self, ctx):
+        if not ctx.voice_state.voice:
+            await ctx.send(lang["not_connected_voice_ch"])
+            return False
+          
+        ctx.voice_state.songs.clear()
 
+        if ctx.voice_state.is_playing:
+          await ctx.voice_state.stop()
+        del self.voice_states[ctx.guild.id]
+        return True
     def cog_unload(self):
         for state in self.voice_states.values():
             self.bot.loop.create_task(state.stop())
@@ -304,15 +314,19 @@ class Music(commands.Cog, name= lang["music"]):
 
         ctx.voice_state.voice = await destination.connect()
 
-    @commands.command(name='leave', aliases=['l', 'disconnect', 'd'], brief=lang["leave_desc"], description=lang["leave_desc"])
+    @commands.command(name='leave', aliases=['l', 'disconnect', 'd'], brief=lang["stop_leave_desc"], description=lang["stop_leave_desc"])
     @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
 
-        if not ctx.voice_state.voice:
-            return await ctx.send(lang["not_connected_voice_ch"])
+        #if not ctx.voice_state.voice:
+        #    return await ctx.send(lang["not_connected_voice_ch"])
 
-        await ctx.voice_state.stop()
-        del self.voice_states[ctx.guild.id]
+        #await ctx.voice_state.stop()
+        #del self.voice_states[ctx.guild.id]
+        #await ctx.message.add_reaction('✅')
+        leave_status = await self.clear_music(ctx)
+        if leave_status:
+            await ctx.message.add_reaction('✅')
 
     @commands.command(name='volume', aliases=['v', 'vol'], brief=lang["volume_desc"], description=lang["volume_desc"])
     async def _volume(self, ctx: commands.Context, *, volume: int = commands.parameter(default = -1, description=lang["volume_level_desc"])):
@@ -328,6 +342,8 @@ class Music(commands.Cog, name= lang["music"]):
 
     @commands.command(name='now', aliases=['current', 'playing', 'n', 'c'], brief=lang["now_desc"], description=lang["now_desc"])
     async def _now(self, ctx: commands.Context):
+        if not ctx.voice_state.is_playing:
+            return await ctx.send(lang["not_playing"])
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
 
@@ -335,7 +351,7 @@ class Music(commands.Cog, name= lang["music"]):
     @commands.has_permissions(manage_guild=True)
     async def _pause(self, ctx: commands.Context):
 
-        if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
+        if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
             ctx.voice_state.voice.pause()
             await ctx.message.add_reaction('⏯')
 
@@ -343,18 +359,20 @@ class Music(commands.Cog, name= lang["music"]):
     @commands.has_permissions(manage_guild=True)
     async def _resume(self, ctx: commands.Context):
 
-        if not ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
+        if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
             ctx.voice_state.voice.resume()
             await ctx.message.add_reaction('⏯')
 
-    @commands.command(name='stop', brief=lang["stop_desc"], description=lang["stop_desc"])
+    @commands.command(name='stop', brief=lang["stop_leave_desc"], description=lang["stop_leave_desc"])
     @commands.has_permissions(manage_guild=True)
     async def _stop(self, ctx: commands.Context):
+        #ctx.voice_state.songs.clear()
 
-        ctx.voice_state.songs.clear()
-
-        if not ctx.voice_state.is_playing:
-            ctx.voice_state.voice.stop()
+        #if ctx.voice_state.is_playing:
+        #    ctx.voice_state.voice.stop()
+        #    await ctx.message.add_reaction('⏹')
+        stop_status = await self.clear_music(ctx)
+        if stop_status:
             await ctx.message.add_reaction('⏹')
 
     @commands.command(name='skip', aliases=['s'], brief=lang["skip_desc"], description=lang["skip_desc_full"])
@@ -428,7 +446,10 @@ class Music(commands.Cog, name= lang["music"]):
 
         # Inverse boolean value to loop and unloop.
         ctx.voice_state.loop = not ctx.voice_state.loop
-        await ctx.message.add_reaction('✅')
+        if ctx.voice_state.loop:
+          await ctx.send(lang["loop_enabled"])
+        else:
+          await ctx.send(lang["loop_disabled"])
 
     @commands.command(name='play', aliases=['p'], brief=lang["play_desc"], description=lang["play_desc_full"])
     async def _play(self, ctx: commands.Context, *, search: str = commands.parameter(default="", description=lang["play_search_desc"])):
