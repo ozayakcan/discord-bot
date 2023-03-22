@@ -1,7 +1,3 @@
-#run="""
-#export PATH="$PWD/node_modules/ffmpeg-static:$PATH"
-#python main.py
-#"""
 # The command that runs the program. If the interpreter field is set, it will have priority and this run command will do nothing
 run = "python3 main.py"
 
@@ -32,8 +28,7 @@ channel = "stable-22_11"
 
 [env]
 VIRTUAL_ENV = "/home/runner/${REPL_SLUG}/venv"
-#PATH = "${VIRTUAL_ENV}/bin"
-PATH = "/home/runner/${REPL_SLUG}/node_modules/ffmpeg-static:${VIRTUAL_ENV}/bin"
+PATH = "${VIRTUAL_ENV}/bin"
 PYTHONPATH = "$PYTHONHOME/lib/python3.10:${VIRTUAL_ENV}/lib/python3.10/site-packages"
 REPLIT_POETRY_PYPI_REPOSITORY = "https://package-proxy.replit.com/pypi/"
 MPLBACKEND = "TkAgg"

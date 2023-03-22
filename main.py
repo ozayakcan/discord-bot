@@ -1,29 +1,46 @@
 import os
 from keep_alive import keep_alive
+import asyncio
 import discord
 import json
 from ai_message import ai_message
+from discord.ext import commands
 
-intents = discord.Intents.default()
+command_prefix = os.environ.get("COMMAND_PREFIX")
+if command_prefix is None:
+  command_prefix = "!"
+
+intents = discord.Intents.all()
 intents.message_content = True
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix,intents=intents, description='Chat bot.')
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+  print(f'We have logged in as {bot.user}')
+  await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play"))
 
 channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
-    if str(message.channel.id) in channel_ids or not message.guild:
-      await ai_message(message, mention = message.guild)
-    else:
-      return
+    if not message.content.startswith(command_prefix):
+      if str(message.channel.id) in channel_ids or not message.guild:
+        await ai_message(message, mention = message.guild)
+    await bot.process_commands(message)
 
-keep_alive()
+async def load_extensions():
+    for filename in os.listdir("./commands"):
+        if filename.endswith(".py"):
+            await bot.load_extension(f"commands.{filename[:-3]}")
+          
 token = os.environ.get("DISCORD_BOT_SECRET") 
-client.run(token)
+async def main():
+  async with bot:
+    await load_extensions()
+    await bot.start(token)
+keep_alive()
+#bot.run(token)
+asyncio.run(main())
