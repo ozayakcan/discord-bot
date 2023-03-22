@@ -6,6 +6,7 @@ import json
 from ai_message import ai_message
 from discord.ext import commands
 from lang.lang import lang
+from commands.help import MyHelpCommand
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
@@ -17,7 +18,7 @@ discord.opus.load_opus("./libopus.so.0.8.0")
 intents = discord.Intents.all()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix,intents=intents, description=lang["description"])
+bot = commands.Bot(command_prefix,intents=intents, description=lang["description"], help_command=MyHelpCommand(command_prefix))
 
 @bot.event
 async def on_ready():
@@ -37,7 +38,7 @@ async def on_message(message):
 
 async def load_extensions():
     for filename in os.listdir("./commands"):
-        if filename.endswith(".py"):
+        if filename.endswith(".py") and filename != "help.py":
             await bot.load_extension(f"commands.{filename[:-3]}")
           
 token = os.environ.get("DISCORD_BOT_SECRET") 

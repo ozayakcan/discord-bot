@@ -1,6 +1,16 @@
 {
-  "description": "Rodanel bot",
+  "description": "Rodanel",
   "ready_msg": "We have logged in as {}",
+  "help_aliases": [
+    "helps"
+  ],
+  "no_category": "No category",
+  "help_desc": "Shows this message",
+  "help_desc_full": "Shows command list.",
+  "help_arg_desc": "No description specified.",
+  "arguments_heading": "Arguments:",
+  "commands_heading": "Commands:",
+  "help_ending_note": "Type {}help command for more info on a command.\nYou can also type {}help category for more info on a category.",
   "yt_uploader": "**{0.title}** by **{0.uploader}**",
   "yt_could_not_find": "Couldn't find anything that matches `{}`",
   "yt_could_not_fetch": "Couldn't fetch `{}`",
@@ -40,7 +50,7 @@
   "queue_desc": "Shows the player's queue.",
   "queue_desc_full": "Shows the player's queue. You can optionally specify the page to show. Each page contains 10 elements.",
   "queue_page_desc": "Set page number.",
-  "queue_pattern": "'`{0}.` [**{1.source.title}**]({1.source.url})\n'",
+  "queue_pattern": "`{0}.` [**{1.source.title}**]({1.source.url})\n",
   "empty_queue": "Empty queue.",
   "tracks": "**{} tracks:**\n\n{}",
   "viewing_page": "Viewing page {}/{}",
