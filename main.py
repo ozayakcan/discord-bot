@@ -5,6 +5,7 @@ import discord
 import json
 from ai_message import ai_message
 from discord.ext import commands
+from lang.lang import lang
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
@@ -16,11 +17,11 @@ discord.opus.load_opus("./libopus.so.0.8.0")
 intents = discord.Intents.all()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix,intents=intents, description='Chat bot.')
+bot = commands.Bot(command_prefix,intents=intents, description=lang["description"])
 
 @bot.event
 async def on_ready():
-  print(f'We have logged in as {bot.user}')
+  print(lang["ready_msg"].format(bot.user))
   await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play"))
 
 channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))

@@ -8,6 +8,11 @@ def brainshop(message, userid, token):
   return resp['cnt']
 
 language_code = os.environ.get("LANGUAGE_CODE")
+translate = os.environ.get("TRANSLATE")
+if translate == "True" or translate == "true":
+  translate = True
+else:
+  translate = False
 
 apis = {
   "brainshop" : {
@@ -20,7 +25,7 @@ async def ai_message(message, api = "brainshop", mention = True):
   try:
     if api in apis:
       resp = apis[api]["function"](message.content, message.author.id, apis[api]["token"])
-    if language_code is not None:
+    if language_code is not None and translate:
       resp = ts.translate_text(resp, translator= "google", to_language=language_code) 
     #for resp in resps['choices']:
       #await message.channel.send(resp['message']['content'])
