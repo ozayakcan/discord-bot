@@ -12,7 +12,7 @@ command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
   command_prefix = "!"
   
-FFMPEG_PATH = '/home/runner/Discord-Chat-Bot/node_modules/ffmpeg-static/ffmpeg'
+FFMPEG_PATH = os.environ.get("FFMPEG_PATH")
 discord.opus.load_opus("./libopus.so.0.8.0")
 
 intents = discord.Intents.all()
