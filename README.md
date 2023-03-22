@@ -8,7 +8,7 @@ npm install ffmpeg-static
 ```
 node -e "console.log(require('ffmpeg-static'))"
 ```
-- copy result to variable in main.py: 
+- copy result to variable in main.py like this: 
 ```
 FFMPEG_PATH = '/home/runner/your_repl_name/node_modules/ffmpeg-static/ffmpeg'
 ```
