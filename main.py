@@ -23,7 +23,7 @@ bot = commands.Bot(command_prefix,intents=intents, description=lang["description
 @bot.event
 async def on_ready():
   print(lang["ready_msg"].format(bot.user))
-  await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play"))
+  await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
 
 channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
 

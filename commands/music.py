@@ -280,7 +280,7 @@ class Music(commands.Cog, name= lang["music"]):
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.send(lang["an_error_ocurred"].format(str(error)))
 
-    @commands.command(name='join', invoke_without_subcommand=True, brief=lang["join_desc"], description=lang["join_desc"])
+    @commands.command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=lang["join_desc"], description=lang["join_desc"])
     async def _join(self, ctx: commands.Context):
 
         destination = ctx.author.voice.channel
@@ -290,7 +290,7 @@ class Music(commands.Cog, name= lang["music"]):
 
         ctx.voice_state.voice = await destination.connect()
 
-    @commands.command(name='summon', brief=lang["summon_desc"], description=lang["summon_desc_full"])
+    @commands.command(name='summon', aliases=['sum'], brief=lang["summon_desc"], description=lang["summon_desc_full"])
     @commands.has_permissions(manage_guild=True)
     async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = commands.parameter(default=None, description=lang["summon_channel_desc"])):
 
@@ -304,7 +304,7 @@ class Music(commands.Cog, name= lang["music"]):
 
         ctx.voice_state.voice = await destination.connect()
 
-    @commands.command(name='leave', aliases=['disconnect'], brief=lang["leave_desc"], description=lang["leave_desc"])
+    @commands.command(name='leave', aliases=['l', 'disconnect', 'd'], brief=lang["leave_desc"], description=lang["leave_desc"])
     @commands.has_permissions(manage_guild=True)
     async def _leave(self, ctx: commands.Context):
 
@@ -314,7 +314,7 @@ class Music(commands.Cog, name= lang["music"]):
         await ctx.voice_state.stop()
         del self.voice_states[ctx.guild.id]
 
-    @commands.command(name='volume', brief=lang["volume_desc"], description=lang["volume_desc"])
+    @commands.command(name='volume', aliases=['v', 'vol'], brief=lang["volume_desc"], description=lang["volume_desc"])
     async def _volume(self, ctx: commands.Context, *, volume: int = commands.parameter(default = -1, description=lang["volume_level_desc"])):
 
         if not ctx.voice_state.is_playing:
@@ -326,7 +326,7 @@ class Music(commands.Cog, name= lang["music"]):
         ctx.voice_state.volume = volume / 100
         await ctx.send(lang["vol_set"].format(volume))
 
-    @commands.command(name='now', aliases=['current', 'playing'], brief=lang["now_desc"], description=lang["now_desc"])
+    @commands.command(name='now', aliases=['current', 'playing', 'n', 'c'], brief=lang["now_desc"], description=lang["now_desc"])
     async def _now(self, ctx: commands.Context):
 
         await ctx.send(embed=ctx.voice_state.current.create_embed())
@@ -339,7 +339,7 @@ class Music(commands.Cog, name= lang["music"]):
             ctx.voice_state.voice.pause()
             await ctx.message.add_reaction('⏯')
 
-    @commands.command(name='resume', brief=lang["resume_desc"], description=lang["resume_desc"])
+    @commands.command(name='resume', aliases=['res', 'r'], brief=lang["resume_desc"], description=lang["resume_desc"])
     @commands.has_permissions(manage_guild=True)
     async def _resume(self, ctx: commands.Context):
 
@@ -357,7 +357,7 @@ class Music(commands.Cog, name= lang["music"]):
             ctx.voice_state.voice.stop()
             await ctx.message.add_reaction('⏹')
 
-    @commands.command(name='skip', brief=lang["skip_desc"], description=lang["skip_desc_full"])
+    @commands.command(name='skip', aliases=['s'], brief=lang["skip_desc"], description=lang["skip_desc_full"])
     async def _skip(self, ctx: commands.Context):
 
         if not ctx.voice_state.is_playing:
@@ -381,7 +381,7 @@ class Music(commands.Cog, name= lang["music"]):
         else:
             await ctx.send(lang["skip_already_voted"])
 
-    @commands.command(name='queue', brief=lang["queue_desc"], description=lang["queue_desc_full"])
+    @commands.command(name='queue', aliases=['q'], brief=lang["queue_desc"], description=lang["queue_desc_full"])
     async def _queue(self, ctx: commands.Context, *, page: int = commands.parameter(default=1, description=lang["queue_page_desc"])):
 
         if len(ctx.voice_state.songs) == 0:
@@ -401,7 +401,7 @@ class Music(commands.Cog, name= lang["music"]):
                  .set_footer(text=lang["viewing_page"].format(page, pages)))
         await ctx.send(embed=embed)
 
-    @commands.command(name='shuffle', brief=lang["shuffle_desc"], description=lang["shuffle_desc"])
+    @commands.command(name='shuffle', aliases=['shuf'], brief=lang["shuffle_desc"], description=lang["shuffle_desc"])
     async def _shuffle(self, ctx: commands.Context):
 
         if len(ctx.voice_state.songs) == 0:
@@ -410,7 +410,7 @@ class Music(commands.Cog, name= lang["music"]):
         ctx.voice_state.songs.shuffle()
         await ctx.message.add_reaction('✅')
 
-    @commands.command(name='remove', brief=lang["remove_desc"], description=lang["remove_desc"])
+    @commands.command(name='remove', aliases=['rem'], brief=lang["remove_desc"], description=lang["remove_desc"])
     async def _remove(self, ctx: commands.Context, index: int = commands.parameter(default=0, description=lang["remove_index_desc"])):
         if index <= 0:
             return await ctx.send(lang["remove_index_err"])
@@ -420,7 +420,7 @@ class Music(commands.Cog, name= lang["music"]):
         ctx.voice_state.songs.remove(index - 1)
         await ctx.message.add_reaction('✅')
 
-    @commands.command(name='loop', brief=lang["loop_desc"], description=lang["loop_desc_full"])
+    @commands.command(name='loop',  aliases=['repeat', 'rep'], brief=lang["loop_desc"], description=lang["loop_desc_full"])
     async def _loop(self, ctx: commands.Context):
 
         if not ctx.voice_state.is_playing:
@@ -430,7 +430,7 @@ class Music(commands.Cog, name= lang["music"]):
         ctx.voice_state.loop = not ctx.voice_state.loop
         await ctx.message.add_reaction('✅')
 
-    @commands.command(name='play', brief=lang["play_desc"], description=lang["play_desc_full"])
+    @commands.command(name='play', aliases=['p'], brief=lang["play_desc"], description=lang["play_desc_full"])
     async def _play(self, ctx: commands.Context, *, search: str = commands.parameter(default="", description=lang["play_search_desc"])):
 
         if not ctx.voice_state.voice:
