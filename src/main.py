@@ -13,7 +13,7 @@ if command_prefix is None:
   command_prefix = "!"
   
 FFMPEG_PATH = os.environ.get("FFMPEG_PATH")
-discord.opus.load_opus("./libopus.so.0.8.0")
+discord.opus.load_opus("./src/libopus.so.0.8.0")
 
 intents = discord.Intents.all()
 intents.message_content = True
@@ -37,7 +37,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 async def load_extensions():
-    for filename in os.listdir("./commands"):
+    for filename in os.listdir("./src/commands"):
         if filename.endswith(".py") and filename != "help.py":
             await bot.load_extension(f"commands.{filename[:-3]}")
           
