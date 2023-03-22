@@ -249,7 +249,7 @@ class VoiceState:
             await self.voice.disconnect()
             self.voice = None
 
-class Music(commands.Cog):
+class Music(commands.Cog, name= lang["music"]):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.voice_states = {}

@@ -12,6 +12,7 @@
   "arguments_heading": "Argümanlar:",
   "commands_heading": "Komutlar:",
   "help_ending_note": "Bir komut hakkında detaylı bilgi almak için '{}help komut_adi' komutunu kullanın.\nBir kategori hakkında detaylı bilgi almak için '{}help kategori_adi' komutunu kullanın.",
+  "music": "Müzik",
   "yt_uploader": "**{0.title}**, **{0.uploader}** tarafından",
   "yt_could_not_find": "`{}` ile eşleşen sonuç bulunamadı.",
   "yt_could_not_fetch": "`{}` getirilemedi",

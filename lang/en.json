@@ -11,6 +11,7 @@
   "arguments_heading": "Arguments:",
   "commands_heading": "Commands:",
   "help_ending_note": "Type {}help command for more info on a command.\nYou can also type {}help category for more info on a category.",
+  "music": "Music",
   "yt_uploader": "**{0.title}** by **{0.uploader}**",
   "yt_could_not_find": "Couldn't find anything that matches `{}`",
   "yt_could_not_fetch": "Couldn't fetch `{}`",
