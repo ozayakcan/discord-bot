@@ -268,8 +268,9 @@ class Music(commands.Cog):
     def cog_check(self, ctx: commands.Context):
         if not ctx.guild:
             raise commands.NoPrivateMessage('This command can\'t be used in DM channels.')
-
-        return True
+        # Disable commands for now
+        raise commands.CommandError('Music commands not available right now.')
+        return False # return True
 
     async def cog_before_invoke(self, ctx: commands.Context):
         ctx.voice_state = self.get_voice_state(ctx)
