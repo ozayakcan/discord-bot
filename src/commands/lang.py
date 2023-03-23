@@ -73,10 +73,10 @@ async def set_lang(ctx: commands.Context, lang_code: str = default_lang_code):
         json_file.seek(0)
         json.dump(data, json_file, indent=4, sort_keys=False)
         json_file.truncate()
-        await ctx.send(get_lang_string("lang_changed"))
+        await ctx.send(get_lang_string("lang_changed"), delete_after=self.delete_delay)
     except Exception as e:
       print(str(e))
-      await ctx.send(get_lang_string("lang_not_changed"))
+      await ctx.send(get_lang_string("lang_not_changed"), delete_after=self.delete_delay)
 def get_lang():
   global lang_settings
   try:
@@ -97,6 +97,7 @@ def get_lang_string(key):
 class Lang(commands.Cog):
   def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.delete_delay = 5
 
   async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.send(get_lang_string("an_error_ocurred").format(str(error)), delete_after=self.delete_delay)
@@ -111,13 +112,13 @@ class Lang(commands.Cog):
       if lang_code in langs:
         await set_lang(ctx, lang_code)
       else:
-        await ctx.send(get_lang_string("lang_not_supported").format(lang_code, ctx.clean_prefix, "supported_langs"))
+        await ctx.send(get_lang_string("lang_not_supported").format(lang_code, ctx.clean_prefix, "supported_langs"), delete_after=self.delete_delay)
     else:
-      await ctx.send(get_lang_string("lang_current"))
+      await ctx.send(get_lang_string("lang_current"), delete_after=self.delete_delay)
 
   @commands.command(name='supported_langs', brief=get_lang_string("supported_langs_desc"), description=get_lang_string("supported_langs_desc"))
   async def _supported_langs(self, ctx: commands.Context):
-      await ctx.send(get_lang_string("supported_langs").format(", ".join(get_supported_langs())))
+      await ctx.send(get_lang_string("supported_langs").format(", ".join(get_supported_langs())), delete_after=self.delete_delay)
 
 async def setup(bot):
   await bot.add_cog(Lang(bot))
