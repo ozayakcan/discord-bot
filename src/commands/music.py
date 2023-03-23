@@ -287,6 +287,12 @@ class Music(commands.Cog, name= lang["music"]):
     async def cog_before_invoke(self, ctx: commands.Context):
         ctx.voice_state = self.get_voice_state(ctx)
 
+    async def cog_after_invoke(self, ctx: commands.Context):
+        try:
+          await ctx.message.delete(delay=5)
+        except Exception as e:
+          print(e)
+
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.send(lang["an_error_ocurred"].format(str(error)))
 
