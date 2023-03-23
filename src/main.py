@@ -5,8 +5,8 @@ import discord
 import json
 from ai_message import ai_message
 from discord.ext import commands
-from lang.lang import lang
 from commands.help import MyHelpCommand
+from extensions import get_extensions
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
@@ -18,11 +18,11 @@ discord.opus.load_opus("./src/libopus.so.0.8.0")
 intents = discord.Intents.all()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix,intents=intents, description=lang["description"], help_command=MyHelpCommand(command_prefix))
+bot = commands.Bot(command_prefix,intents=intents, help_command=None)
 
 @bot.event
 async def on_ready():
-  print(lang["ready_msg"].format(bot.user))
+  print(f"We have logged in as {bot.user}")
   await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
 
 channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
@@ -37,9 +37,8 @@ async def on_message(message):
     await bot.process_commands(message)
 
 async def load_extensions():
-    for filename in os.listdir("./src/commands"):
-        if filename.endswith(".py") and filename != "help.py":
-            await bot.load_extension(f"commands.{filename[:-3]}")
+    for extension in get_extensions():
+      await bot.load_extension(extension)
           
 token = os.environ.get("DISCORD_BOT_SECRET") 
 async def main():

@@ -1,6 +1,4 @@
 {
-  "description": "Rodanel",
-  "ready_msg": "We have logged in as {}",
   "help_aliases": [
     "helps"
   ],
@@ -11,6 +9,8 @@
   "arguments_heading": "Arguments:",
   "commands_heading": "Commands:",
   "help_ending_note": "Type {}help command for more info on a command.\nYou can also type {}help category for more info on a category.",
+  "help_not_found": "{} command/category not found.",
+  "help_input_desc": "Command or category name.",
   "music": "Music",
   "yt_uploader": "**{0.title}** by **{0.uploader}**",
   "yt_could_not_find": "Couldn't find anything that matches `{}`",
@@ -66,5 +66,15 @@
   "play_desc_full": "Plays a song. If there are songs in the queue, this will be queued until the other songs finished playing. This command automatically searches from various sites if no URL is provided.",
   "play_search_desc": "Search query or url.",
   "enqueued": "Enqueued {}",
-  "already_in_voice_channel": "Bot is already in a voice channel."
+  "already_in_voice_channel": "Bot is already in a voice channel.",
+  "lang_empty_err": "You should specify a lang. Supported langs: {}",
+  "lang_not_supported": "{0} is not supported yet. You can see supported langs with {1}{2} command.",
+  "lang_changed": "Lang successfully changed to English.",
+  "lang_not_changed": "Changing lang failed. Please try again later.",
+  "lang_current": "Current language is English.",
+  "lang_desc": "Changes language.",
+  "lang_desc_full": "Changes language. Supported languages: {}",
+  "lang_code_desc": "Language code.",
+  "supported_langs": "Supported langs: {}",
+  "supported_langs_desc": "Returns supported languages."
 }

@@ -1,6 +1,4 @@
 {
-  "description": "Rodanel",
-  "ready_msg": "{} olarak giriş yaptık",
   "help_aliases": [
     "yardım",
     "yardim"
@@ -12,6 +10,8 @@
   "arguments_heading": "Argümanlar:",
   "commands_heading": "Komutlar:",
   "help_ending_note": "Bir komut hakkında detaylı bilgi almak için '{}help komut_adi' komutunu kullanın.\nBir kategori hakkında detaylı bilgi almak için '{}help kategori_adi' komutunu kullanın.",
+  "help_not_found": "{} isimli komut/kategori bulunamadı.",
+  "help_input_desc": "Komut ya da kategori adı.",
   "music": "Müzik",
   "yt_uploader": "**{0.title}**, Yükleyen: **{0.uploader}**.",
   "yt_could_not_find": "`{}` ile eşleşen sonuç bulunamadı.",
@@ -67,5 +67,15 @@
   "play_desc_full": "Parça çalar. Eğer sırada bir parça mevcutsa, diğer parçalar bitene kadar sırada bekletilir. Bu komut bir url belirtilmemişse parça adını birkaç sitede araştırır.",
   "play_search_desc": "Arama terimi ya da url.",
   "enqueued": "Sıraya Eklendi: {}",
-  "already_in_voice_channel": "Bot zaten bir ses kanalında."
+  "already_in_voice_channel": "Bot zaten bir ses kanalında.",
+  "lang_empty_err": "Bir dil belirtmelisiniz. Desteklenen diller: {}",
+  "lang_not_supported": "{0} dili şuanda desteklenmiyor. Desteklenen dilleri {1}{2} komutu ile görebilirsiniz",
+  "lang_changed": "Dil başarıyla Türkçe olarak ayarlandı.",
+  "lang_not_changed": "Dil değiştirirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+  "lang_current": "Şuanki dil Türkçe.",
+  "lang_desc": "Dili değiştirir.",
+  "lang_desc_full": "Dili değiştirir. Desteklenen diller: {}",
+  "lang_code_desc": "Dil kodu.",
+  "supported_langs": "Desteklenen diller: {}",
+  "supported_langs_desc": "Desteklenen dilleri gösterir."
 }
