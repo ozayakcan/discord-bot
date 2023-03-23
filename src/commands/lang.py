@@ -1,8 +1,12 @@
 from discord.ext import commands
+import io
 import os
 import json
 
 lang_file = "./src/lang/lang.json"
+if not os.path.isfile(lang_file) and not os.access(lang_file, os.R_OK):
+  with io.open(lang_file, 'w') as lang_file_object:
+    lang_file_object.write(json.dumps({}))
 default_lang_code = "en"
 lang_settings = {}
 langs = {}
