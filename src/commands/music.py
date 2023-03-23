@@ -289,7 +289,7 @@ class Music(commands.Cog, name= get_lang_string("music")):
 
     async def cog_before_invoke(self, ctx: commands.Context):
         ctx.voice_state = self.get_voice_state(ctx)
-        set_current_lang_infos(ctx)
+        set_current_lang_infos(guild=ctx.guild, author=ctx.message.author)
 
     async def cog_after_invoke(self, ctx: commands.Context):
         try:

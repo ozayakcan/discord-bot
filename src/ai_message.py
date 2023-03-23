@@ -1,13 +1,14 @@
 import os
 import requests
 import translators as ts
+from commands.lang import get_lang_code
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
   resp = resp.json()
   return resp['cnt']
 
-language_code = os.environ.get("LANGUAGE_CODE")
+language_code = get_lang_code()
 translate = os.environ.get("TRANSLATE")
 if translate == "True" or translate == "true":
   translate = True

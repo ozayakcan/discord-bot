@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 import io
 import os
@@ -13,14 +14,14 @@ langs = {}
 lang_current_id = 0
 lang_current_group = "guilds"
 
-def set_current_lang_infos(ctx: commands.Context):
+def set_current_lang_infos(guild: discord.Guild, author: discord.Message.author):
   global lang_current_group, lang_current_id
-  if ctx.guild:
+  if guild:
     lang_current_group = "guilds"
-    lang_current_id = ctx.guild.id
+    lang_current_id = guild.id
   else:
     lang_current_group = "users"
-    lang_current_id = ctx.message.author.id
+    lang_current_id = author.id
 
 def get_supported_langs(ret: bool = True):
   global langs
@@ -78,7 +79,7 @@ get_lang()
 def get_lang_code():
   try:
     return lang_settings[lang_current_group][str(lang_current_id)]["lang"]
-  except Exception as e:
+  except:
     return default_lang_code
 def get_lang_string(key):
   return langs[get_lang_code()][key]
@@ -92,7 +93,7 @@ class Lang(commands.Cog):
         await ctx.send(get_lang_string("an_error_ocurred").format(str(error)), delete_after=self.delete_delay)
 
   async def cog_before_invoke(self, ctx: commands.Context):
-        set_current_lang_infos(ctx=ctx)
+        set_current_lang_infos(guild=ctx.guild, author=ctx.message.author)
   async def cog_after_invoke(self, ctx: commands.Context):
         try:
           await ctx.message.delete(delay=self.delete_delay)

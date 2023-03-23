@@ -23,7 +23,6 @@ DISCORD_BOT_SECRET = 'MTA.......86CQ' // Discord bot secret token
 
 CHANNEL_IDS = '["1234567890123", "1234567890456"]' // Channel ids for chat func will work. Don't forget to define inside quotes for .env file. For replit remove quotes.
 
-LANGUAGE_CODE = 'fr' // Copy lang/en.json and rename it to your language code.
 TRANSLATE = 'True' // Translates chat messages if True. If not specified or False it will not translate chat messages.
 ```
 

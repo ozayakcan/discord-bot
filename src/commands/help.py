@@ -25,7 +25,7 @@ class Help(commands.Cog):
         self.bot = bot
 
   async def cog_before_invoke(self, ctx: commands.Context):
-      set_current_lang_infos(ctx)
+      set_current_lang_infos(guild=ctx.guild, author=ctx.message.author)
       for extension in get_extensions():
           await self.bot.unload_extension(extension)
           await self.bot.load_extension(extension)
