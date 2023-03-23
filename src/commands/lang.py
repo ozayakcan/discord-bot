@@ -61,22 +61,7 @@ def update_lang_dict(data, key: str, id: int, lang_code: str):
     data[key][str(id)]["lang"] = f"{lang_code}"
   lang_settings.update(data) 
   return data
-
-async def set_lang(ctx: commands.Context, lang_code: str = default_lang_code):
-    try:
-      with open(lang_file, 'r+') as json_file:
-        data = json.load(json_file)
-        if not ctx.guild:
-          data = update_lang_dict(data, "users", ctx.message.author.id, lang_code)
-        else:
-          data = update_lang_dict(data, "guilds", ctx.guild.id, lang_code)
-        json_file.seek(0)
-        json.dump(data, json_file, indent=4, sort_keys=False)
-        json_file.truncate()
-        await ctx.send(get_lang_string("lang_changed"), delete_after=self.delete_delay)
-    except Exception as e:
-      print(str(e))
-      await ctx.send(get_lang_string("lang_not_changed"), delete_after=self.delete_delay)
+    
 def get_lang():
   global lang_settings
   try:
@@ -104,13 +89,30 @@ class Lang(commands.Cog):
 
   async def cog_before_invoke(self, ctx: commands.Context):
         set_current_lang_infos(ctx=ctx)
-
+  async def cog_after_invoke(self, ctx: commands.Context):
+        try:
+          await ctx.message.delete(delay=self.delete_delay)
+        except Exception as e:
+          print(e)
   @commands.command(name='lang', brief=get_lang_string("lang_desc"), description=get_lang_string("lang_desc_full").format(", ".join(get_supported_langs())))
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string("lang_code_desc"))):
     langs = get_supported_langs()
     if lang_code:
       if lang_code in langs:
-        await set_lang(ctx, lang_code)
+        try:
+          with open(lang_file, 'r+') as json_file:
+            data = json.load(json_file)
+            if not ctx.guild:
+              data = update_lang_dict(data, "users", ctx.message.author.id, lang_code)
+            else:
+              data = update_lang_dict(data, "guilds", ctx.guild.id, lang_code)
+            json_file.seek(0)
+            json.dump(data, json_file, indent=4, sort_keys=False)
+            json_file.truncate()
+            await ctx.send(get_lang_string("lang_changed"), delete_after=self.delete_delay)
+        except Exception as e:
+          print(str(e))
+          await ctx.send(get_lang_string("lang_not_changed"), delete_after=self.delete_delay)
       else:
         await ctx.send(get_lang_string("lang_not_supported").format(lang_code, ctx.clean_prefix, "supported_langs"), delete_after=self.delete_delay)
     else:
