@@ -497,6 +497,18 @@ class Music(commands.Cog, name= get_lang_string(id=lang_current_id, group=lang_c
         if ctx.voice_client:
             if ctx.voice_client.channel != ctx.author.voice.channel:
                 raise commands.CommandError(get_lang_string(id=lang_current_id, group=lang_current_group, key="already_in_voice_channel"))
-
+              
+    @_summon.after_invoke
+    @_join.after_invoke
+    @_play.after_invoke
+    async def deaf_itself(self, ctx: commands.Context):
+      try:
+        member = ctx.message.guild.get_member(self.bot.user.id)
+        if member.guild_permissions.deafen_members:
+          await member.edit(deafen=True)
+        else:
+          await ctx.guild.change_voice_state(channel=ctx.voice_client.channel, self_deaf=True)
+      except Exception as e:
+        print(str(e))
 async def setup(bot):
   await bot.add_cog(Music(bot))
