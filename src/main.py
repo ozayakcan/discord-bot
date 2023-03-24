@@ -28,22 +28,24 @@ channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
-        return
-    if not message.content.startswith(command_prefix):
-      if str(message.channel.id) in channel_ids or isinstance(message.channel, discord.channel.DMChannel):
-        await ai_message(message, mention = not isinstance(message.channel, discord.channel.DMChannel))
-    await bot.process_commands(message)
+  if message.author == bot.user:
+    return
+  if not message.content.startswith(command_prefix):
+    if str(message.channel.id) in channel_ids or isinstance(message.channel, discord.channel.DMChannel):
+      await ai_message(message, mention = not isinstance(message.channel, discord.channel.DMChannel))
+  await bot.process_commands(message)
 
 async def load_extensions():
-    for extension in get_extensions():
-      await bot.load_extension(extension)
+  for extension in get_extensions():
+    await bot.load_extension(extension)
           
 token = os.environ.get("DISCORD_BOT_SECRET") 
 async def main():
   async with bot:
     await load_extensions()
     await bot.start(token)
+
 keep_alive()
+
 #bot.run(token)
 asyncio.run(main())

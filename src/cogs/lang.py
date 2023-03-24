@@ -59,7 +59,6 @@ def update_lang_settings(ctx: commands.Context, value: any, sub_key="lang"):
     json.dump(data, json_file, indent=4, sort_keys=False)
     json_file.truncate()
 
-
 def get_lang():
   with open(lang_file, 'r+') as json_file:
     data = json.load(json_file)
@@ -71,6 +70,7 @@ def get_lang_code(id: int, group: str):
     return lang_settings[group][str(id)]["lang"]
   except:
     return default_lang_code
+
 def get_lang_string(id: int, group: str, key:str):
   langs = {}
   supported_langs = get_supported_langs()
@@ -86,13 +86,14 @@ def get_translate(id: int, group: str):
     return lang_settings[group][str(id)]["translate"]
   except:
     return False
+
 class Lang(commands.Cog):
   def __init__(self, bot: commands.Bot):
-        self.bot = bot
-        self.delete_delay = 5
+    self.bot = bot
+    self.delete_delay = 5
 
   async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="an_error_ocurred").format(str(error)), delete_after=self.delete_delay)
+    await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="an_error_ocurred").format(str(error)), delete_after=self.delete_delay)
 
   async def cog_before_invoke(self, ctx: commands.Context):
     global lang_current_group, lang_current_id
@@ -102,15 +103,18 @@ class Lang(commands.Cog):
     else:
       lang_current_group = "guilds"
       lang_current_id = ctx.guild.id
+
   async def cog_after_invoke(self, ctx: commands.Context):
-        member = ctx.message.guild.get_member(self.bot.user.id)
-        if member.guild_permissions.manage_messages:
-          try:
-            await ctx.message.delete(delay=self.delete_delay)
-          except Exception as e:
-            print(e)
+    member = ctx.message.guild.get_member(self.bot.user.id)
+    if member.guild_permissions.manage_messages:
+      try:
+        await ctx.message.delete(delay=self.delete_delay)
+      except Exception as e:
+        print(e)
+
   @commands.command(name='lang', brief=get_lang_string(id=lang_current_id, group=lang_current_group, key="lang_desc"), description=get_lang_string(id=lang_current_id, group=lang_current_group, key="lang_desc_full").format(", ".join(get_supported_langs())))
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string(id=lang_current_id, group=lang_current_group, key="lang_code_desc"))):
+
     supported_langs = get_supported_langs()
     if lang_code:
       if not isinstance(ctx.channel, discord.channel.DMChannel):
@@ -130,15 +134,19 @@ class Lang(commands.Cog):
 
   @commands.command(name='supported_langs', brief=get_lang_string(id=lang_current_id, group=lang_current_group, key="supported_langs_desc"), description=get_lang_string(id=lang_current_id, group=lang_current_group, key="supported_langs_desc"))
   async def _supported_langs(self, ctx: commands.Context):
-      await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="supported_langs").format(", ".join(get_supported_langs())), delete_after=self.delete_delay)
+
+    await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="supported_langs").format(", ".join(get_supported_langs())), delete_after=self.delete_delay)
 
   @commands.command(name='translate', brief=get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_desc"), description=get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_desc"))
   async def _translate(self, ctx: commands.Context):
+
     if not isinstance(ctx.channel, discord.channel.DMChannel):
       if not ctx.message.author.guild_permissions.manage_messages:
         return await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="manage_messages"), delete_after=self.delete_delay)
+
     translate = not get_translate(id=lang_current_id, group=lang_current_group)
     update_lang_settings(ctx=ctx, value=translate, sub_key="translate")
+
     if translate:
       await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_enabled"), delete_after=self.delete_delay)
     else:
