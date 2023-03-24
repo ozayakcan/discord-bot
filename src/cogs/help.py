@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 from cogs.lang import get_lang_string
 from extensions import get_extensions
@@ -28,12 +29,12 @@ class Help(commands.Cog):
 
   async def cog_before_invoke(self, ctx: commands.Context):
       global lang_current_group, lang_current_id
-      if ctx.guild:
-        lang_current_group = "guilds"
-        lang_current_id = ctx.guild.id
-      else:
+      if isinstance(ctx.channel, discord.channel.DMChannel):
         lang_current_group = "users"
         lang_current_id = ctx.message.author.id
+      else:
+        lang_current_group = "guilds"
+        lang_current_id = ctx.guild.id
       for extension in get_extensions():
           await self.bot.unload_extension(extension)
           await self.bot.load_extension(extension)

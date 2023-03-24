@@ -31,8 +31,8 @@ async def on_message(message):
     if message.author == bot.user:
         return
     if not message.content.startswith(command_prefix):
-      if str(message.channel.id) in channel_ids or not message.guild:
-        await ai_message(message, mention = message.guild)
+      if str(message.channel.id) in channel_ids or isinstance(message.channel, discord.channel.DMChannel):
+        await ai_message(message, mention = not isinstance(message.channel, discord.channel.DMChannel))
     await bot.process_commands(message)
 
 async def load_extensions():

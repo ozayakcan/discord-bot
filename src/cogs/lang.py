@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 import io
 import os
@@ -50,10 +51,10 @@ def update_lang_dict(data, key: str, id: int, value: any, sub_key: str):
 def update_lang_settings(ctx: commands.Context, value: any, sub_key="lang"):
   with open(lang_file, 'r+') as json_file:
     data = json.load(json_file)
-    if ctx.guild:
-      data = update_lang_dict(data=data, key="guilds", id=ctx.guild.id, value=value, sub_key=sub_key)
-    else:
+    if isinstance(ctx.channel, discord.channel.DMChannel):
       data = update_lang_dict(data=data, key="users", id=ctx.message.author.id, value=value, sub_key=sub_key)
+    else:
+      data = update_lang_dict(data=data, key="guilds", id=ctx.guild.id, value=value, sub_key=sub_key)
     json_file.seek(0)
     json.dump(data, json_file, indent=4, sort_keys=False)
     json_file.truncate()
@@ -95,12 +96,12 @@ class Lang(commands.Cog):
 
   async def cog_before_invoke(self, ctx: commands.Context):
     global lang_current_group, lang_current_id
-    if ctx.guild:
-      lang_current_group = "guilds"
-      lang_current_id = ctx.guild.id
-    else:
+    if isinstance(ctx.channel, discord.channel.DMChannel):
       lang_current_group = "users"
       lang_current_id = ctx.message.author.id
+    else:
+      lang_current_group = "guilds"
+      lang_current_id = ctx.guild.id
   async def cog_after_invoke(self, ctx: commands.Context):
         try:
           await ctx.message.delete(delay=self.delete_delay)
@@ -110,7 +111,7 @@ class Lang(commands.Cog):
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string(id=lang_current_id, group=lang_current_group, key="lang_code_desc"))):
     supported_langs = get_supported_langs()
     if lang_code:
-      if ctx.guild:
+      if not isinstance(ctx.channel, discord.channel.DMChannel):
         if not ctx.message.author.guild_permissions.manage_messages:
           return await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="manage_messages"), delete_after=self.delete_delay)
       if lang_code in supported_langs:
@@ -131,7 +132,7 @@ class Lang(commands.Cog):
 
   @commands.command(name='translate', brief=get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_desc"), description=get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_desc"))
   async def _translate(self, ctx: commands.Context):
-    if ctx.guild:
+    if not isinstance(ctx.channel, discord.channel.DMChannel):
       if not ctx.message.author.guild_permissions.manage_messages:
         return await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="manage_messages"), delete_after=self.delete_delay)
     translate = not get_translate(id=lang_current_id, group=lang_current_group)

@@ -2,6 +2,7 @@ import os
 import requests
 import translators as ts
 from cogs.lang import get_lang_code, get_translate
+import discord
 
 lang_current_id = 0
 lang_current_group = "guilds"
@@ -19,12 +20,12 @@ apis = {
 }
 async def ai_message(message, api = "brainshop", mention = True):
   global lang_current_group, lang_current_id
-  if message.guild:
-    lang_current_group = "guilds"
-    lang_current_id = message.guild.id
-  else:
+  if isinstance(message.channel, discord.channel.DMChannel):
     lang_current_group = "users"
     lang_current_id = message.author.id
+  else:
+    lang_current_group = "guilds"
+    lang_current_id = message.guild.id
   async with message.channel.typing():
     resp = ""
     try:

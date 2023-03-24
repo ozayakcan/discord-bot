@@ -284,7 +284,7 @@ class Music(commands.Cog, name= get_lang_string(id=lang_current_id, group=lang_c
             self.bot.loop.create_task(state.stop())
 
     def cog_check(self, ctx: commands.Context):
-        if not ctx.guild:
+        if isinstance(ctx.channel, discord.channel.DMChannel):
             raise commands.NoPrivateMessage(get_lang_string(id=lang_current_id, group=lang_current_group, key="command_dm"))
         # Disable commands for now
         #raise commands.CommandError('Music commands not available right now.')
@@ -294,12 +294,12 @@ class Music(commands.Cog, name= get_lang_string(id=lang_current_id, group=lang_c
     async def cog_before_invoke(self, ctx: commands.Context):
         ctx.voice_state = self.get_voice_state(ctx)
         global lang_current_group, lang_current_id
-        if ctx.guild:
-          lang_current_group = "guilds"
-          lang_current_id = ctx.guild.id
-        else:
+        if isinstance(ctx.channel, discord.channel.DMChannel):
           lang_current_group = "users"
           lang_current_id = ctx.message.author.id
+        else:
+          lang_current_group = "guilds"
+          lang_current_id = ctx.guild.id
 
     async def cog_after_invoke(self, ctx: commands.Context):
         try:
