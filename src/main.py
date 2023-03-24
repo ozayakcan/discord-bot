@@ -5,7 +5,6 @@ import discord
 import json
 from ai_message import ai_message
 from discord.ext import commands
-from cogs.lang import set_current_lang_infos
 from extensions import get_extensions
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
@@ -32,7 +31,6 @@ async def on_message(message):
     if message.author == bot.user:
         return
     if not message.content.startswith(command_prefix):
-      set_current_lang_infos(guild=message.guild, author=message.author)
       if str(message.channel.id) in channel_ids or not message.guild:
         await ai_message(message, mention = message.guild)
     await bot.process_commands(message)
