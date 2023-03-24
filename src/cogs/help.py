@@ -1,6 +1,5 @@
-import os
 from discord.ext import commands
-from commands.lang import get_lang_string, set_current_lang_infos
+from cogs.lang import get_lang_string, set_current_lang_infos
 from extensions import get_extensions
 
 class MyHelpCommand(commands.DefaultHelpCommand):

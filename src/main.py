@@ -5,8 +5,7 @@ import discord
 import json
 from ai_message import ai_message
 from discord.ext import commands
-from commands.help import MyHelpCommand
-from commands.lang import set_current_lang_infos
+from cogs.lang import set_current_lang_infos
 from extensions import get_extensions
 
 command_prefix = os.environ.get("COMMAND_PREFIX")

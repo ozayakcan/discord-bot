@@ -8,7 +8,7 @@ import discord
 import yt_dlp as youtube_dl
 from async_timeout import timeout
 from discord.ext import commands
-from commands.lang import get_lang_string, set_current_lang_infos
+from cogs.lang import get_lang_string, set_current_lang_infos
 
 # Silence useless bug reports messages
 youtube_dl.utils.bug_reports_message = lambda: ''

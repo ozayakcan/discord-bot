@@ -1,7 +1,7 @@
 import os
 import requests
 import translators as ts
-from commands.lang import get_lang_code
+from cogs.lang import get_lang_code
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
