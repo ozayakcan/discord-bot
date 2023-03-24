@@ -79,5 +79,6 @@
   "supported_langs_desc": "Returns supported languages.",
   "translate_desc": "Toggles chat message translation.",
   "translate_enabled": "Chat message translation enabled.",
-  "translate_disabled": "Chat message translation disabled."
+  "translate_disabled": "Chat message translation disabled.",
+  "manage_messages": "You need to manage messages permission to use this command."
 }

@@ -80,5 +80,6 @@
   "supported_langs_desc": "Desteklenen dilleri gösterir.",
   "translate_desc": "Sohbet mesajı çevirisini açar/kapatır.",
   "translate_enabled": "Sohbet mesajı çevirisi etkinleştirildi.",
-  "translate_disabled": "Sohbet mesajı çevirisi devredışı bırakıldı."
+  "translate_disabled": "Sohbet mesajı çevirisi devredışı bırakıldı.",
+  "manage_messages": "Bu komutu kullanabilmek için mesajları düzenleme yetkinizin bulunması gerekiyor."
 }

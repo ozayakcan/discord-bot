@@ -110,6 +110,9 @@ class Lang(commands.Cog):
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string(id=lang_current_id, group=lang_current_group, key="lang_code_desc"))):
     supported_langs = get_supported_langs()
     if lang_code:
+      if ctx.guild:
+        if not ctx.message.author.guild_permissions.manage_messages:
+          return await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="manage_messages"), delete_after=self.delete_delay)
       if lang_code in supported_langs:
         try:
           update_lang_settings(ctx=ctx, value=lang_code)
@@ -128,6 +131,9 @@ class Lang(commands.Cog):
 
   @commands.command(name='translate', brief=get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_desc"), description=get_lang_string(id=lang_current_id, group=lang_current_group, key="translate_desc"))
   async def _translate(self, ctx: commands.Context):
+    if ctx.guild:
+      if not ctx.message.author.guild_permissions.manage_messages:
+        return await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="manage_messages"), delete_after=self.delete_delay)
     translate = not get_translate(id=lang_current_id, group=lang_current_group)
     update_lang_settings(ctx=ctx, value=translate, sub_key="translate")
     if translate:
