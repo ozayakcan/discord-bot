@@ -1,7 +1,7 @@
 import os
 import requests
 import translators as ts
-from cogs.lang import get_lang_code
+from cogs.lang import get_lang_code, get_translate
 
 lang_current_id = 0
 lang_current_group = "guilds"
@@ -10,12 +10,6 @@ def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
   resp = resp.json()
   return resp['cnt']
-
-translate = os.environ.get("TRANSLATE")
-if translate == "True" or translate == "true":
-  translate = True
-else:
-  translate = False
 
 apis = {
   "brainshop" : {
@@ -35,7 +29,7 @@ async def ai_message(message, api = "brainshop", mention = True):
   try:
     if api in apis:
       resp = apis[api]["function"](message.content, message.author.id, apis[api]["token"])
-    if get_lang_code(id=lang_current_id, group=lang_current_group) != "en" and translate:
+    if get_lang_code(id=lang_current_id, group=lang_current_group) != "en" and get_translate(id=lang_current_id, group=lang_current_group):
       resp = ts.translate_text(resp, translator= "google", to_language=get_lang_code(id=lang_current_id, group=lang_current_group)) 
     #for resp in resps['choices']:
       #await message.channel.send(resp['message']['content'])

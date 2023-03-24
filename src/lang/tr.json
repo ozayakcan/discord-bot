@@ -77,5 +77,8 @@
   "lang_desc_full": "Dili değiştirir. Desteklenen diller: {}",
   "lang_code_desc": "Dil kodu.",
   "supported_langs": "Desteklenen diller: {}",
-  "supported_langs_desc": "Desteklenen dilleri gösterir."
+  "supported_langs_desc": "Desteklenen dilleri gösterir.",
+  "translate_desc": "Sohbet mesajı çevirisini açar/kapatır.",
+  "translate_enabled": "Sohbet mesajı çevirisi etkinleştirildi.",
+  "translate_disabled": "Sohbet mesajı çevirisi devredışı bırakıldı."
 }

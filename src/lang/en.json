@@ -76,5 +76,8 @@
   "lang_desc_full": "Changes language. Supported languages: {}",
   "lang_code_desc": "Language code.",
   "supported_langs": "Supported langs: {}",
-  "supported_langs_desc": "Returns supported languages."
+  "supported_langs_desc": "Returns supported languages.",
+  "translate_desc": "Toggles chat message translation.",
+  "translate_enabled": "Chat message translation enabled.",
+  "translate_disabled": "Chat message translation disabled."
 }
