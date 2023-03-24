@@ -302,10 +302,12 @@ class Music(commands.Cog, name= get_lang_string(id=lang_current_id, group=lang_c
           lang_current_id = ctx.guild.id
 
     async def cog_after_invoke(self, ctx: commands.Context):
-        try:
-          await ctx.message.delete(delay=self.delete_delay)
-        except Exception as e:
-          print(e)
+        member = ctx.message.guild.get_member(self.bot.user.id)
+        if member.guild_permissions.manage_messages:
+          try:
+            await ctx.message.delete(delay=self.delete_delay)
+          except Exception as e:
+            print(e)
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
         await ctx.send(get_lang_string(id=lang_current_id, group=lang_current_group, key="an_error_ocurred").format(str(error)), delete_after=self.delete_delay)
