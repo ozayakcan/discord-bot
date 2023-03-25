@@ -18,9 +18,9 @@ def get_settings():
     return data
 
 def get_key(id: int, group: str, key: str, default: any):
-  settings_args = get_settings()
+  settings_model = get_settings()
   try:
-    return settings_args[group][str(id)][key]
+    return settings_model[group][str(id)][key]
   except:
     return default
 
@@ -84,8 +84,8 @@ def get_lang_string(id: int, group: str, key:str):
   return langs[get_lang_code(id=id, group=group)][key]
 
 def get_translate(id: int, group: str):
-  lang_settings = get_settings()
+  settings_model = get_settings()
   try:
-    return lang_settings[group][str(id)]["translate"]
+    return settings_model[group][str(id)]["translate"]
   except:
     return False
