@@ -6,7 +6,7 @@ from settings.settings import get_lang_string, get_supported_langs, update_setti
 settings_current_id = 0
 settings_current_group = "guilds"
 
-class Lang(commands.Cog):
+class Settings(commands.Cog):
   def __init__(self, bot: commands.Bot):
     self.bot = bot
     self.delete_delay = 5
@@ -72,4 +72,4 @@ class Lang(commands.Cog):
       await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="translate_disabled"), delete_after=self.delete_delay)
 
 async def setup(bot):
-  await bot.add_cog(Lang(bot))
+  await bot.add_cog(Settings(bot))
