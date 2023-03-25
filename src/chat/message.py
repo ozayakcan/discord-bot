@@ -1,8 +1,9 @@
 import os
 import requests
-import translators as ts
-from settings.settings import get_lang_code, get_translate
 
+import translators as ts
+
+from settings.settings import get_lang_code, get_translate
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
@@ -15,7 +16,7 @@ apis = {
     "function": brainshop
   }
 }
-async def ai_message(message, group, id, api = "brainshop", mention = True):
+async def chat_message(message, group, id, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:

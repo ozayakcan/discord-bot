@@ -1,8 +1,9 @@
-import discord
-from discord.ext import commands
 import io
 import os
 import json
+
+import discord
+from discord.ext import commands
 
 settings_file = "./src/settings/settings.json"
 

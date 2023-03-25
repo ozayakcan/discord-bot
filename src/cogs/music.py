@@ -3,11 +3,12 @@ import functools
 import itertools
 import math
 import random
-
-import discord
-import yt_dlp as youtube_dl
 from async_timeout import timeout
+
+import yt_dlp as youtube_dl
+import discord
 from discord.ext import commands
+
 from settings.settings import get_lang_string
 
 settings_current_id = 0

@@ -1,18 +1,20 @@
 import os
-from keep_alive import keep_alive
 import asyncio
-import discord
 import json
-from ai_message import ai_message
+
+import discord
 from discord.ext import commands
-from extensions import get_extensions
+
+from chat.message import chat_message
+from extensions.extensions import get_extensions
+from settings.keep_alive import keep_alive
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
   command_prefix = "!"
   
 FFMPEG_PATH = os.environ.get("FFMPEG_PATH")
-discord.opus.load_opus("./src/libopus.so.0.8.0")
+discord.opus.load_opus("./src/extensions/libopus.so.0.8.0")
 
 intents = discord.Intents.all()
 intents.message_content = True
@@ -42,7 +44,7 @@ async def on_message(message):
       lang_current_group = "guilds"
       lang_current_id = message.guild.id
     if str(message.channel.id) in channel_ids or isinstance(message.channel, discord.channel.DMChannel):
-      await ai_message(message=message, group=lang_current_group, id=lang_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
+      await chat_message(message=message, group=lang_current_group, id=lang_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
   await bot.process_commands(message)
 
 async def load_extensions():

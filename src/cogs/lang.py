@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+
 from settings.settings import get_lang_string, get_supported_langs, update_settings, get_translate
 
 settings_current_id = 0
