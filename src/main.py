@@ -26,13 +26,23 @@ async def on_ready():
 
 channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
 
+lang_current_id = 0
+lang_current_group = "guilds"
+
 @bot.event
 async def on_message(message):
   if message.author == bot.user:
     return
+  global lang_current_group, lang_current_id
   if not message.content.startswith(command_prefix):
+    if isinstance(message.channel, discord.channel.DMChannel):
+      lang_current_group = "users"
+      lang_current_id = message.author.id
+    else:
+      lang_current_group = "guilds"
+      lang_current_id = message.guild.id
     if str(message.channel.id) in channel_ids or isinstance(message.channel, discord.channel.DMChannel):
-      await ai_message(message, mention = not isinstance(message.channel, discord.channel.DMChannel))
+      await ai_message(message=message, group=lang_current_group, id=lang_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
   await bot.process_commands(message)
 
 async def load_extensions():
