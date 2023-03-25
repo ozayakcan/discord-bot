@@ -7,7 +7,7 @@ from discord.ext import commands
 
 from chat.message import chat_message
 from extensions.extensions import get_extensions
-from settings.keep_alive import keep_alive
+from extensions.keep_alive import keep_alive
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
