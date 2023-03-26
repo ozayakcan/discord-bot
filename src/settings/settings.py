@@ -2,8 +2,6 @@ import io
 import os
 import json
 
-import discord
-from discord.ext import commands
 
 settings_file = "./src/settings/settings.json"
 
@@ -18,7 +16,7 @@ def get_settings():
     data = json.load(json_file)
     return data
 
-def get_key(id: int, group: str, key: str, default: any):
+def get_key(group: str, id: int, key: str, default: any):
   settings_model = get_settings()
   try:
     return settings_model[group][str(id)][key]
@@ -52,7 +50,7 @@ def set_key(data, group: str, id: int, key: str, value: any):
     data[group][str(id)][f"{key}"] = value
   return data
 
-def update_settings(id: int, group: str, key: str, value: any):
+def update_settings(group: str, id: int, key: str, value: any):
   with open(settings_file, 'r+') as json_file:
     data = json.load(json_file)
     data = set_key(data=data, group=group, id=id, key=key, value=value)
@@ -64,11 +62,11 @@ def update_settings(id: int, group: str, key: str, value: any):
     
 chat_channels_str = "chat_channels"
 
-def set_chat_channels(id: int, group: str, channel_ids: list = []):
-  update_settings(id=id, group=group, key=chat_channels_str, value=channel_ids)
+def set_chat_channels(group: str, id: int, channel_ids: list = []):
+  update_settings(group=group, id=id, key=chat_channels_str, value=channel_ids)
 
-def get_chat_channels(id: int, group: str):
-  return get_key(id=id, group=group, key=chat_channels_str, default=[])
+def get_chat_channels(group: str, id: int):
+  return get_key(group=group, id=id, key=chat_channels_str, default=[])
     
 # Localizations
 
@@ -79,27 +77,27 @@ def get_supported_langs():
       supported_langs.append(filename[:-5])
   return supported_langs
 
-def get_lang_string(id: int, group: str, key:str):
+def get_lang_string(group: str, id: int, key:str):
   langs = {}
   supported_langs = get_supported_langs()
   for supported_lang in supported_langs:
     file = open(lang_folder+"/"+supported_lang+".json")
     langs[supported_lang] = json.load(file)
     file.close()
-  return langs[get_lang_code(id=id, group=group)][key]
+  return langs[get_lang_code(group=group, id=id)][key]
 
 lang_str = "lang"
 
-def set_lang_code(id: int, group: str, lang: str):
-  update_settings(id=id, group=group, key=lang_str, value=lang)
+def set_lang_code(group: str, id: int, lang: str):
+  update_settings(group=group, id=id, key=lang_str, value=lang)
 
-def get_lang_code(id: int, group: str):
-  return get_key(id=id, group=group, key=lang_str, default=default_lang_code)
+def get_lang_code(group: str, id: int):
+  return get_key(group=group, id=id, key=lang_str, default=default_lang_code)
 
 translate_str = "translate"
 
-def set_translate(id: int, group: str, translate: bool):
-  update_settings(id=id, group=group, key=translate_str, value=translate)
+def set_translate(group: str, id: int, translate: bool):
+  update_settings(group=group, id=id, key=translate_str, value=translate)
 
-def get_translate(id: int, group: str):
-  return get_key(id=id, group=group, key=translate_str, default=False)
+def get_translate(group: str, id: int):
+  return get_key(group=group, id=id, key=translate_str, default=False)

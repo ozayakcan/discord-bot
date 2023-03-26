@@ -1,6 +1,5 @@
 import os
 import asyncio
-import json
 
 import discord
 from discord.ext import commands
@@ -27,23 +26,23 @@ async def on_ready():
   print(f"We have logged in as {bot.user}")
   await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
 
-lang_current_id = 0
-lang_current_group = "guilds"
+settings_current_group = "guilds"
+settings_current_id = 0
 
 @bot.event
 async def on_message(message):
   if message.author == bot.user:
     return
-  global lang_current_group, lang_current_id
+  global settings_current_group, settings_current_id
   if not message.content.startswith(command_prefix):
     if isinstance(message.channel, discord.channel.DMChannel):
-      lang_current_group = "users"
-      lang_current_id = message.author.id
+      settings_current_group = "users"
+      settings_current_id = message.author.id
     else:
-      lang_current_group = "guilds"
-      lang_current_id = message.guild.id
-    if message.channel.id in get_chat_channels(id= lang_current_id, group=lang_current_group) or isinstance(message.channel, discord.channel.DMChannel):
-      await chat_message(message=message, group=lang_current_group, id=lang_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
+      settings_current_group = "guilds"
+      settings_current_id = message.guild.id
+    if message.channel.id in get_chat_channels( group=settings_current_group, id=settings_current_id) or isinstance(message.channel, discord.channel.DMChannel):
+      await chat_message(message=message, group=settings_current_group, id=settings_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
   await bot.process_commands(message)
 
 async def load_extensions():

@@ -2,6 +2,7 @@ import os
 import requests
 
 import translators as ts
+import discord
 
 from settings.settings import get_lang_code, get_translate
 
@@ -16,7 +17,7 @@ apis = {
     "function": brainshop
   }
 }
-async def chat_message(message, group, id, api = "brainshop", mention = True):
+async def chat_message(message: discord.Message, group: str, id: int, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:
