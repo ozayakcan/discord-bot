@@ -81,5 +81,8 @@
   "translate_desc": "Sohbet mesajı çevirisini açar/kapatır.",
   "translate_enabled": "Sohbet mesajı çevirisi etkinleştirildi.",
   "translate_disabled": "Sohbet mesajı çevirisi devredışı bırakıldı.",
-  "manage_messages": "Bu komutu kullanabilmek için mesajları düzenleme yetkinizin bulunması gerekiyor."
+  "manage_messages": "Bu komutu kullanabilmek için mesajları düzenleme yetkinizin bulunması gerekiyor.",
+  "chat_desc": "Geçerli kanalda sohbet botunu etkinleştirir/devredışı bırakır.",
+  "chat_bot_enabled": "Sohbet botu bu kanalda etkinleştirildi.",
+  "chat_bot_disabled": "Sohbet botu bu kanalda devredışı bırakıldı."
 }

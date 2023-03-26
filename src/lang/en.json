@@ -80,5 +80,8 @@
   "translate_desc": "Toggles chat message translation.",
   "translate_enabled": "Chat message translation enabled.",
   "translate_disabled": "Chat message translation disabled.",
-  "manage_messages": "You need to manage messages permission to use this command."
+  "manage_messages": "You need to manage messages permission to use this command.",
+  "chat_desc": "Toggles chat bot in current channel.",
+  "chat_bot_enabled": "Enabled chat bot in this channel.",
+  "chat_bot_disabled": "Disabled chat bot in this channel."
 }

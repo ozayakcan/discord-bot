@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from settings.settings import get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate
+from settings.settings import get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels
 
 settings_current_id = 0
 settings_current_group = "guilds"
@@ -70,6 +70,24 @@ class Settings(commands.Cog):
       await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="translate_enabled"), delete_after=self.delete_delay)
     else:
       await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="translate_disabled"), delete_after=self.delete_delay)
+
+  @commands.command(name='chat', brief=get_lang_string(id=settings_current_id, group=settings_current_group, key="chat_desc"), description=get_lang_string(id=settings_current_id, group=settings_current_group, key="chat_desc"))
+  async def _chat(self, ctx: commands.Context):
+
+    channel_ids = get_chat_channels(id=settings_current_id, group=settings_current_group)
+    channel_id = ctx.channel.id
+    is_removed = False
+    if channel_id in channel_ids:
+      channel_ids.remove(channel_id)
+      is_removed = True
+    else:
+      channel_ids.append(channel_id)
+      is_removed = False
+    set_chat_channels(id=settings_current_id, group=settings_current_group, channel_ids = channel_ids)
+    if is_removed:
+      await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="chat_bot_disabled"), delete_after=self.delete_delay)
+    else:
+      await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="chat_bot_enabled"), delete_after=self.delete_delay)
 
 async def setup(bot):
   await bot.add_cog(Settings(bot))

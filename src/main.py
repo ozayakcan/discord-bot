@@ -8,6 +8,7 @@ from discord.ext import commands
 from chat.message import chat_message
 from extensions.extensions import get_extensions
 from extensions.keep_alive import keep_alive
+from settings.settings import get_chat_channels
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
@@ -26,8 +27,6 @@ async def on_ready():
   print(f"We have logged in as {bot.user}")
   await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
 
-channel_ids = json.loads(os.environ.get("CHANNEL_IDS"))
-
 lang_current_id = 0
 lang_current_group = "guilds"
 
@@ -43,7 +42,7 @@ async def on_message(message):
     else:
       lang_current_group = "guilds"
       lang_current_id = message.guild.id
-    if str(message.channel.id) in channel_ids or isinstance(message.channel, discord.channel.DMChannel):
+    if message.channel.id in get_chat_channels(id= lang_current_id, group=lang_current_group) or isinstance(message.channel, discord.channel.DMChannel):
       await chat_message(message=message, group=lang_current_group, id=lang_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
   await bot.process_commands(message)
 

@@ -60,6 +60,16 @@ def update_settings(id: int, group: str, key: str, value: any):
     json.dump(data, json_file, indent=4, sort_keys=False)
     json_file.truncate()
 
+# Chat
+    
+chat_channels_str = "chat_channels"
+
+def set_chat_channels(id: int, group: str, channel_ids: list = []):
+  update_settings(id=id, group=group, key=chat_channels_str, value=channel_ids)
+
+def get_chat_channels(id: int, group: str):
+  return get_key(id=id, group=group, key=chat_channels_str, default=[])
+    
 # Localizations
 
 def get_supported_langs():
