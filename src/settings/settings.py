@@ -8,18 +8,31 @@ class Settings:
 
 default_settings = Settings()
 
+use_replit_db = os.environ.get("USE_REPLIT_DB")
+if use_replit_db is not None:
+  if str(use_replit_db).lower() == "true":
+    use_replit_db = True
+  else:
+    use_replit_db = False
+else:
+  use_replit_db = False
 settings_file = "./src/settings/settings.json"
 
 lang_folder = "./src/lang"
-if not os.path.isfile(settings_file) and not os.access(settings_file, os.R_OK):
-  with io.open(settings_file, 'w') as settings_file_object:
-    settings_file_object.write(json.dumps({}))
+if not use_replit_db:
+  if not os.path.isfile(settings_file) and not os.access(settings_file, os.R_OK):
+    with io.open(settings_file, 'w') as settings_file_object:
+      settings_file_object.write(json.dumps({}))
 default_lang_code = "en"
 
 def get_settings():
-  with open(settings_file, 'r+') as json_file:
-    data = json.load(json_file)
-    return data
+  if use_replit_db:
+    from replit import db
+    return db
+  else:
+    with open(settings_file, 'r+') as json_file:
+      data = json.load(json_file)
+      return data
 
 def get_key(group: str, id: int, key: str, default: any):
   settings_model = get_settings()
@@ -56,12 +69,16 @@ def set_key(data, group: str, id: int, key: str, value: any):
   return data
 
 def update_settings(group: str, id: int, key: str, value: any):
-  with open(settings_file, 'r+') as json_file:
-    data = json.load(json_file)
-    data = set_key(data=data, group=group, id=id, key=key, value=value)
-    json_file.seek(0)
-    json.dump(data, json_file, indent=4, sort_keys=False)
-    json_file.truncate()
+  if use_replit_db:
+    settings_model = get_settings()
+    settings_model = set_key(data=settings_model, group=group, id=id, key=key, value=value)
+  else:
+    with open(settings_file, 'r+') as json_file:
+      data = json.load(json_file)
+      data = set_key(data=data, group=group, id=id, key=key, value=value)
+      json_file.seek(0)
+      json.dump(data, json_file, indent=4, sort_keys=False)
+      json_file.truncate()
 
 # Chat
     
