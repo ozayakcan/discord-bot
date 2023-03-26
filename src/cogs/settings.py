@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from settings.settings import get_lang_string, get_supported_langs, update_settings, get_translate
+from settings.settings import get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate
 
 settings_current_id = 0
 settings_current_group = "guilds"
@@ -41,7 +41,7 @@ class Settings(commands.Cog):
           return await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="manage_messages"), delete_after=self.delete_delay)
       if lang_code in supported_langs:
         try:
-          update_settings(id=settings_current_id, group=settings_current_group, key="lang", value=lang_code)
+          set_lang_code(id=settings_current_id, group=settings_current_group, lang=lang_code)
           await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="lang_changed"), delete_after=self.delete_delay)
         except Exception as e:
           print(str(e))
@@ -64,7 +64,7 @@ class Settings(commands.Cog):
         return await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="manage_messages"), delete_after=self.delete_delay)
 
     translate = not get_translate(id=settings_current_id, group=settings_current_group)
-    update_settings(id=settings_current_id, group=settings_current_group, key="translate", value=translate)
+    set_translate(id=settings_current_id, group=settings_current_group, translate=translate)
 
     if translate:
       await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="translate_enabled"), delete_after=self.delete_delay)

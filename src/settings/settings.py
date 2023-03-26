@@ -62,9 +62,6 @@ def update_settings(id: int, group: str, key: str, value: any):
 
 # Localizations
 
-def get_lang_code(id: int, group: str):
-  return get_key(id=id, group=group, key="lang", default=default_lang_code)
-
 def get_supported_langs():
   supported_langs = []
   for filename in os.listdir(lang_folder):
@@ -81,5 +78,18 @@ def get_lang_string(id: int, group: str, key:str):
     file.close()
   return langs[get_lang_code(id=id, group=group)][key]
 
+lang_str = "lang"
+
+def set_lang_code(id: int, group: str, lang: str):
+  update_settings(id=id, group=group, key=lang_str, value=lang)
+
+def get_lang_code(id: int, group: str):
+  return get_key(id=id, group=group, key=lang_str, default=default_lang_code)
+
+translate_str = "translate"
+
+def set_translate(id: int, group: str, translate: bool):
+  update_settings(id=id, group=group, key=translate_str, value=translate)
+
 def get_translate(id: int, group: str):
-  return get_key(id=id, group=group, key="translate", False)
+  return get_key(id=id, group=group, key=translate_str, default=False)
