@@ -1,6 +1,9 @@
-## Secrets
+## Info
 
-- Define in .env file. For replit define in secrets tab.
+- This repo only tested in [https://replit.com/](https://replit.com/)
+- Feel free to update for yourselfs
+
+## Secrets
 
 - For replit don't forget to remove quotes. Example:
 - key
@@ -12,8 +15,6 @@ AI_BRAINSHOP_TOKEN
 VG......W1
 ```
 
-
-- Remove comments or it can cause error.
 ```
 COMMAND_PREFIX = '!'
 
