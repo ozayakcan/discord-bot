@@ -38,7 +38,7 @@ class MyBot(commands.Bot):
 
   async def on_ready(self):
     print(f"We have logged in as {self.user}")
-    await self.bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
+    await self.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
 
   async def on_message(self, message):
     if message.author == self.user:
