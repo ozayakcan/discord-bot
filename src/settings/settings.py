@@ -52,13 +52,10 @@ def set_key(data, group: str, id: int, key: str, value: any):
     data[group][str(id)][f"{key}"] = value
   return data
 
-def update_settings(ctx: commands.Context, key: str, value: any):
+def update_settings(id: int, group: str, key: str, value: any):
   with open(settings_file, 'r+') as json_file:
     data = json.load(json_file)
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-      data = set_key(data=data, group="users", id=ctx.message.author.id, key=key, value=value)
-    else:
-      data = set_key(data=data, group="guilds", id=ctx.guild.id, key=key, value=value)
+    data = set_key(data=data, group=group, id=id, key=key, value=value)
     json_file.seek(0)
     json.dump(data, json_file, indent=4, sort_keys=False)
     json_file.truncate()

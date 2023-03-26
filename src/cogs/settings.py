@@ -41,7 +41,7 @@ class Settings(commands.Cog):
           return await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="manage_messages"), delete_after=self.delete_delay)
       if lang_code in supported_langs:
         try:
-          update_settings(ctx=ctx, key="lang", value=lang_code)
+          update_settings(id=settings_current_id, group=settings_current_group, key="lang", value=lang_code)
           await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="lang_changed"), delete_after=self.delete_delay)
         except Exception as e:
           print(str(e))
@@ -64,7 +64,7 @@ class Settings(commands.Cog):
         return await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="manage_messages"), delete_after=self.delete_delay)
 
     translate = not get_translate(id=settings_current_id, group=settings_current_group)
-    update_settings(ctx=ctx, key="translate", value=translate)
+    update_settings(id=settings_current_id, group=settings_current_group, key="translate", value=translate)
 
     if translate:
       await ctx.send(get_lang_string(id=settings_current_id, group=settings_current_group, key="translate_enabled"), delete_after=self.delete_delay)
