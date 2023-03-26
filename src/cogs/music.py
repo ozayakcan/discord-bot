@@ -290,7 +290,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     return True
 
   async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-    default_settings.send_cog_error(group=settings_current_group, id=settings_current_id, ctx=ctx, error=error)
+    await default_settings.send_cog_error(group=settings_current_group, id=settings_current_id, ctx=ctx, error=error)
 
   async def cog_before_invoke(self, ctx: commands.Context):
     ctx.voice_state = self.get_voice_state(ctx)
