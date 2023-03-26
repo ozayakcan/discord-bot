@@ -2,9 +2,17 @@ import io
 import os
 import json
 
+from discord.ext import commands
+
 class Settings:
   def __init__(self):
     self.message_delete_delay = 5
+
+  async def send_cog_error(self, group: str, id: int, ctx: commands.Context, error: commands.CommandError):
+    if get_debug(group=group, id=id):
+      await ctx.send(str(error), delete_after=self.message_delete_delay)
+    else:
+      await ctx.send(get_lang_string(group=group, id=id, key="an_error_ocurred").format(ctx.clean_prefix, ctx.invoked_with), delete_after=self.message_delete_delay)
 
 default_settings = Settings()
 
@@ -123,3 +131,14 @@ def set_translate(group: str, id: int, translate: bool):
 
 def get_translate(group: str, id: int):
   return get_key(group=group, id=id, key=translate_str, default=False)
+
+# Debug
+
+debug_str = "debug"
+
+def set_debug(group: str, id: int, debug: bool):
+  update_settings(group=group, id=id, key=debug_str, value=debug)
+
+def get_debug(group: str, id: int):
+  return get_key(group=group, id=id, key=debug_str, default=False)
+

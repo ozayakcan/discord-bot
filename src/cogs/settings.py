@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from settings.settings import default_settings, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels
+from settings.settings import default_settings, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels, set_debug, get_debug
 
 settings_current_group = "guilds"
 settings_current_id = 0
@@ -11,7 +11,7 @@ class Settings(commands.Cog):
     self.bot = bot
 
   async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(error)), delete_after=default_settings.message_delete_delay)
+    default_settings.send_cog_error(group=settings_current_group, id=settings_current_id, ctx=ctx, error=error)
 
   async def cog_before_invoke(self, ctx: commands.Context):
     global settings_current_group, settings_current_id
@@ -72,6 +72,7 @@ class Settings(commands.Cog):
 
   @commands.command(name='chat', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"))
   async def _chat(self, ctx: commands.Context):
+
     if isinstance(ctx.channel, discord.channel.DMChannel):
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_in_dm"), delete_after=default_settings.message_delete_delay)
     channel_ids = get_chat_channels(group=settings_current_group, id=settings_current_id)
@@ -88,6 +89,16 @@ class Settings(commands.Cog):
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_bot_disabled"), delete_after=default_settings.message_delete_delay)
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_bot_enabled"), delete_after=default_settings.message_delete_delay)
+
+  @commands.command(name='debug', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"))
+  async def _debug(self, ctx: commands.Context):
+
+    debug = not get_debug(group=settings_current_group, id=settings_current_id)
+    set_debug(group=settings_current_group, id=settings_current_id, debug=debug)
+    if debug:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_enabled"), delete_after=default_settings.message_delete_delay)
+    else:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_disabled"), delete_after=default_settings.message_delete_delay)
 
 async def setup(bot):
   await bot.add_cog(Settings(bot))

@@ -28,7 +28,7 @@
   "url": "Url",
   "url_content": "[Tıklayın]({0.source.url})",
   "command_dm": "Bu komut direkt mesajlarda kullanılamaz.",
-  "an_error_ocurred": "Bir hata oluştu: {}",
+  "an_error_ocurred": "{0}{1} komutu kullanılırken bir hata oluştu.",
   "join_desc": "Ses kanalına katılır.",
   "summon_desc": "Botu bir ses kanalına çağırır.",
   "summon_desc_full": "Botu bir ses kanalına çağırır. Eğer bir kanal belirtilmemişse bulunduğunuz kanala katılır.",
@@ -85,5 +85,8 @@
   "chat_desc": "Geçerli kanalda sohbet botunu etkinleştirir/devredışı bırakır. (Sadece sunucularda. Direkt mesajlar her zaman etkindir.)",
   "chat_in_dm": "Direkt mesajlarda sohbet botu her zaman etkindir.",
   "chat_bot_enabled": "Sohbet botu bu kanalda etkinleştirildi.",
-  "chat_bot_disabled": "Sohbet botu bu kanalda devredışı bırakıldı."
+  "chat_bot_disabled": "Sohbet botu bu kanalda devredışı bırakıldı.",
+  "debug_desc": "Hata ayıklama modunu etkinleştirir/devredışı bırakır. (Etkinken hatalardaki ayrıntıları gösterir.)",
+  "debug_enabled": "Hata ayıklama modu etkinleştirildi.",
+  "debug_disabled": "Hata ayıklama modu devredışı bırakıldı."
 }

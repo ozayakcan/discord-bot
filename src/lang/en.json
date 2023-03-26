@@ -27,7 +27,7 @@
   "url": "Url",
   "url_content": "[Click]({0.source.url})",
   "command_dm": "This command can't be used in DM channels.",
-  "an_error_ocurred": "An error occurred: {}",
+  "an_error_ocurred": "An error occurred while invoking {0}{1} command",
   "join_desc": "Joins a voice channel.",
   "summon_desc": "Summons the bot to a voice channel.",
   "summon_desc_full": "Summons the bot to a voice channel. If no channel was specified, it joins your channel.",
@@ -84,5 +84,8 @@
   "chat_desc": "Toggles chat bot in current channel. (Only in guilds. In dm's it's always enabled.)",
   "chat_in_dm": "Chat bot always enabled in dm's.",
   "chat_bot_enabled": "Enabled chat bot in this channel.",
-  "chat_bot_disabled": "Disabled chat bot in this channel."
+  "chat_bot_disabled": "Disabled chat bot in this channel.",
+  "debug_desc": "Toggles debug mode. (Shows details for errors if enabled.)",
+  "debug_enabled": "Debug mode enabled.",
+  "debug_disabled": "Debug mode disabled."
 }

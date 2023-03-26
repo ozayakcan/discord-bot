@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 from extensions.extensions import get_extensions
-from settings.settings import get_lang_string
+from settings.settings import default_settings, get_lang_string
 
 settings_current_group = "guilds"
 settings_current_id = 0
@@ -28,6 +28,10 @@ class Help(commands.Cog):
   def __init__(self, bot: commands.Bot):
     self.bot = bot
 
+  
+  async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
+    default_settings.send_cog_error(group=settings_current_group, id=settings_current_id, ctx=ctx, error=error)
+    
   async def cog_before_invoke(self, ctx: commands.Context):
     global settings_current_group, settings_current_id
     if isinstance(ctx.channel, discord.channel.DMChannel):

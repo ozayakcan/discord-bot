@@ -289,6 +289,9 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     #return False # return True
     return True
 
+  async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
+    default_settings.send_cog_error(group=settings_current_group, id=settings_current_id, ctx=ctx, error=error)
+
   async def cog_before_invoke(self, ctx: commands.Context):
     ctx.voice_state = self.get_voice_state(ctx)
     global settings_current_group, settings_current_id
@@ -306,9 +309,6 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
         await ctx.message.delete(delay=default_settings.message_delete_delay)
       except Exception as e:
         print(e)
-
-  async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(error)), delete_after=default_settings.message_delete_delay)
 
   @commands.command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"))
   async def _join(self, ctx: commands.Context):
