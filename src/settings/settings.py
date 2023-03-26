@@ -85,8 +85,4 @@ def get_lang_string(id: int, group: str, key:str):
   return langs[get_lang_code(id=id, group=group)][key]
 
 def get_translate(id: int, group: str):
-  settings_model = get_settings()
-  try:
-    return settings_model[group][str(id)]["translate"]
-  except:
-    return False
+  return get_key(id=id, group=group, key="translate", False)
