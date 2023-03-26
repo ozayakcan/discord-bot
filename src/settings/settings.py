@@ -2,6 +2,11 @@ import io
 import os
 import json
 
+class Settings:
+  def __init__(self):
+    self.message_delete_delay = 5
+
+default_settings = Settings()
 
 settings_file = "./src/settings/settings.json"
 

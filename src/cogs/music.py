@@ -9,7 +9,7 @@ import yt_dlp as youtube_dl
 import discord
 from discord.ext import commands
 
-from settings.settings import get_lang_string
+from settings.settings import default_settings, get_lang_string
 
 settings_current_group = "guilds"
 settings_current_id = 0
@@ -256,7 +256,6 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   def __init__(self, bot: commands.Bot):
     self.bot = bot
     self.voice_states = {}
-    self.delete_delay = 5
 
   def get_voice_state(self, ctx: commands.Context):
     state = self.voice_states.get(ctx.guild.id)
@@ -268,7 +267,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
 
   async def clear_music(self, ctx: commands.Context):
     if not ctx.voice_state.voice:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_connected_voice_ch"), delete_after=self.delete_delay)
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_connected_voice_ch"), delete_after=default_settings.message_delete_delay)
       return False
       
     ctx.voice_state.songs.clear()
@@ -304,12 +303,12 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     member = ctx.message.guild.get_member(self.bot.user.id)
     if member.guild_permissions.manage_messages:
       try:
-        await ctx.message.delete(delay=self.delete_delay)
+        await ctx.message.delete(delay=default_settings.message_delete_delay)
       except Exception as e:
         print(e)
 
   async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(error)), delete_after=self.delete_delay)
+    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(error)), delete_after=default_settings.message_delete_delay)
 
   @commands.command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"))
   async def _join(self, ctx: commands.Context):
@@ -340,7 +339,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _leave(self, ctx: commands.Context):
 
     #if not ctx.voice_state.voice:
-    #    return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_connected_voice_ch"), delete_after=self.delete_delay)
+    #    return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_connected_voice_ch"), delete_after=default_settings.message_delete_delay)
 
     #await ctx.voice_state.stop()
     #del self.voice_states[ctx.guild.id]
@@ -353,18 +352,18 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _volume(self, ctx: commands.Context, *, volume: int = commands.parameter(default = -1, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_level_desc"))):
 
     if not ctx.voice_state.is_playing:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
 
     if 0 > volume or volume > 100:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="vol_err"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="vol_err"), delete_after=default_settings.message_delete_delay)
 
     ctx.voice_state.volume = volume / 100
-    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="vol_set").format(volume), delete_after=self.delete_delay)
+    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="vol_set").format(volume), delete_after=default_settings.message_delete_delay)
 
   @commands.command(name='now', aliases=['current', 'playing', 'n', 'c'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="now_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="now_desc"))
   async def _now(self, ctx: commands.Context):
     if not ctx.voice_state.is_playing:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
 
     await ctx.send(embed=ctx.voice_state.current.create_embed())
 
@@ -400,7 +399,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _skip(self, ctx: commands.Context):
 
     if not ctx.voice_state.is_playing:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
 
     voter = ctx.message.author
     if voter == ctx.voice_state.current.requester:
@@ -415,16 +414,16 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
       else:
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_vote_added").format(total_votes), delete_after=self.delete_delay)
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_vote_added").format(total_votes), delete_after=default_settings.message_delete_delay)
 
     else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_already_voted"), delete_after=self.delete_delay)
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_already_voted"), delete_after=default_settings.message_delete_delay)
 
   @commands.command(name='queue', aliases=['q'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc_full"))
   async def _queue(self, ctx: commands.Context, *, page: int = commands.parameter(default=1, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_page_desc"))):
 
     if len(ctx.voice_state.songs) == 0:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=default_settings.message_delete_delay)
 
     items_per_page = 10
     pages = math.ceil(len(ctx.voice_state.songs) / items_per_page)
@@ -444,7 +443,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _shuffle(self, ctx: commands.Context):
 
     if len(ctx.voice_state.songs) == 0:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=default_settings.message_delete_delay)
 
     ctx.voice_state.songs.shuffle()
     await ctx.message.add_reaction('✅')
@@ -453,9 +452,9 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _remove(self, ctx: commands.Context, index: int = commands.parameter(default=0, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_desc"))):
 
     if index <= 0:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_err"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_err"), delete_after=default_settings.message_delete_delay)
     if len(ctx.voice_state.songs) == 0:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=default_settings.message_delete_delay)
 
     ctx.voice_state.songs.remove(index - 1)
     await ctx.message.add_reaction('✅')
@@ -464,14 +463,14 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _loop(self, ctx: commands.Context):
 
     if not ctx.voice_state.is_playing:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=self.delete_delay)
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
 
     # Inverse boolean value to loop and unloop.
     ctx.voice_state.loop = not ctx.voice_state.loop
     if ctx.voice_state.loop:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_enabled"), delete_after=self.delete_delay)
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_enabled"), delete_after=default_settings.message_delete_delay)
     else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_disabled"), delete_after=self.delete_delay)
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_disabled"), delete_after=default_settings.message_delete_delay)
 
   @commands.command(name='play', aliases=['p'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc_full"))
   async def _play(self, ctx: commands.Context, *, search: str = commands.parameter(default="", description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_desc"))):
@@ -483,12 +482,12 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       try:
         source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
       except YTDLError as e:
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(e)), delete_after=self.delete_delay)
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(e)), delete_after=default_settings.message_delete_delay)
       else:
         song = Song(source)
 
         await ctx.voice_state.songs.put(song)
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="enqueued").format(str(source)), delete_after=self.delete_delay)
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="enqueued").format(str(source)), delete_after=default_settings.message_delete_delay)
 
   @_join.before_invoke
   @_play.before_invoke
