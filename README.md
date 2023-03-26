@@ -37,8 +37,7 @@ node -e "console.log(require('ffmpeg-static'))"
 
 - add secret like this: 
 ```
-key = FFMPEG_PATH
-value = '/home/runner/your_repl_name/node_modules/ffmpeg-static/ffmpeg'
+FFMPEG_PATH='/home/runner/your_repl_name/node_modules/ffmpeg-static/ffmpeg'
 ```
 
 ## Installing Dependecies
