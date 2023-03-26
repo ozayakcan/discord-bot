@@ -72,7 +72,8 @@ class Settings(commands.Cog):
 
   @commands.command(name='chat', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"))
   async def _chat(self, ctx: commands.Context):
-
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_in_dm"), delete_after=default_settings.message_delete_delay)
     channel_ids = get_chat_channels(group=settings_current_group, id=settings_current_id)
     channel_id = ctx.channel.id
     is_removed = False
