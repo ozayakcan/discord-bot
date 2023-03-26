@@ -310,7 +310,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       except Exception as e:
         print(e)
 
-  @commands.command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"))
+  @commands.hybrid_command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"))
   async def _join(self, ctx: commands.Context):
 
     destination = ctx.author.voice.channel
@@ -320,7 +320,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
 
     ctx.voice_state.voice = await destination.connect()
 
-  @commands.command(name='summon', aliases=['sum'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_desc_full"))
+  @commands.hybrid_command(name='summon', aliases=['sum'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_desc_full"))
   @commands.has_permissions(manage_guild=True)
   async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_channel_desc"))):
 
@@ -334,7 +334,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
 
     ctx.voice_state.voice = await destination.connect()
 
-  @commands.command(name='leave', aliases=['l', 'disconnect', 'd'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"))
+  @commands.hybrid_command(name='leave', aliases=['l', 'disconnect', 'd'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"))
   @commands.has_permissions(manage_guild=True)
   async def _leave(self, ctx: commands.Context):
 
@@ -348,7 +348,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if leave_status:
       await ctx.message.add_reaction('✅')
 
-  @commands.command(name='volume', aliases=['v', 'vol'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"))
+  @commands.hybrid_command(name='volume', aliases=['v', 'vol'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"))
   async def _volume(self, ctx: commands.Context, *, volume: int = commands.parameter(default = -1, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_level_desc"))):
 
     if not ctx.voice_state.is_playing:
@@ -360,14 +360,14 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     ctx.voice_state.volume = volume / 100
     await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="vol_set").format(volume), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='now', aliases=['current', 'playing', 'n', 'c'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="now_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="now_desc"))
+  @commands.hybrid_command(name='now', aliases=['current', 'playing', 'n', 'c'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="now_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="now_desc"))
   async def _now(self, ctx: commands.Context):
     if not ctx.voice_state.is_playing:
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
 
     await ctx.send(embed=ctx.voice_state.current.create_embed())
 
-  @commands.command(name='pause', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="pause_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="pause_desc"))
+  @commands.hybrid_command(name='pause', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="pause_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="pause_desc"))
   @commands.has_permissions(manage_guild=True)
   async def _pause(self, ctx: commands.Context):
 
@@ -375,7 +375,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       ctx.voice_state.voice.pause()
       await ctx.message.add_reaction('⏯')
 
-  @commands.command(name='resume', aliases=['res', 'r'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_desc"))
+  @commands.hybrid_command(name='resume', aliases=['res', 'r'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_desc"))
   @commands.has_permissions(manage_guild=True)
   async def _resume(self, ctx: commands.Context):
 
@@ -383,7 +383,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       ctx.voice_state.voice.resume()
       await ctx.message.add_reaction('⏯')
 
-  @commands.command(name='stop', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"))
+  @commands.hybrid_command(name='stop', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"))
   @commands.has_permissions(manage_guild=True)
   async def _stop(self, ctx: commands.Context):
     #ctx.voice_state.songs.clear()
@@ -395,7 +395,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if stop_status:
       await ctx.message.add_reaction('⏹')
 
-  @commands.command(name='skip', aliases=['s'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc_full"))
+  @commands.hybrid_command(name='skip', aliases=['s'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"))
   async def _skip(self, ctx: commands.Context):
 
     if not ctx.voice_state.is_playing:
@@ -419,7 +419,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_already_voted"), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='queue', aliases=['q'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc_full"))
+  @commands.hybrid_command(name='queue', aliases=['q'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc"))
   async def _queue(self, ctx: commands.Context, *, page: int = commands.parameter(default=1, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_page_desc"))):
 
     if len(ctx.voice_state.songs) == 0:
@@ -439,7 +439,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
              .set_footer(text=get_lang_string(group=settings_current_group, id=settings_current_id, key="viewing_page").format(page, pages)))
     await ctx.send(embed=embed)
 
-  @commands.command(name='shuffle', aliases=['shuf'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="shuffle_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="shuffle_desc"))
+  @commands.hybrid_command(name='shuffle', aliases=['shuf'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="shuffle_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="shuffle_desc"))
   async def _shuffle(self, ctx: commands.Context):
 
     if len(ctx.voice_state.songs) == 0:
@@ -448,7 +448,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     ctx.voice_state.songs.shuffle()
     await ctx.message.add_reaction('✅')
 
-  @commands.command(name='remove', aliases=['rem'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_desc"))
+  @commands.hybrid_command(name='remove', aliases=['rem'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_desc"))
   async def _remove(self, ctx: commands.Context, index: int = commands.parameter(default=0, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_desc"))):
 
     if index <= 0:
@@ -459,7 +459,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     ctx.voice_state.songs.remove(index - 1)
     await ctx.message.add_reaction('✅')
 
-  @commands.command(name='loop',  aliases=['repeat', 'rep'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc_full"))
+  @commands.hybrid_command(name='loop',  aliases=['repeat', 'rep'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc_full"))
   async def _loop(self, ctx: commands.Context):
 
     if not ctx.voice_state.is_playing:
@@ -472,7 +472,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_disabled"), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='play', aliases=['p'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc_full"))
+  @commands.hybrid_command(name='play', aliases=['p'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"))
   async def _play(self, ctx: commands.Context, *, search: str = commands.parameter(default="", description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_desc"))):
 
     if not ctx.voice_state.voice:

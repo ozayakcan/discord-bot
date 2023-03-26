@@ -30,7 +30,7 @@ class Settings(commands.Cog):
       except Exception as e:
         print(e)
 
-  @commands.command(name='lang', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc_full").format(", ".join(get_supported_langs())))
+  @commands.hybrid_command(name='lang', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc_full").format(", ".join(get_supported_langs())))
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_code_desc"))):
 
     supported_langs = get_supported_langs()
@@ -50,12 +50,12 @@ class Settings(commands.Cog):
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_current"), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='supported_langs', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs_desc"))
+  @commands.hybrid_command(name='supported_langs', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs_desc"))
   async def _supported_langs(self, ctx: commands.Context):
 
     await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs").format(", ".join(get_supported_langs())), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='translate', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"))
+  @commands.hybrid_command(name='translate', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"))
   async def _translate(self, ctx: commands.Context):
 
     if not isinstance(ctx.channel, discord.channel.DMChannel):
@@ -70,7 +70,7 @@ class Settings(commands.Cog):
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_disabled"), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='chat', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"))
+  @commands.hybrid_command(name='chat', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"))
   async def _chat(self, ctx: commands.Context):
 
     if isinstance(ctx.channel, discord.channel.DMChannel):
@@ -90,7 +90,7 @@ class Settings(commands.Cog):
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_bot_enabled"), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='debug', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"))
+  @commands.hybrid_command(name='debug', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"))
   async def _debug(self, ctx: commands.Context):
 
     debug = not get_debug(group=settings_current_group, id=settings_current_id)
@@ -99,6 +99,14 @@ class Settings(commands.Cog):
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_enabled"), delete_after=default_settings.message_delete_delay)
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_disabled"), delete_after=default_settings.message_delete_delay)
+
+  @commands.hybrid_command(name='sync', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
+  async def _sync(self, ctx: commands.Context):
+    if ctx.message.author.guild_permissions.administrator:
+      await self.bot.tree.sync()
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"))
+    else:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"))
 
 async def setup(bot):
   await bot.add_cog(Settings(bot))

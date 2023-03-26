@@ -44,7 +44,7 @@ class Help(commands.Cog):
     #  await self.bot.unload_extension(extension)
     #  await self.bot.load_extension(extension)
 
-  @commands.command(name='help', aliases=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_aliases"), brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_desc_full"))
+  @commands.hybrid_command(name='help', aliases=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_aliases"), brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_desc_full"))
   async def _help(self, ctx: commands.Context, *, input: str = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_input_desc"))):
 
     async with ctx.typing():

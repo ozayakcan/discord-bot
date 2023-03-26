@@ -45,11 +45,9 @@
   "pause_desc": "Oynatmayı duraklatır.",
   "resume_desc": "Oynatmayı devam ettirir.",
   "skip_desc": "Parçayı atlamayı oylar. Ekleyen kişi direkt olarak atlayabilir.",
-  "skip_desc_full": "Parçayı atlamayı oylar. Ekleyen kişi direkt olarak atlayabilir. Parçanın atlanması için 3 oy gereklidir.",
   "skip_vote_added": "Atlama oyu eklendi. Şuanda **{}/3** oy mevcut.",
   "skip_already_voted": "Bu parçayı atlamayı zaten oyladın.",
   "queue_desc": "Oynatıcıdaki parçaları gösterir.",
-  "queue_desc_full": "Oynatıcıdaki parçaları gösterir. İsteğe bağlı olarak bir sayfa sayısı belirtebilirsin. Her sayfada 10 öğe mevcuttur.",
   "queue_page_desc": "Sayfa numarası belirle.",
   "queue_pattern": "`{0}.` [**{1.source.title}**]({1.source.url})\n",
   "empty_queue": "Sıra boş.",
@@ -64,7 +62,6 @@
   "loop_enabled": "Tekrarlama etkin.",
   "loop_disabled": "Tekrarlama devredışı.",
   "play_desc": "Parça çalar.",
-  "play_desc_full": "Parça çalar. Eğer sırada bir parça mevcutsa, diğer parçalar bitene kadar sırada bekletilir. Bu komut bir url belirtilmemişse parça adını birkaç sitede araştırır.",
   "play_search_desc": "Arama terimi ya da url.",
   "enqueued": "Sıraya Eklendi: {}",
   "already_in_voice_channel": "Bot zaten bir ses kanalında.",
@@ -88,5 +85,8 @@
   "chat_bot_disabled": "Sohbet botu bu kanalda devredışı bırakıldı.",
   "debug_desc": "Hata ayıklama modunu etkinleştirir/devredışı bırakır. (Etkinken hatalardaki ayrıntıları gösterir.)",
   "debug_enabled": "Hata ayıklama modu etkinleştirildi.",
-  "debug_disabled": "Hata ayıklama modu devredışı bırakıldı."
+  "debug_disabled": "Hata ayıklama modu devredışı bırakıldı.",
+  "sync_desc": "Eğik çizgi komutlarını sunucun ile senkronize et.",
+  "sync_success": "Eğik çizgi komutları başarıyla senkronize edildi.",
+  "admin_permission_err": "Bu komutu kullanabilmek için yönetici yetkiniz bulunmalıdır."
 }

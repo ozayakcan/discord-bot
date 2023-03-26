@@ -44,11 +44,9 @@
   "pause_desc": "Pauses the currently playing song.",
   "resume_desc": "Resumes a currently paused song.",
   "skip_desc": "Vote to skip a song. The requester can automatically skip.",
-  "skip_desc_full": "Vote to skip a song. The requester can automatically skip. 3 skip votes are needed for the song to be skipped.",
   "skip_vote_added": "Skip vote added, currently at **{}/3**",
   "skip_already_voted": "You have already voted to skip this song.",
   "queue_desc": "Shows the player's queue.",
-  "queue_desc_full": "Shows the player's queue. You can optionally specify the page to show. Each page contains 10 elements.",
   "queue_page_desc": "Set page number.",
   "queue_pattern": "`{0}.` [**{1.source.title}**]({1.source.url})\n",
   "empty_queue": "Empty queue.",
@@ -63,7 +61,6 @@
   "loop_enabled": "Loop is enabled.",
   "loop_disabled": "Loop is disabled.",
   "play_desc": "Plays a song.",
-  "play_desc_full": "Plays a song. If there are songs in the queue, this will be queued until the other songs finished playing. This command automatically searches from various sites if no URL is provided.",
   "play_search_desc": "Search query or url.",
   "enqueued": "Enqueued {}",
   "already_in_voice_channel": "Bot is already in a voice channel.",
@@ -87,5 +84,8 @@
   "chat_bot_disabled": "Disabled chat bot in this channel.",
   "debug_desc": "Toggles debug mode. (Shows details for errors if enabled.)",
   "debug_enabled": "Debug mode enabled.",
-  "debug_disabled": "Debug mode disabled."
+  "debug_disabled": "Debug mode disabled.",
+  "sync_desc": "Sync slash commands to your guild.",
+  "sync_success": "Slash commands successfully synced.",
+  "admin_permission_err": "You should have admin permission to use this command."
 }
