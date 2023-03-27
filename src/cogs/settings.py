@@ -101,15 +101,15 @@ class Settings(commands.Cog):
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_bot_enabled"), delete_after=default_settings.message_delete_delay)
 
-  @commands.hybrid_command(name='debug', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"))
-  async def _debug(self, ctx: commands.Context):
+  #@commands.hybrid_command(name='debug', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_desc"))
+  #async def _debug(self, ctx: commands.Context):
 
-    debug = not get_debug(group=settings_current_group, id=settings_current_id)
-    set_debug(group=settings_current_group, id=settings_current_id, debug=debug)
-    if debug:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_enabled"), delete_after=default_settings.message_delete_delay)
-    else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_disabled"), delete_after=default_settings.message_delete_delay)
+  #  debug = not get_debug(group=settings_current_group, id=settings_current_id)
+  #  set_debug(group=settings_current_group, id=settings_current_id, debug=debug)
+  #  if debug:
+  #    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_enabled"), delete_after=default_settings.message_delete_delay)
+  #  else:
+  #    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_disabled"), delete_after=default_settings.message_delete_delay)
 
   @commands.command(name='sync', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
   async def _sync(self, ctx: commands.Context):
