@@ -1,7 +1,6 @@
 ## Info
 
 - This repo only tested in [https://replit.com/](https://replit.com/)
-- Feel free to update for yourselfs
 
 ## Secrets
 
