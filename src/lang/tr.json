@@ -63,6 +63,7 @@
   "loop_disabled": "Tekrarlama devredışı.",
   "play_desc": "Parça çalar.",
   "play_search_desc": "Arama terimi ya da url.",
+  "play_search_req_desc": "Arama terimi ya da url gerekli.",
   "enqueued": "Sıraya Eklendi: {}",
   "already_in_voice_channel": "Bot zaten bir ses kanalında.",
   "lang_empty_err": "Bir dil belirtmelisiniz. Desteklenen diller: {}",

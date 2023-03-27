@@ -62,6 +62,7 @@
   "loop_disabled": "Loop is disabled.",
   "play_desc": "Plays a song.",
   "play_search_desc": "Search query or url.",
+  "play_search_req_desc": "Search query or url required.",
   "enqueued": "Enqueued {}",
   "already_in_voice_channel": "Bot is already in a voice channel.",
   "lang_empty_err": "You should specify a lang. Supported langs: {}",

@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 
 from settings.settings import default_settings, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels, set_debug, get_debug
@@ -49,7 +50,17 @@ class Settings(commands.Cog):
         await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_not_supported").format(lang_code, ctx.clean_prefix, "supported_langs"), delete_after=default_settings.message_delete_delay)
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_current"), delete_after=default_settings.message_delete_delay)
-
+      
+  @_lang.autocomplete('lang_code')
+  async def _lang_autocomplete(self,
+        interaction: discord.Interaction,
+        current: str,
+    ) -> list[app_commands.Choice[str]]:
+    langs = get_supported_langs()
+    return [
+        app_commands.Choice(name=lang, value=lang)
+        for lang in langs if current.lower() in lang.lower()
+    ]
   @commands.hybrid_command(name='supported_langs', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs_desc"))
   async def _supported_langs(self, ctx: commands.Context):
 
@@ -100,13 +111,18 @@ class Settings(commands.Cog):
     else:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_disabled"), delete_after=default_settings.message_delete_delay)
 
-  @commands.hybrid_command(name='sync', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
+  @commands.command(name='sync', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
   async def _sync(self, ctx: commands.Context):
-    if ctx.message.author.guild_permissions.administrator:
-      await self.bot.tree.sync()
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"))
-    else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"))
+    async with ctx.typing():
+      if ctx.message.author.guild_permissions.administrator:
+        try:
+          await ctx.bot.tree.sync()
+          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"))
+        except Exception as e:
+          print(str(e))
+          raise commands.CommandError(str(e))
+      else:
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"))
 
 async def setup(bot):
   await bot.add_cog(Settings(bot))

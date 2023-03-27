@@ -473,21 +473,24 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_disabled"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='play', aliases=['p'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"))
-  async def _play(self, ctx: commands.Context, *, search: str = commands.parameter(default="", description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_desc"))):
-
-    if not ctx.voice_state.voice:
-      await ctx.invoke(self._join)
-
-    async with ctx.typing():
-      try:
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
-      except YTDLError as e:
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(e)), delete_after=default_settings.message_delete_delay)
-      else:
-        song = Song(source)
-
-        await ctx.voice_state.songs.put(song)
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="enqueued").format(str(source)), delete_after=default_settings.message_delete_delay)
+  async def _play(self, ctx: commands.Context, *, link_or_query: str = commands.parameter(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_desc"))):
+    if link_or_query is not None:
+      if not ctx.voice_state.voice:
+        await ctx.invoke(self._join)
+  
+      async with ctx.typing():
+        try:
+          source = await YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
+        except YTDLError as e:
+          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="an_error_ocurred").format(str(e)), delete_after=default_settings.message_delete_delay)
+        else:
+          song = Song(source)
+  
+          await ctx.voice_state.songs.put(song)
+          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="enqueued").format(str(source)), delete_after=default_settings.message_delete_delay)
+    else:
+      async with ctx.typing():
+        ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_req_desc"))
 
   @_join.before_invoke
   @_play.before_invoke
