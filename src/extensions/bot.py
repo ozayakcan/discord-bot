@@ -22,6 +22,8 @@ class MyBot(commands.Bot):
     intents.message_content = True
             
     self.mytoken = os.environ.get("DISCORD_BOT_SECRET")
+    self.synced = False
+    
     super().__init__(command_prefix,intents=intents, help_command=None)
 
   async def load_my_extensions(self):
@@ -37,9 +39,15 @@ class MyBot(commands.Bot):
     asyncio.run(self._main_run())
 
   async def on_ready(self):
-    await self.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
-    print(f"We have logged in as {self.user}")
-
+    try:
+      await self.wait_until_ready()
+      if not self.synced:
+        await self.tree.sync()
+        self.synced = True
+      await self.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
+      print(f"We have logged in as {self.user}")
+    except Exception as e:
+      print("on_ready error: "+str(e))
   async def on_message(self, message):
     if message.author == self.user:
       return

@@ -111,7 +111,7 @@ class Settings(commands.Cog):
   #  else:
   #    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="debug_disabled"), delete_after=default_settings.message_delete_delay)
 
-  @commands.command(name='sync', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
+  @commands.command(name='sync', hidden=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
   async def _sync(self, ctx: commands.Context):
     async with ctx.typing():
       if ctx.message.author.guild_permissions.administrator:
