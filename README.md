@@ -36,7 +36,7 @@ USE_REPLIT_DB = true
 
 ### Music Bot
 
-- To download ffmpef, open shell (ctrl+shift+s):
+- To download ffmpef, open shell in replit (ctrl+shift+s):
 - Enter this commands:
 ```
 npm install
