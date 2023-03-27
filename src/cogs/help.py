@@ -45,14 +45,14 @@ class Help(commands.Cog):
     #  await self.bot.load_extension(extension)
 
   @commands.hybrid_command(name='help', aliases=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_aliases"), brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_desc_full"))
-  async def _help(self, ctx: commands.Context, *, input: str = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_input_desc"))):
+  async def _help(self, ctx: commands.Context, *, command_name_or_category: str = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="help_command_name_or_category_desc"))):
 
     async with ctx.typing():
       self.bot.help_command = MyHelpCommand(ctx.clean_prefix)
-      if input:
-        command_def = self.bot.get_cog(input) or self.bot.get_command(input)
+      if command_name_or_category:
+        command_def = self.bot.get_cog(command_name_or_category) or self.bot.get_command(command_name_or_category)
         if command_def is None:
-          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="help_not_found").format(input))
+          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="help_not_found").format(command_name_or_category))
         else:
           await ctx.send_help(command_def)
       else:

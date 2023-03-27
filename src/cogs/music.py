@@ -162,7 +162,7 @@ class SongQueue(asyncio.Queue):
 
   def __len__(self):
     return self.qsize()
-
+  
   def clear(self):
     self._queue.clear()
 
@@ -170,7 +170,9 @@ class SongQueue(asyncio.Queue):
     random.shuffle(self._queue)
 
   def remove(self, index: int):
+    song = self._queue[index]
     del self._queue[index]
+    return song
 
 class VoiceState:
   def __init__(self, bot: commands.Bot, ctx: commands.Context):
@@ -256,6 +258,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   def __init__(self, bot: commands.Bot):
     self.bot = bot
     self.voice_states = {}
+    self.display_join_message = True
 
   def get_voice_state(self, ctx: commands.Context):
     state = self.voice_states.get(ctx.guild.id)
@@ -319,6 +322,8 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       return
 
     ctx.voice_state.voice = await destination.connect()
+    if self.display_join_message:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="join_success"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='summon', aliases=['sum'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_desc_full"))
   @commands.has_permissions(manage_guild=True)
@@ -330,9 +335,10 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     destination = channel or ctx.author.voice.channel
     if ctx.voice_state.voice:
       await ctx.voice_state.voice.move_to(destination)
-      return
+      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_success").format(f"<#{destination.id}>"), delete_after=default_settings.message_delete_delay)
 
     ctx.voice_state.voice = await destination.connect()
+    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="summon_success").format(f"<#{destination.id}>"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='leave', aliases=['l', 'disconnect', 'd'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"))
   @commands.has_permissions(manage_guild=True)
@@ -347,9 +353,16 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     leave_status = await self.clear_music(ctx)
     if leave_status:
       await ctx.message.add_reaction('✅')
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_success"), delete_after=default_settings.message_delete_delay)
+    else:
+      raise commands.CommandError(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_failed"))
+      
 
   @commands.hybrid_command(name='volume', aliases=['v', 'vol'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"))
-  async def _volume(self, ctx: commands.Context, *, volume: int = commands.parameter(default = -1, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_level_desc"))):
+  async def _volume(self, ctx: commands.Context, *, volume: commands.Range[int, 1, 100] = commands.parameter(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_level_desc"))):
+
+    if volume is None:
+      volume = -1
 
     if not ctx.voice_state.is_playing:
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
@@ -374,6 +387,9 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
       ctx.voice_state.voice.pause()
       await ctx.message.add_reaction('⏯')
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="pause_success"), delete_after=default_settings.message_delete_delay)
+    else:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="pause_fail"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='resume', aliases=['res', 'r'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_desc"))
   @commands.has_permissions(manage_guild=True)
@@ -382,6 +398,9 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
       ctx.voice_state.voice.resume()
       await ctx.message.add_reaction('⏯')
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_success"), delete_after=default_settings.message_delete_delay)
+    else:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="resume_fail"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='stop', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_desc"))
   @commands.has_permissions(manage_guild=True)
@@ -394,6 +413,10 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     stop_status = await self.clear_music(ctx)
     if stop_status:
       await ctx.message.add_reaction('⏹')
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_success"), delete_after=default_settings.message_delete_delay)
+    else:
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_failed"), delete_after=default_settings.message_delete_delay)
+
 
   @commands.hybrid_command(name='skip', aliases=['s'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"))
   async def _skip(self, ctx: commands.Context):
@@ -405,7 +428,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if voter == ctx.voice_state.current.requester:
       await ctx.message.add_reaction('⏭')
       ctx.voice_state.skip()
-
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_success"), delete_after=default_settings.message_delete_delay)
     elif voter.id not in ctx.voice_state.skip_votes:
       ctx.voice_state.skip_votes.add(voter.id)
       total_votes = len(ctx.voice_state.skip_votes)
@@ -413,6 +436,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       if total_votes >= 3:
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_success"), delete_after=default_settings.message_delete_delay)
       else:
         await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_vote_added").format(total_votes), delete_after=default_settings.message_delete_delay)
 
@@ -449,15 +473,19 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     await ctx.message.add_reaction('✅')
 
   @commands.hybrid_command(name='remove', aliases=['rem'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_desc"))
-  async def _remove(self, ctx: commands.Context, index: int = commands.parameter(default=0, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_desc"))):
+  async def _remove(self, ctx: commands.Context, index: commands.Range[int, 1] = commands.parameter(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_desc"))):
+    
+    if index is None:
+      index = 0
 
     if index <= 0:
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="remove_index_err"), delete_after=default_settings.message_delete_delay)
     if len(ctx.voice_state.songs) == 0:
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=default_settings.message_delete_delay)
 
-    ctx.voice_state.songs.remove(index - 1)
+    removed_song = ctx.voice_state.songs.remove(index - 1)
     await ctx.message.add_reaction('✅')
+    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="track_removed").format(f"**{str(removed_song.source.title)}**"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='loop',  aliases=['repeat', 'rep'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc_full"))
   async def _loop(self, ctx: commands.Context):
@@ -476,7 +504,9 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   async def _play(self, ctx: commands.Context, *, link_or_query: str = commands.parameter(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_desc"))):
     if link_or_query is not None:
       if not ctx.voice_state.voice:
+        self.display_join_message = False
         await ctx.invoke(self._join)
+        self.display_join_message = True
   
       async with ctx.typing():
         try:

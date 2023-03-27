@@ -31,7 +31,7 @@ class Settings(commands.Cog):
       except Exception as e:
         print(e)
 
-  @commands.hybrid_command(name='lang', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc_full").format(", ".join(get_supported_langs())))
+  @commands.hybrid_command(name='lang', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"))
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_code_desc"))):
 
     supported_langs = get_supported_langs()
@@ -117,12 +117,12 @@ class Settings(commands.Cog):
       if ctx.message.author.guild_permissions.administrator:
         try:
           await ctx.bot.tree.sync()
-          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"))
+          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"), delete_after=default_settings.message_delete_delay)
         except Exception as e:
           print(str(e))
           raise commands.CommandError(str(e))
       else:
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"))
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"), delete_after=default_settings.message_delete_delay)
 
 async def setup(bot):
   await bot.add_cog(Settings(bot))
