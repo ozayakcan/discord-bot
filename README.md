@@ -16,13 +16,22 @@ VG......W1
 ```
 
 ```
+// Command prefix for using commands without slash.
 COMMAND_PREFIX = '!'
 
-AI_BRAINSHOP_TOKEN = 'VG......W1' // Brainshop.ai api token. Get it from https://brainshop.ai/
+// Requires for chat bot.
+// Brainshop.ai api token. Get it from https://brainshop.ai/
+AI_BRAINSHOP_TOKEN = 'VG......W1'
 
-DISCORD_BOT_SECRET = 'MTA.......86CQ' // Discord bot secret token
+// Discord bot secret token
+DISCORD_BOT_SECRET = 'MTA.......86CQ'
 
-USE_REPLIT_DB = true // If not specified default will be false. If false; creates settings.json file locally and saves guild/user settings in it. If true; uses replit database (you have to deploy your bot in replit for this.) You can check and edit "src/settings/settings.py" file for your database
+// If USE_REPLIT_DB not specified default will be false. 
+// If false; creates settings.json file locally and saves 
+// guild/user settings in it. If true; uses replit database 
+// (you have to deploy your bot in replit for this.) 
+// You can check and edit "src/settings/settings.py" file for your database
+USE_REPLIT_DB = true 
 ```
 
 ### Music Bot
