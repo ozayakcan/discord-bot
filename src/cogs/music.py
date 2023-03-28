@@ -295,14 +295,18 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if not ctx.voice_state.voice:
       await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_connected_voice_ch"), delete_after=default_settings.message_delete_delay)
       return False
-      
-    ctx.voice_state.songs.clear()
-
-    if ctx.voice_state.is_playing:
-      await ctx.voice_state.stop()
-    else:
-      await ctx.voice_state.voice.disconnect()
-    del self.voice_states[ctx.guild.id]
+    try:
+      ctx.voice_state.songs.clear()
+      if ctx.voice_state.is_playing:
+        await ctx.voice_state.stop()
+      else:
+        await ctx.voice_state.voice.disconnect()
+      del self.voice_states[ctx.guild.id]
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_success"), delete_after=default_settings.message_delete_delay)
+    except Exception as e:
+      print("Stop/Leave failed: "+str(e))
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_failed"), delete_after=default_settings.message_delete_delay)
+      return False
     return True
 
   def cog_unload(self):
@@ -372,9 +376,6 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     leave_status = await self.clear_music(ctx)
     if leave_status:
       await ctx.message.add_reaction('✅')
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_success"), delete_after=default_settings.message_delete_delay)
-    else:
-      raise commands.CommandError(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_failed"))
       
 
   @commands.hybrid_command(name='volume', aliases=['v', 'vol'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="volume_desc"))
@@ -432,9 +433,6 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     stop_status = await self.clear_music(ctx)
     if stop_status:
       await ctx.message.add_reaction('⏹')
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_success"), delete_after=default_settings.message_delete_delay)
-    else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="stop_leave_failed"), delete_after=default_settings.message_delete_delay)
 
 
   @commands.hybrid_command(name='skip', aliases=['s'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="skip_desc"))
