@@ -300,6 +300,8 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
 
     if ctx.voice_state.is_playing:
       await ctx.voice_state.stop()
+    else:
+      await ctx.voice_state.voice.disconnect()
     del self.voice_states[ctx.guild.id]
     return True
 
