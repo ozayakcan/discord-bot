@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "discord-chat-bot"
-version = "0.1.0"
+name = "discord-bot-py"
+version = "0.8.2"
 description = ""
 authors = ["Özay Akcan <mail@ozayakcan.com.tr>"]
 
