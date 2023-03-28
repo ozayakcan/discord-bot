@@ -98,5 +98,7 @@
   "debug_disabled": "Hata ayıklama modu devredışı bırakıldı.",
   "sync_desc": "Eğik çizgi komutlarını sunucun ile senkronize et.",
   "sync_success": "Eğik çizgi komutları başarıyla senkronize edildi.",
-  "admin_permission_err": "Bu komutu kullanabilmek için yönetici yetkiniz bulunmalıdır."
+  "admin_permission_err": "Bu komutu kullanabilmek için yönetici yetkiniz bulunmalıdır.",
+  "no_track_leave_msg": "{} içinde herhangi bir parça çalınmadı. Kanaldan çıkılıyor.",
+  "no_user_leave_msg": "Ses kanalında hiç kullanıcı yok. Kanaldan çıkılıyor."
 }

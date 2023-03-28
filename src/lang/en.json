@@ -97,5 +97,7 @@
   "debug_disabled": "Debug mode disabled.",
   "sync_desc": "Sync slash commands to your guild.",
   "sync_success": "Slash commands successfully synced.",
-  "admin_permission_err": "You should have admin permission to use this command."
+  "admin_permission_err": "You should have admin permission to use this command.",
+  "no_track_leave_msg": "No tracks played in {}. Leaving channel.",
+  "no_user_leave_msg": "No users in voice channel. Leaving channel."
 }

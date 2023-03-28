@@ -14,6 +14,31 @@ from settings.settings import default_settings, get_lang_string
 settings_current_group = "guilds"
 settings_current_id = 0
 
+def set_global_defs(ctx: commands.Context):
+  global settings_current_group, settings_current_id
+  if isinstance(ctx.channel, discord.channel.DMChannel):
+    settings_current_group = "users"
+    settings_current_id = ctx.message.author.id
+  else:
+    settings_current_group = "guilds"
+    settings_current_id = ctx.guild.id
+
+def parse_duration(duration: int):
+    minutes, seconds = divmod(duration, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+
+    duration = []
+    if days > 0:
+      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="days").format(days))
+    if hours > 0:
+      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="hours").format(hours))
+    if minutes > 0:
+      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="minutes").format(minutes))
+    if seconds > 0:
+      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="seconds").format(seconds))
+
+    return ', '.join(duration)
 # Silence useless bug reports messages
 youtube_dl.utils.bug_reports_message = lambda: ''
 
@@ -49,7 +74,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
   def __init__(self, ctx: commands.Context, source: discord.FFmpegPCMAudio, *, data: dict, volume: float = 0.5):
     super().__init__(source, volume)
-
+    set_global_defs(ctx)
     self.requester = ctx.author
     self.channel = ctx.channel
     self.data = data
@@ -61,7 +86,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     self.title = data.get('title')
     self.thumbnail = data.get('thumbnail')
     self.description = data.get('description')
-    self.duration = self.parse_duration(int(data.get('duration')))
+    self.duration = parse_duration(int(data.get('duration')))
     self.tags = data.get('tags')
     self.url = data.get('webpage_url')
     self.views = data.get('view_count')
@@ -112,24 +137,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
           raise YTDLError(get_lang_string(group=settings_current_group, id=settings_current_id, key="yt_could_not_retrieve").format(webpage_url))
 
     return cls(ctx, discord.FFmpegPCMAudio(info['url'], **cls.FFMPEG_OPTIONS), data=info)
-
-  @staticmethod
-  def parse_duration(duration: int):
-    minutes, seconds = divmod(duration, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-
-    duration = []
-    if days > 0:
-      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="days").format(days))
-    if hours > 0:
-      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="hours").format(hours))
-    if minutes > 0:
-      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="minutes").format(minutes))
-    if seconds > 0:
-      duration.append(get_lang_string(group=settings_current_group, id=settings_current_id, key="seconds").format(seconds))
-
-    return ', '.join(duration)
 
 class Song:
   __slots__ = ('source', 'requester')
@@ -214,6 +221,7 @@ class VoiceState:
     return self.voice and self.current
 
   async def audio_player_task(self):
+    set_global_defs(self._ctx)
     while True:
       self.next.clear()
 
@@ -223,11 +231,19 @@ class VoiceState:
         # the player will disconnect due to performance
         # reasons.
         try:
-          async with timeout(180):  # 3 minutes
+          timeout_val = 180
+          async with timeout(timeout_val):  # 3 minutesif member_count == 0:
+            if self.get_mem_count() == 0:
+              self.bot.loop.create_task(self.stop())
+              await self._ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="no_user_leave_msg"))
+              return
             self.current = await self.songs.get()
         except asyncio.TimeoutError:
           self.bot.loop.create_task(self.stop())
+          await self.current.source.channel.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="no_track_leave_msg").format(parse_duration(timeout_val)))
           return
+        except Exception as e:
+          print(str(e))
 
       self.current.source.volume = self._volume
       self.voice.play(self.current.source, after=self.play_next_song)
@@ -253,6 +269,13 @@ class VoiceState:
     if self.voice:
       await self.voice.disconnect()
       self.voice = None
+
+  def get_mem_count(self):
+    member_count = 0
+    for voice_member in self._ctx.voice_client.channel.members:
+      if self.bot.user.id != voice_member.id:
+        member_count += 1
+    return member_count
 
 class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id=settings_current_id, key="music")):
   def __init__(self, bot: commands.Bot):
@@ -297,13 +320,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
 
   async def cog_before_invoke(self, ctx: commands.Context):
     ctx.voice_state = self.get_voice_state(ctx)
-    global settings_current_group, settings_current_id
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-      settings_current_group = "users"
-      settings_current_id = ctx.message.author.id
-    else:
-      settings_current_group = "guilds"
-      settings_current_id = ctx.guild.id
+    set_global_defs(ctx)
 
   async def cog_after_invoke(self, ctx: commands.Context):
     member = ctx.message.guild.get_member(self.bot.user.id)
