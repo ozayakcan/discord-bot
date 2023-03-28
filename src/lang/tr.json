@@ -61,7 +61,7 @@
   "queue_pattern": "`{0}.` [**{1.source.title}**]({1.source.url})\n",
   "empty_queue": "Sıra boş.",
   "track_removed": "Kaldırılan parça: {}",
-  "tracks": "**{} parçalar:**\n\n{}",
+  "tracks": "**{} parça:**\n\n{}",
   "viewing_page": "Sayfa görüntüleniyor {}/{}",
   "shuffle_desc": "Parçaları karıştırır.",
   "remove_desc": "Belirtilen sıradaki parçayı kaldırır.",
