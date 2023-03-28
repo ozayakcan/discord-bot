@@ -504,18 +504,18 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     await ctx.message.add_reaction('✅')
     await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="track_removed").format(f"**{str(removed_song.source.title)}**"), delete_after=default_settings.message_delete_delay)
 
-  @commands.hybrid_command(name='loop',  aliases=['repeat', 'rep'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc_full"))
-  async def _loop(self, ctx: commands.Context):
+  #@commands.hybrid_command(name='loop',  aliases=['repeat', 'rep'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_desc_full"))
+  #async def _loop(self, ctx: commands.Context):
 
-    if not ctx.voice_state.is_playing:
-      return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
+  #  if not ctx.voice_state.is_playing:
+  #    return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="not_playing"), delete_after=default_settings.message_delete_delay)
 
     # Inverse boolean value to loop and unloop.
-    ctx.voice_state.loop = not ctx.voice_state.loop
-    if ctx.voice_state.loop:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_enabled"), delete_after=default_settings.message_delete_delay)
-    else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_disabled"), delete_after=default_settings.message_delete_delay)
+  #  ctx.voice_state.loop = not ctx.voice_state.loop
+  #  if ctx.voice_state.loop:
+  #    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_enabled"), delete_after=default_settings.message_delete_delay)
+  #  else:
+  #    await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="loop_disabled"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='play', aliases=['p'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_desc"))
   async def _play(self, ctx: commands.Context, *, link_or_query: str = commands.parameter(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="play_search_desc"))):
