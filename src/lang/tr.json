@@ -100,5 +100,7 @@
   "sync_success": "Eğik çizgi komutları başarıyla senkronize edildi.",
   "admin_permission_err": "Bu komutu kullanabilmek için yönetici yetkiniz bulunmalıdır.",
   "no_track_leave_msg": "{} içinde herhangi bir parça çalınmadı. Kanaldan çıkılıyor.",
-  "no_user_leave_msg": "Ses kanalında hiç kullanıcı yok. Kanaldan çıkılıyor."
+  "no_user_leave_msg": "Ses kanalında hiç kullanıcı yok. Kanaldan çıkılıyor.",
+  "no_track_leave_msg": "{} içinde herhangi bir parça çalınmadığı için kanaldan çıkılıyor.",
+  "no_user_leave_msg": "{} içinde kanalda herhangi bir kullanıcı bulunmadığı için kanaldan çıkılıyor."
 }

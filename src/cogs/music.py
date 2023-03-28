@@ -231,11 +231,11 @@ class VoiceState:
         # the player will disconnect due to performance
         # reasons.
         try:
-          timeout_val = 180
-          async with timeout(timeout_val):  # 3 minutesif member_count == 0:
+          timeout_val = 180 # 3 minutes
+          async with timeout(timeout_val):
             if self.get_mem_count() == 0:
               self.bot.loop.create_task(self.stop())
-              await self._ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="no_user_leave_msg"))
+              await self._ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="no_user_leave_msg").format(parse_duration(timeout_val)))
               return
             self.current = await self.songs.get()
         except asyncio.TimeoutError:
@@ -243,7 +243,7 @@ class VoiceState:
           await self.current.source.channel.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="no_track_leave_msg").format(parse_duration(timeout_val)))
           return
         except Exception as e:
-          print(str(e))
+          print("src/cogs/music.py find: async with timeout(timeout_val) see this error codes: "+ str(e))
 
       self.current.source.volume = self._volume
       self.voice.play(self.current.source, after=self.play_next_song)
