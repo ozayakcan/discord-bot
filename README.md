@@ -33,8 +33,21 @@ DISCORD_BOT_SECRET = 'MTA.......86CQ'
 USE_REPLIT_DB = true 
 ```
 
-### Music Bot
+## Music Bot
 
+- See [supported sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
+- Playlists not supported for now.
+
+### Known Bugs
+
+- Sometimes after bot restarted, if it's in a voice channel before restart, music commands not working properly. After you kick bot from voice channel, commands works again.
+
+- loop command disabled. The command does not work properly because song is removed from the queue when starts playing.
+  - Tried solutions:
+    1) Disabled removing song from the queue. But then play command stops working
+    2) Created seperate queue for loop. Still play command stops working
+
+### Installing
 - To download ffmpef, open shell in replit (ctrl+shift+s):
 - Enter this commands:
 ```
