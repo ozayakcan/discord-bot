@@ -42,10 +42,7 @@ USE_REPLIT_DB = true
 
 - Sometimes after bot restarted, if it's in a voice channel before restart, music commands not working properly. After you kick bot from voice channel, commands works again.
 
-- loop command disabled. The command does not work properly because song is removed from the queue when starts playing.
-  - Tried solutions:
-    1) Disabled removing song from the queue. But then play command stops working
-    2) Created seperate queue for loop. Still play command stops working
+- loop command disabled. (Not working)
 
 ### Installing
 - To download ffmpef, open shell in replit (ctrl+shift+s):
