@@ -4,6 +4,7 @@ import itertools
 import math
 import random
 from async_timeout import timeout
+import collections
 
 import yt_dlp as youtube_dl
 import discord
@@ -158,27 +159,67 @@ class Song:
     return embed
 
 class SongQueue(asyncio.Queue):
+
+  def __init__(self):
+    self._queue_all = collections.deque()
+    self.current = None
+    super().__init__()
+  
   def __getitem__(self, item):
     if isinstance(item, slice):
       return list(itertools.islice(self._queue, item.start, item.stop, item.step))
     else:
       return self._queue[item]
 
+  def _get(self):
+    if self.__len__() > 0:
+      self.current = self._queue[0]
+    return super()._get()
+  
   def __iter__(self):
     return self._queue.__iter__()
 
   def __len__(self):
     return self.qsize()
+
+  def len_all(self):
+    return len(self._queue_all)
+  
+  def get_all(self, item):
+    if isinstance(item, slice):
+      return list(itertools.islice(self._queue_all, item.start, item.stop, item.step))
+    else:
+      return self._queue_all[item]
+
+  async def put(self, item):
+    self._queue_all.append(item)
+    await super().put(item)
   
   def clear(self):
     self._queue.clear()
+    self._queue_all.clear()
 
   def shuffle(self):
-    random.shuffle(self._queue)
+    random.shuffle(self._queue_all)
+    first_item = None
+    for i, sng in enumerate(self._queue_all):
+      if self._queue_all[i] == self.current:
+        first_item = self._queue_all.copy()[i]
+        del self._queue_all[i]
+        break
+    self._queue = self._queue_all.copy()
+    if first_item is not None:
+      self._queue_all.append(first_item)
 
-  def remove(self, index: int):
-    song = self._queue[index]
-    del self._queue[index]
+  def remove(self, index: int, vc):
+    song = self._queue_all.copy()[index]
+    for i, sng in enumerate(self._queue):
+      if self._queue[i] == song:
+        del self._queue[i]
+        break
+    del self._queue_all[index]
+    if self.current == song:
+      vc.skip()
     return song
 
 class VoiceState:
@@ -463,20 +504,20 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   @commands.hybrid_command(name='queue', aliases=['q'], brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_desc"))
   async def _queue(self, ctx: commands.Context, *, page: int = commands.parameter(default=1, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_page_desc"))):
 
-    if len(ctx.voice_state.songs) == 0:
+    if ctx.voice_state.songs.len_all() == 0:
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=default_settings.message_delete_delay)
 
     items_per_page = 10
-    pages = math.ceil(len(ctx.voice_state.songs) / items_per_page)
+    pages = math.ceil(ctx.voice_state.songs.len_all() / items_per_page)
 
     start = (page - 1) * items_per_page
     end = start + items_per_page
 
     queue = ''
-    for i, song in enumerate(ctx.voice_state.songs[start:end], start=start):
+    for i, song in enumerate(ctx.voice_state.songs.get_all(slice(start, end)), start=start):
       queue += get_lang_string(group=settings_current_group, id=settings_current_id, key="queue_pattern").format(i + 1, song)
 
-    embed = (discord.Embed(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="tracks").format(len(ctx.voice_state.songs), queue))
+    embed = (discord.Embed(description=get_lang_string(group=settings_current_group, id=settings_current_id, key="tracks").format(ctx.voice_state.songs.len_all(), queue))
              .set_footer(text=get_lang_string(group=settings_current_group, id=settings_current_id, key="viewing_page").format(page, pages)))
     await ctx.send(embed=embed)
 
@@ -500,7 +541,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     if len(ctx.voice_state.songs) == 0:
       return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="empty_queue"), delete_after=default_settings.message_delete_delay)
 
-    removed_song = ctx.voice_state.songs.remove(index - 1)
+    removed_song = ctx.voice_state.songs.remove(index - 1, ctx.voice_state)
     await ctx.message.add_reaction('✅')
     await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="track_removed").format(f"**{str(removed_song.source.title)}**"), delete_after=default_settings.message_delete_delay)
 
