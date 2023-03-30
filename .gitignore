@@ -135,3 +135,7 @@ node_modules/
 
 # Settings
 settings.json
+
+# My custom commands
+metin2.py
+metin2/
