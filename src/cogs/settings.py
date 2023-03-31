@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from settings.settings import default_settings, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels, set_debug, get_debug
+from settings.settings import default_settings, is_guild, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels, set_debug, get_debug
 
 settings_current_group = "guilds"
 settings_current_id = 0
@@ -16,27 +16,28 @@ class Settings(commands.Cog):
 
   async def cog_before_invoke(self, ctx: commands.Context):
     global settings_current_group, settings_current_id
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-      settings_current_group = "users"
-      settings_current_id = ctx.message.author.id
-    else:
+    if is_guild(ctx):
       settings_current_group = "guilds"
       settings_current_id = ctx.guild.id
+    else:
+      settings_current_group = "users"
+      settings_current_id = ctx.message.author.id
 
   async def cog_after_invoke(self, ctx: commands.Context):
-    member = ctx.message.guild.get_member(self.bot.user.id)
-    if member.guild_permissions.manage_messages:
-      try:
-        await ctx.message.delete(delay=default_settings.message_delete_delay)
-      except Exception as e:
-        print(e)
+    if is_guild(ctx):
+      member = ctx.message.guild.get_member(self.bot.user.id)
+      if member.guild_permissions.manage_messages:
+        try:
+          await ctx.message.delete(delay=default_settings.message_delete_delay)
+        except Exception as e:
+          print(e)
 
   @commands.hybrid_command(name='lang', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_desc"))
   async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=get_lang_string(group=settings_current_group, id=settings_current_id, key="lang_code_desc"))):
 
     supported_langs = get_supported_langs()
     if lang_code:
-      if not isinstance(ctx.channel, discord.channel.DMChannel):
+      if is_guild(ctx):
         if not ctx.message.author.guild_permissions.manage_messages:
           return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="manage_messages"), delete_after=default_settings.message_delete_delay)
       if lang_code in supported_langs:
@@ -69,7 +70,7 @@ class Settings(commands.Cog):
   @commands.hybrid_command(name='translate', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"))
   async def _translate(self, ctx: commands.Context):
 
-    if not isinstance(ctx.channel, discord.channel.DMChannel):
+    if is_guild(ctx):
       if not ctx.message.author.guild_permissions.manage_messages:
         return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="manage_messages"), delete_after=default_settings.message_delete_delay)
 
@@ -114,15 +115,15 @@ class Settings(commands.Cog):
   @commands.command(name='sync', hidden=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_desc"))
   async def _sync(self, ctx: commands.Context):
     async with ctx.typing():
-      if ctx.message.author.guild_permissions.administrator:
-        try:
-          await ctx.bot.tree.sync()
-          await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"), delete_after=default_settings.message_delete_delay)
-        except Exception as e:
-          print(str(e))
-          raise commands.CommandError(str(e))
-      else:
-        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"), delete_after=default_settings.message_delete_delay)
+      if is_guild(ctx):
+        if ctx.message.author.guild_permissions.administrator:
+          return await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="admin_permission_err"), delete_after=default_settings.message_delete_delay)
+      try:
+        await ctx.bot.tree.sync()
+        await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="sync_success"), delete_after=default_settings.message_delete_delay)
+      except Exception as e:
+        print(str(e))
+        raise commands.CommandError(str(e))
 
 async def setup(bot):
   await bot.add_cog(Settings(bot))

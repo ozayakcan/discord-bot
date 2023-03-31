@@ -9,7 +9,7 @@ class Settings:
     self.message_delete_delay = 5
 
   async def send_cog_error(self, group: str, id: int, ctx: commands.Context, error: commands.CommandError):
-    await ctx.send(str(error), delete_after=self.message_delete_delay)
+    
     #if get_debug(group=group, id=id):
     #  await ctx.send(str(error), delete_after=self.message_delete_delay)
     #else:
@@ -17,6 +17,15 @@ class Settings:
 
 default_settings = Settings()
 
+
+# Guild
+def is_guild(ctx: commands.Context):
+  if not ctx.guild:
+    return False
+  else:
+    return True
+
+# Database
 use_replit_db = os.environ.get("USE_REPLIT_DB")
 if use_replit_db is not None:
   if str(use_replit_db).lower() == "true":
@@ -142,4 +151,3 @@ def set_debug(group: str, id: int, debug: bool):
 
 def get_debug(group: str, id: int):
   return get_key(group=group, id=id, key=debug_str, default=False)
-

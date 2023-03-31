@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 #from extensions.extensions import get_extensions
-from settings.settings import default_settings, get_lang_string
+from settings.settings import is_guild, default_settings, get_lang_string
 
 settings_current_group = "guilds"
 settings_current_id = 0
@@ -34,12 +34,12 @@ class Help(commands.Cog):
     
   async def cog_before_invoke(self, ctx: commands.Context):
     global settings_current_group, settings_current_id
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-      settings_current_group = "users"
-      settings_current_id = ctx.message.author.id
-    else:
+    if is_guild(ctx):
       settings_current_group = "guilds"
       settings_current_id = ctx.guild.id
+    else:
+      settings_current_group = "users"
+      settings_current_id = ctx.message.author.id
     #for extension in get_extensions():
     #  await self.bot.unload_extension(extension)
     #  await self.bot.load_extension(extension)

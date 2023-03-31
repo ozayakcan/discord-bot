@@ -10,19 +10,19 @@ import yt_dlp as youtube_dl
 import discord
 from discord.ext import commands
 
-from settings.settings import default_settings, get_lang_string
+from settings.settings import default_settings, is_guild, get_lang_string
 
 settings_current_group = "guilds"
 settings_current_id = 0
 
 def set_global_defs(ctx: commands.Context):
   global settings_current_group, settings_current_id
-  if isinstance(ctx.channel, discord.channel.DMChannel):
-    settings_current_group = "users"
-    settings_current_id = ctx.message.author.id
-  else:
+  if is_guild(ctx):
     settings_current_group = "guilds"
     settings_current_id = ctx.guild.id
+  else:
+    settings_current_group = "users"
+    settings_current_id = ctx.message.author.id
 
 def parse_duration(duration: int):
     minutes, seconds = divmod(duration, 60)
@@ -355,7 +355,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
       self.bot.loop.create_task(state.stop())
 
   def cog_check(self, ctx: commands.Context):
-    if isinstance(ctx.channel, discord.channel.DMChannel):
+    if not is_guild(ctx):
       raise commands.NoPrivateMessage(get_lang_string(group=settings_current_group, id=settings_current_id, key="command_dm"))
     # Disable commands for now
     #raise commands.CommandError('Music commands not available right now.')
@@ -363,6 +363,7 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     return True
 
   async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
+    set_global_defs(ctx)
     await default_settings.send_cog_error(group=settings_current_group, id=settings_current_id, ctx=ctx, error=error)
 
   async def cog_before_invoke(self, ctx: commands.Context):
@@ -370,12 +371,13 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
     set_global_defs(ctx)
 
   async def cog_after_invoke(self, ctx: commands.Context):
-    member = ctx.message.guild.get_member(self.bot.user.id)
-    if member.guild_permissions.manage_messages:
-      try:
-        await ctx.message.delete(delay=default_settings.message_delete_delay)
-      except Exception as e:
-        print(e)
+    if is_guild(ctx):
+      member = ctx.message.guild.get_member(self.bot.user.id)
+      if member.guild_permissions.manage_messages:
+        try:
+          await ctx.message.delete(delay=default_settings.message_delete_delay)
+        except Exception as e:
+          print(e)
 
   @commands.hybrid_command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="join_desc"))
   async def _join(self, ctx: commands.Context):
@@ -594,14 +596,15 @@ class Music(commands.Cog, name= get_lang_string(group=settings_current_group, id
   @_join.after_invoke
   @_play.after_invoke
   async def deaf_itself(self, ctx: commands.Context):
-    try:
-      member = ctx.message.guild.get_member(self.bot.user.id)
-      if member.guild_permissions.deafen_members:
-        await member.edit(deafen=True)
-      else:
-        await ctx.guild.change_voice_state(channel=ctx.voice_client.channel, self_deaf=True)
-    except Exception as e:
-      print(str(e))
+    if is_guild(ctx):
+      try:
+        member = ctx.message.guild.get_member(self.bot.user.id)
+        if member.guild_permissions.deafen_members:
+          await member.edit(deafen=True)
+        else:
+          await ctx.guild.change_voice_state(channel=ctx.voice_client.channel, self_deaf=True)
+      except Exception as e:
+        print(str(e))
 
 async def setup(bot):
   await bot.add_cog(Music(bot))
