@@ -1,8 +1,4 @@
 {
-  "help_aliases": [
-    "yardım",
-    "yardim"
-  ],
   "no_category": "Kategori yok",
   "help_desc": "Bu mesajı gösterir.",
   "help_desc_full": "Komut listesini gösterir.",

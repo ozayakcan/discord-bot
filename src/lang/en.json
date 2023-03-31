@@ -1,7 +1,4 @@
 {
-  "help_aliases": [
-    "helps"
-  ],
   "no_category": "No category",
   "help_desc": "Shows this message",
   "help_desc_full": "Shows command list.",
