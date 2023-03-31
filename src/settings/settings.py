@@ -87,14 +87,21 @@ def get_supported_langs():
       supported_langs.append(filename[:-5])
   return supported_langs
 
-def get_lang_string(group: str, id: int, key:str):
+def get_lang_dict():
   langs = {}
   supported_langs = get_supported_langs()
   for supported_lang in supported_langs:
     file = open(lang_folder+"/"+supported_lang+".json")
     langs[supported_lang] = json.load(file)
     file.close()
-  return langs[get_lang_code(group=group, id=id)][key]
+  return langs
+
+def get_lang_string(key: str, group: str = None, id: int = None):
+  langs = get_lang_dict()
+  if group is None or id is None:
+    return langs[default_lang_code][key]
+  else:
+    return langs[get_lang_code(group=group, id=id)][key]
 
 lang_str = "lang"
 
