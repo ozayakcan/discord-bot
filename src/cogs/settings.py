@@ -67,7 +67,7 @@ class Settings(commands.Cog):
 
     await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="supported_langs").format(", ".join(get_supported_langs())), delete_after=default_settings.message_delete_delay)
 
-  @commands.hybrid_command(name='translate', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_desc"))
+  @commands.hybrid_command(name='chat_translate', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_translate_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_translate_desc"))
   async def _translate(self, ctx: commands.Context):
 
     if is_guild(ctx):
@@ -78,9 +78,9 @@ class Settings(commands.Cog):
     set_translate(group=settings_current_group, id=settings_current_id, translate=translate)
 
     if translate:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_enabled"), delete_after=default_settings.message_delete_delay)
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_translate_enabled"), delete_after=default_settings.message_delete_delay)
     else:
-      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="translate_disabled"), delete_after=default_settings.message_delete_delay)
+      await ctx.send(get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_translate_disabled"), delete_after=default_settings.message_delete_delay)
 
   @commands.hybrid_command(name='chat', brief=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"), description=get_lang_string(group=settings_current_group, id=settings_current_id, key="chat_desc"))
   async def _chat(self, ctx: commands.Context):
