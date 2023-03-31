@@ -37,8 +37,10 @@ def get_settings(group:str, id: int):
     os.makedirs(os.path.dirname(file), exist_ok=True)
     with open(file, 'w') as file_object:
       file_object.write(json.dumps({}))
+      file_object.close()
   with open(file, 'r+') as json_file:
     data = json.load(json_file)
+    json_file.close()
     return data
 
 def get_key(group: str, id: int, key: str, default: any):
@@ -64,6 +66,7 @@ def update_settings(group: str, id: int, key: str, value: any):
   dumped = json.dumps(settings_model, indent=4)
   with open(settings_file.format(group, str(id)), "w") as _data:
     _data.write(dumped)
+    _data.close()
 
 # Chat
     
