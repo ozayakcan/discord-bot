@@ -9,7 +9,7 @@ class Settings:
     self.message_delete_delay = 5
 
   async def send_cog_error(self, group: str, id: int, ctx: commands.Context, error: commands.CommandError):
-    
+    await ctx.send(f"{ctx.message.author.mention}, {str(error)}")
     #if get_debug(group=group, id=id):
     #  await ctx.send(str(error), delete_after=self.message_delete_delay)
     #else:
