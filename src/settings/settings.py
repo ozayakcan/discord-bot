@@ -1,4 +1,3 @@
-import io
 import os
 import json
 
@@ -25,78 +24,46 @@ def is_guild(ctx: commands.Context):
   else:
     return True
 
-# Database
-use_replit_db = os.environ.get("USE_REPLIT_DB")
-if use_replit_db is not None:
-  if str(use_replit_db).lower() == "true":
-    use_replit_db = True
-  else:
-    use_replit_db = False
-else:
-  use_replit_db = False
-settings_file = "./src/settings/settings.json"
+# Settings files
+settings_file = "./src/settings/{0}/{1}.json"
 
 lang_folder = "./src/lang"
-if not use_replit_db:
-  if not os.path.isfile(settings_file) and not os.access(settings_file, os.R_OK):
-    with io.open(settings_file, 'w') as settings_file_object:
-      settings_file_object.write(json.dumps({}))
+
 default_lang_code = "en"
 
-def get_settings():
-  if use_replit_db:
-    from replit import db
-    return db
-  else:
-    with open(settings_file, 'r+') as json_file:
-      data = json.load(json_file)
-      return data
+def get_settings(group:str, id: int):
+  file = settings_file.format(group, str(id))
+  if not os.path.isfile(file) and not os.access(file, os.R_OK):
+    os.makedirs(os.path.dirname(file), exist_ok=True)
+    with open(file, 'w') as file_object:
+      file_object.write(json.dumps({}))
+  with open(file, 'r+') as json_file:
+    data = json.load(json_file)
+    return data
 
 def get_key(group: str, id: int, key: str, default: any):
-  settings_model = get_settings()
+  settings_model = get_settings(group, id)
   try:
-    return settings_model[group][str(id)][key]
+    return settings_model[key]
   except:
     return default
 
-def set_key(data, group: str, id: int, key: str, value: any):
-  if group not in data:
+def set_key(data, key: str, value: any):
+  if f"{key}" not in data:
+    data = data
     data.update({
-      f"{group}" : {
-        f"{id}": {
-          f"{key}": value
-        }
-      }
-    })
-  elif str(id) not in data[group]:
-    key_data = data[group]
-    key_data.update({
-      f"{id}": {
-        f"{key}": value
-      }
-    })
-    data[group] = key_data
-  elif f"{key}" not in data[group][str(id)]:
-    id_data = data[group][str(id)]
-    id_data.update({
       f"{key}": value
     })
-    data[group][str(id)] = id_data 
   else:
-    data[group][str(id)][f"{key}"] = value
+    data[f"{key}"] = value
   return data
 
 def update_settings(group: str, id: int, key: str, value: any):
-  if use_replit_db:
-    settings_model = get_settings()
-    settings_model = set_key(data=settings_model, group=group, id=id, key=key, value=value)
-  else:
-    with open(settings_file, 'r+') as json_file:
-      data = json.load(json_file)
-      data = set_key(data=data, group=group, id=id, key=key, value=value)
-      json_file.seek(0)
-      json.dump(data, json_file, indent=4, sort_keys=False)
-      json_file.truncate()
+  settings_model = get_settings(group, id)
+  settings_model = set_key(settings_model, key=key, value=value)
+  dumped = json.dumps(settings_model, indent=4)
+  with open(settings_file.format(group, str(id)), "w") as _data:
+    _data.write(dumped)
 
 # Chat
     
