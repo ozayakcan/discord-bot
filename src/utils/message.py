@@ -4,7 +4,7 @@ import requests
 import translators as ts
 import discord
 
-import utils
+from ._settings import Settings
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
@@ -17,7 +17,7 @@ apis = {
     "function": brainshop
   }
 }
-async def bot(message: discord.Message, settings: utils.Settings, api = "brainshop", mention = True):
+async def bot(message: discord.Message, settings: Settings, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:

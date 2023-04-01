@@ -1,11 +1,10 @@
-import os
-
 import discord
 
 from utils import MyBot, keep_alive
 from os import system
+import utils.env
   
-FFMPEG_PATH = os.environ.get("FFMPEG_PATH")
+FFMPEG_PATH = utils.env.get("FFMPEG_PATH")
 discord.opus.load_opus("./src/assets/opus/libopus.so.0.8.0")
 
 bot = MyBot()

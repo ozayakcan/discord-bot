@@ -1,5 +1,4 @@
 import asyncio
-import os
 
 import discord
 from discord.ext import commands
@@ -7,8 +6,9 @@ from discord.ext import commands
 from ._extensions import get_extensions
 from ._settings import settings
 from .message import bot as chat_bot
+from .env import get as getenv
 
-command_prefix = os.environ.get("COMMAND_PREFIX")
+command_prefix = getenv("COMMAND_PREFIX")
 if command_prefix is None:
   command_prefix = "!"
 
@@ -18,7 +18,7 @@ class MyBot(commands.Bot):
     intents = discord.Intents.all()
     intents.message_content = True
             
-    self.mytoken = os.environ.get("DISCORD_BOT_SECRET")
+    self.mytoken = getenv("DISCORD_BOT_SECRET")
     self.synced = False
     
     super().__init__(command_prefix,intents=intents, help_command=None)
