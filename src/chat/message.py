@@ -4,7 +4,7 @@ import requests
 import translators as ts
 import discord
 
-from utils.settings import get_lang_code, get_translate
+import utils
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
@@ -17,14 +17,14 @@ apis = {
     "function": brainshop
   }
 }
-async def chat_message(message: discord.Message, group: str, id: int, api = "brainshop", mention = True):
+async def chat_message(message: discord.Message, settings: utils.Settings, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:
       if api in apis:
         resp = apis[api]["function"](message.content, message.author.id, apis[api]["token"])
-      if get_lang_code(id=id, group=group) != "en" and get_translate(id=id, group=group):
-        resp = ts.translate_text(resp, translator= "google", to_language=get_lang_code(id=id, group=group)) 
+      if settings.lang_code != "en" and settings.translate:
+        resp = ts.translate_text(resp, translator= "google", to_language=settings.lang_code) 
       #for resp in resps['choices']:
         #await message.channel.send(resp['message']['content'])
     except Exception as e:

@@ -6,9 +6,8 @@ from discord.ext import commands
 
 from chat.message import chat_message
 from extensions.extensions import get_extensions
-from utils.settings import get_chat_channels
+from utils import settings
 
-settings_current_group = "guilds"
 settings_current_id = 0
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
@@ -51,14 +50,8 @@ class MyBot(commands.Bot):
   async def on_message(self, message):
     if message.author == self.user:
       return
-    global settings_current_group, settings_current_id
     if not message.content.startswith(command_prefix):
-      if isinstance(message.channel, discord.channel.DMChannel):
-        settings_current_group = "users"
-        settings_current_id = message.author.id
-      else:
-        settings_current_group = "guilds"
-        settings_current_id = message.guild.id
-      if message.channel.id in get_chat_channels( group=settings_current_group, id=settings_current_id) or isinstance(message.channel, discord.channel.DMChannel):
-        await chat_message(message=message, group=settings_current_group, id=settings_current_id , mention = not isinstance(message.channel, discord.channel.DMChannel))
+      settings.update_currents(message=message)
+      if message.channel.id in settings.chat_channels or isinstance(message.channel, discord.channel.DMChannel):
+        await chat_message(message=message, default_settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
     await super().process_commands(message)
