@@ -214,7 +214,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   @commands.hybrid_command(name='shuffle', aliases=['shuf'], brief=settings.lang_string("shuffle_desc"), description=settings.lang_string("shuffle_desc"))
   async def _shuffle(self, ctx: commands.Context):
 
-    if len(ctx.voice_state.songs) == 0:
+    if ctx.voice_state.songs.len_all() == 0:
       return await ctx.send(settings.lang_string("empty_queue"), delete_after=settings.message_delete_delay)
 
     ctx.voice_state.songs.shuffle()
@@ -228,7 +228,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
 
     if index <= 0:
       return await ctx.send(settings.lang_string("remove_index_err"), delete_after=settings.message_delete_delay)
-    if len(ctx.voice_state.songs) == 0:
+    if ctx.voice_state.songs.len_all() == 0:
       return await ctx.send(settings.lang_string("empty_queue"), delete_after=settings.message_delete_delay)
 
     removed_song = ctx.voice_state.songs.remove(index - 1, ctx.voice_state)
