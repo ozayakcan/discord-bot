@@ -6,7 +6,7 @@ from discord.ext import commands
 from utils import settings
 import utils.music
 
-class Music(commands.Cog, name= settings.lang_string("music")):
+class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   def __init__(self, bot: commands.Bot):
     self.bot = bot
     self.voice_states = {}

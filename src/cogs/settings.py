@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from utils import settings
 
-class Settings(commands.Cog):
+class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc")):
   def __init__(self, bot: commands.Bot):
     self.bot = bot
 

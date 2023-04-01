@@ -135,12 +135,33 @@ class Settings:
         supported_langs.append(filename[:-5])
     return supported_langs
 
+  def lang_from_text(self, text: str):
+    try:
+      langs = self.lang_dict
+      lang = langs[self.__default_lang_code__]
+      keys = [k for k, v in lang.items() if v == text]
+      if len(keys) > 0:
+        lang_string = self.lang_string(keys[0])
+        if lang_string == keys[0]:
+          return text
+        else:
+          return lang_string
+      else:
+        return text
+    except Exception as e:
+      print("Could not get lang key: "+str(e))
+      return text
+
   def lang_string(self, key: str, is_default = False):
-    langs = self.lang_dict
-    if is_default:
-      return langs[self.__default_lang_code__][key]
-    else:
-      return langs[self.lang_code][key]
+    try:
+      langs = self.lang_dict
+      if is_default:
+        return langs[self.__default_lang_code__][key]
+      else:
+        return langs[self.lang_code][key]
+    except Exception as e:
+      print("Could not get lang string: "+str(e))
+      return key
 
   @property
   def lang_code(self):
