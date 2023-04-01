@@ -1,24 +1,7 @@
 from discord.ext import commands
 
 #from extensions.extensions import get_extensions
-from utils import settings 
-
-class MyHelpCommand(commands.DefaultHelpCommand):
-  def __init__(self, prefix):
-    self.prefix = prefix
-    super().__init__(
-      command_attrs={
-        'name': "xcvsad",
-        'hidden': True,
-      },
-      no_category = settings.lang_string("no_category"),
-      default_argument_description = settings.lang_string("help_arg_desc"),
-      arguments_heading = settings.lang_string("arguments_heading"),
-      commands_heading = settings.lang_string("commands_heading"),
-      width = 150
-    )
-  def get_ending_note(self):
-    return settings.lang_string("help_ending_note").format(self.prefix, self.prefix)
+from utils import settings, help
 
 class Help(commands.Cog):
   def __init__(self, bot: commands.Bot):
@@ -38,7 +21,7 @@ class Help(commands.Cog):
   async def _help(self, ctx: commands.Context, *, command_name_or_category: str = commands.parameter(default=None, description=settings.lang_string("help_command_name_or_category_desc"))):
 
     async with ctx.typing():
-      self.bot.help_command = MyHelpCommand(ctx.clean_prefix)
+      self.bot.help_command = help.Command(ctx.clean_prefix, settings)
       if command_name_or_category:
         command_def = self.bot.get_cog(command_name_or_category) or self.bot.get_command(command_name_or_category)
         if command_def is None:
