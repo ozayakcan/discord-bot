@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from chat.message import chat_message
 from extensions.extensions import get_extensions
-from settings.settings import get_chat_channels
+from utils.settings import get_chat_channels
 
 settings_current_group = "guilds"
 settings_current_id = 0

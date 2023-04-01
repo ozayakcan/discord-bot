@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from settings.settings import default_settings, is_guild, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels, set_debug, get_debug
+from utils.settings import default_settings, is_guild, get_lang_string, get_supported_langs, set_lang_code, set_translate, get_translate, set_chat_channels, get_chat_channels
 
 settings_current_group = "guilds"
 settings_current_id = 0

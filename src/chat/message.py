@@ -4,7 +4,7 @@ import requests
 import translators as ts
 import discord
 
-from settings.settings import get_lang_code, get_translate
+from utils.settings import get_lang_code, get_translate
 
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)

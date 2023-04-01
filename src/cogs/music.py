@@ -10,7 +10,7 @@ import yt_dlp as youtube_dl
 import discord
 from discord.ext import commands
 
-from settings.settings import default_settings, is_guild, get_lang_string
+from utils.settings import default_settings, is_guild, get_lang_string
 
 settings_current_group = "guilds"
 settings_current_id = 0

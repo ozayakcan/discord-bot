@@ -1,8 +1,7 @@
-import discord
 from discord.ext import commands
 
 #from extensions.extensions import get_extensions
-from settings.settings import is_guild, default_settings, get_lang_string
+from utils.settings import is_guild, default_settings, get_lang_string
 
 settings_current_group = "guilds"
 settings_current_id = 0
