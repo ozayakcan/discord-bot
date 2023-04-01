@@ -91,7 +91,7 @@ class VoiceState:
           await self.current.source.channel.send(settings.lang_string("no_track_leave_msg").format(parse_duration(timeout_val)))
           return
         except Exception as e:
-          print("src/cogs/music.py find: async with timeout(timeout_val) see this error codes: "+ str(e))
+          print("src/utils/music/st.py find: async with timeout(timeout_val) see this error codes: "+ str(e))
 
       self.current.source.volume = self._volume
       self.voice.play(self.current.source, after=self.play_next_song)

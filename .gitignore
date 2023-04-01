@@ -134,8 +134,7 @@ node_modules/
 .upm
 
 # Settings
-src/settings/guilds/
-src/settings/users/
+src/json/settings/
 
 # My custom commands
 metin2.py

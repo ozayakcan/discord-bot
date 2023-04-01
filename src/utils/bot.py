@@ -4,11 +4,9 @@ import os
 import discord
 from discord.ext import commands
 
-from chat.message import chat_message
-from extensions.extensions import get_extensions
-from utils import settings
-
-settings_current_id = 0
+from ._extensions import get_extensions
+from ._settings import settings
+from .message import bot as chat_bot
 
 command_prefix = os.environ.get("COMMAND_PREFIX")
 if command_prefix is None:
@@ -53,5 +51,5 @@ class MyBot(commands.Bot):
     if not message.content.startswith(command_prefix):
       settings.update_currents(message=message)
       if message.channel.id in settings.chat_channels or isinstance(message.channel, discord.channel.DMChannel):
-        await chat_message(message=message, settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
+        await chat_bot(message=message, settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
     await super().process_commands(message)

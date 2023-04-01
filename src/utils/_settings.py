@@ -11,9 +11,9 @@ class Settings:
     self.__current_id__ = 0
 
     # Settings files
-    self.__settings_file__ = "./src/settings/{0}/{1}.json"
+    self.__settings_file__ = "./src/json/settings/{0}/{1}.json"
     # Localization
-    self.__lang_folder__ = "./src/lang"
+    self.__lang_folder__ = "./src/json/lang"
     self.__default_lang_code__ = "en"
     
     #Settings

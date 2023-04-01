@@ -17,7 +17,7 @@ apis = {
     "function": brainshop
   }
 }
-async def chat_message(message: discord.Message, settings: utils.Settings, api = "brainshop", mention = True):
+async def bot(message: discord.Message, settings: utils.Settings, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:
