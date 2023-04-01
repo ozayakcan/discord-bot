@@ -53,5 +53,5 @@ class MyBot(commands.Bot):
     if not message.content.startswith(command_prefix):
       settings.update_currents(message=message)
       if message.channel.id in settings.chat_channels or isinstance(message.channel, discord.channel.DMChannel):
-        await chat_message(message=message, default_settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
+        await chat_message(message=message, settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
     await super().process_commands(message)
