@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from utils import settings
-from .st import YTDLError
+from .st import YTDLError, parse_duration
 
 # Silence useless bug reports messages
 youtube_dl.utils.bug_reports_message = lambda: ''
