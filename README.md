@@ -10,7 +10,7 @@ AI_BRAINSHOP_TOKEN | VG......W1 | Get it from [https://brainshop.ai/](https://br
 COMMAND_PREFIX | ! | Your command prefix.
 DISCORD_BOT_SECRET | MTA.......86CQ | Your discord bot token. [https://discord.com/developers/applications](https://discord.com/developers/applications)
 FFMPEG_PATH | ffmpeg path | See [installing music bot](#installing)
-
+DEFAULT_LANGUAGE | en | Default language json file name. See [localization](#localization) (If its not spefied or empty it will be 'en'.)
 
 ## Music Bot
 
@@ -44,6 +44,7 @@ python3 -m poetry install
 src/json/lang/
 ```
 - Just copy en.json and rename as your desired language. Bot will automatically load on start.
+- For changing default language update your [secrets](#secrets).
 
 ### Commands
 

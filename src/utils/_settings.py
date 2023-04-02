@@ -4,6 +4,8 @@ import json
 import discord
 from discord.ext import commands
 
+from .env import get as getenv
+
 class Settings:
   def __init__(self):
     self.message_delete_delay = 5
@@ -14,7 +16,9 @@ class Settings:
     self.__settings_file__ = "./src/json/settings/{0}/{1}.json"
     # Localization
     self.__lang_folder__ = "./src/json/lang"
-    self.__default_lang_code__ = "en"
+    self.__default_lang_code__ = getenv("DEFAULT_LANGUAGE")
+    if self.__default_lang_code__ is None or self.__default_lang_code__ == "":
+      self.__default_lang_code__ = "en"
     
     #Settings
     self.__chat_channels_str__ = "chat_channels"
