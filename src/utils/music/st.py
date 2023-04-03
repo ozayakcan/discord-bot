@@ -70,33 +70,32 @@ class VoiceState:
     return self.voice and self.current
 
   async def audio_player_task(self):
-    while True:
-      self.next.clear()
+    self.next.clear()
 
-      # Try to get the next song within 3 minutes.
-      # If no song will be added to the queue in time,
-      # the player will disconnect due to performance
-      # reasons.
-      try:
-        timeout_val = 180 # 3 minutes
-        async with timeout(timeout_val):
-          if self.get_mem_count() == 0:
-            self.bot.loop.create_task(self.stop())
-            await self._ctx.send(settings.lang_string("no_user_leave_msg").format(parse_duration(timeout_val)))
-            return
-          self.current = await self.songs.get()
-      except asyncio.TimeoutError:
-        self.bot.loop.create_task(self.stop())
-        await self.current.source.channel.send(settings.lang_string("no_track_leave_msg").format(parse_duration(timeout_val)))
-        return
-      except:
-        pass
+    # Try to get the next song within 3 minutes.
+    # If no song will be added to the queue in time,
+    # the player will disconnect due to performance
+    # reasons.
+    try:
+      timeout_val = 180 # 3 minutes
+      async with timeout(timeout_val):
+        if self.get_mem_count() == 0:
+          self.bot.loop.create_task(self.stop())
+          await self._ctx.send(settings.lang_string("no_user_leave_msg").format(parse_duration(timeout_val)))
+          return
+        self.current = await self.songs.get()
+    except asyncio.TimeoutError:
+      self.bot.loop.create_task(self.stop())
+      await self.current.source.channel.send(settings.lang_string("no_track_leave_msg").format(parse_duration(timeout_val)))
+      return
+    except:
+      pass
 
-      self.current.source.volume = self._volume
-      self.voice.play(self.current.source, after=self.play_next_song)
-      await self.current.source.channel.send(embed=self.current.create_embed())
+    self.current.source.volume = self._volume
+    self.voice.play(self.current.source, after=lambda ex:self.bot.loop.create_task(self.audio_player_task()))
+    await self.current.source.channel.send(embed=self.current.create_embed())
 
-      await self.next.wait()
+    await self.next.wait()
 
   def play_next_song(self, error=None):
     if error:
