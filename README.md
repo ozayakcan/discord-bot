@@ -9,7 +9,7 @@ Keys | Values | Description
 AI_BRAINSHOP_TOKEN | VG......W1 | Get from [https://brainshop.ai/](https://brainshop.ai/)
 COMMAND_PREFIX | ! | Your command prefix.
 DISCORD_BOT_SECRET | MTA.......86CQ | Your discord bot token. [https://discord.com/developers/applications](https://discord.com/developers/applications)
-FFMPEG_PATH | ffmpeg path | See [installing music bot](#installing)
+FFMPEG_PATH | ffmpeg path | See [installing ffmpeg in replit](#installing-ffmpeg-in-replit)
 DEFAULT_LANGUAGE | en | Default language json file name. See [localization](#localization) (If not spefied or empty it will be 'en'.)
 
 ## Music Bot
@@ -17,24 +17,38 @@ DEFAULT_LANGUAGE | en | Default language json file name. See [localization](#loc
 - See [supported sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - Playlists not supported for now.
 
-### Installing
-- To download ffmpef, open shell in replit (ctrl+shift+s):
+### Installing FFMPEG in Replit
+
+- If you are not running bot in replit. Open src/main.py and replace this lines:
+```
+FFMPEG_PATH = utils.env.get("FFMPEG_PATH")
+discord.opus.load_opus("./src/assets/opus/libopus.so.0.8.0")
+```
+- With this:
+```
+# FFMPEG_PATH = utils.env.get("FFMPEG_PATH")
+# discord.opus.load_opus("./src/assets/opus/libopus.so.0.8.0")
+```
+
+- In replit, to install ffmpeg, open shell (ctrl+shift+s):
 - Enter this commands:
 ```
 npm install
 ```
 
-- Get ffmpef location with this:
+- Get ffmpeg location with this:
 ```
 node -e "console.log(require('ffmpeg-static'))"
 ```
 - And add your [secrets](#secrets)
+
 
 ## Installing Dependecies
 - Open shell (ctrl+shift+s):
 - Enter this command:
 ```
 python3 -m poetry install
+# If you get error: The lock file is not compatible with the current version of Poetry. Delete poetry.lock file and run command again
 ```
 
 ## Localization

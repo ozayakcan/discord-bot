@@ -14,6 +14,7 @@ discord = "^2.2.2"
 translators = "5.6.3"
 PyNaCl = "1.5.0"
 yt-dlp = "^2023.3.4"
+ffmpeg = "1.4"
 
 [tool.poetry.dev-dependencies]
 debugpy = "^1.6.2"

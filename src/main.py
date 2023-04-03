@@ -3,7 +3,8 @@ import discord
 from utils import MyBot, keep_alive
 from os import system
 import utils.env
-  
+
+# Comment this two lines if not running in replit
 FFMPEG_PATH = utils.env.get("FFMPEG_PATH")
 discord.opus.load_opus("./src/assets/opus/libopus.so.0.8.0")
 
