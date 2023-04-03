@@ -205,7 +205,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
 
     queue = ''
     for i, song in enumerate(ctx.voice_state.songs.get_all(slice(start, end)), start=start):
-      queue += settings.lang_string("queue_pattern").format(i + 1, song)
+      queue += settings.lang_string("queue_pattern").format(i + 1, song, settings.lang_string("queue_current") if song == ctx.voice_state.songs.current else "")
 
     embed = (discord.Embed(description=settings.lang_string("tracks").format(ctx.voice_state.songs.len_all(), queue))
              .set_footer(text=settings.lang_string("viewing_page").format(page, pages)))
