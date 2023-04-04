@@ -66,8 +66,8 @@ class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc
         return await interaction.response.send_message(settings.lang_string("manage_messages"), delete_after=settings.message_delete_delay)
     try:
       settings.lang_code = values[0]
-      await interaction.message.delete()
       await interaction.response.send_message(settings.lang_string("lang_change_success"), delete_after=settings.message_delete_delay)
+      await interaction.message.delete(delay=settings.message_delete_delay)
     except Exception as e:
       print("Changing language failed: "+str(e))
       await interaction.response.send_message(settings.lang_string("lang_change_failed"), delete_after=settings.message_delete_delay)
