@@ -1,4 +1,6 @@
 import asyncio
+import difflib
+import re
 
 import discord
 from discord.ext import commands
@@ -52,4 +54,25 @@ class MyBot(commands.Bot):
       settings.update_currents(message=message)
       if message.channel.id in settings.chat_channels or isinstance(message.channel, discord.channel.DMChannel):
         await chat_bot(message=message, settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
+    else:
+      try:
+        command_name = message.content.split('!', 1)[1].split(' ', 1)[0]
+        command_found = False
+        command_names = []
+        for cmd in self.commands:
+          if command_name == cmd.name:
+            command_found = True
+            break
+          command_names.append(cmd.name)
+        if not command_found:
+          settings.update_currents(message=message)
+          close_matches = difflib.get_close_matches(command_name, command_names)
+          if len(close_matches) > 0:
+            close_matches = [command_prefix + c_m for c_m in close_matches]
+            await message.channel.send(settings.lang_string("command_not_found").format(command_prefix, command_name, settings.lang_string("did_you_mean").format(", ".join(close_matches))))
+          else:
+            await message.channel.send(settings.lang_string("command_not_found").format(command_prefix, command_name, ""))
+      except Exception as e:
+        print(str(e))
+        
     await super().process_commands(message)
