@@ -3,7 +3,7 @@ from discord.ext import commands
 #from extensions.extensions import get_extensions
 from utils import settings, HelpCommand
 
-class Help(commands.Cog, description=settings.lang_string("")):
+class Help(commands.Cog, description=settings.lang_string("help_cog_desc")):
   def __init__(self, bot: commands.Bot):
     self.bot = bot
 
