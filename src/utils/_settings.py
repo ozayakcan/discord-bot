@@ -49,25 +49,31 @@ class Settings:
   def current_id(self, value: id):
     self.__current_id__ = value
 
-  def update_currents(self, ctx: commands.Context = None, message: discord.Message = None):
-    if ctx is None and message is None:
+  def update_currents(self, ctx: commands.Context = None, message: discord.Message = None, interaction: discord.Interaction = None):
+    if ctx is None and message is None and interaction is None:
       return
     if message is not None:
       is_guild = message.guild
-    else:
+    elif ctx is not None:
       is_guild = ctx.guild
+    else:
+      is_guild = interaction.guild
     if is_guild:
       settings.current_group = "guilds"
       if message is not None:
         settings.current_id = message.guild.id
-      else:
+      elif ctx is not None:
         settings.current_id = ctx.guild.id
+      else:
+        settings.current_id = interaction.guild.id
     else:
       settings.current_group = "users"
       if message is not None:
         settings.current_id = message.author.id
-      else:
+      elif ctx is not None:
         settings.current_id = ctx.message.author.id
+      else:
+        settings.current_id = interaction.message.author.id
     
   # Guild
   def is_guild(self, ctx: commands.Context):
@@ -156,13 +162,16 @@ class Settings:
       print("Could not get lang key: "+str(e))
       return text
 
-  def lang_string(self, key: str, is_default = False):
+  def lang_string(self, key: str, lang_code: str = None, is_default = False):
     try:
       langs = self.lang_dict
       if is_default:
         return langs[self.__default_lang_code__][key]
       else:
-        return langs[self.lang_code][key]
+        if lang_code is not None:
+          return langs[lang_code][key]
+        else:
+          return langs[self.lang_code][key]
     except Exception as e:
       print("Could not get lang string: "+str(e))
       return key

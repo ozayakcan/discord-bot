@@ -1,8 +1,44 @@
 import discord
-from discord import app_commands
 from discord.ext import commands
 
-from utils import settings
+from utils import settings, views
+
+class LangDropdown(discord.ui.Select):
+  def __init__(self):
+
+    options = []
+
+    for lang in settings.supported_langs:
+      options.append(discord.SelectOption(
+          label=settings.lang_string(
+            "lang", 
+            lang_code=lang
+          ),
+          value=lang,
+          description=settings.lang_string(
+            "lang_select_desc", 
+            lang_code=lang
+          )
+        ))
+    super().__init__(placeholder=settings.lang_string("lang_choose"), min_values=1, max_values=1, options=options)
+
+  async def callback(self, interaction: discord.Interaction):
+    settings.update_currents(interaction=interaction)
+    if interaction.guild:
+      if not interaction.message.author.guild_permissions.manage_messages:
+        return await interaction.response.send_message(settings.lang_string("manage_messages"), delete_after=settings.message_delete_delay)
+    try:
+      settings.lang_code = self.values[0]
+      await interaction.response.send_message(settings.lang_string("lang_change_success"), delete_after=settings.message_delete_delay)
+    except Exception as e:
+      print("Changing language failed: "+str(e))
+      await interaction.response.send_message(settings.lang_string("lang_change_failed"), delete_after=settings.message_delete_delay)
+
+
+class LangDropdownView(discord.ui.View):
+  def __init__(self):
+    super().__init__()
+    self.add_item(LangDropdown())
 
 class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc")):
   def __init__(self, bot: commands.Bot):
@@ -23,40 +59,45 @@ class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc
         except Exception as e:
           print(e)
 
+  async def change_language(self, interaction: discord.Interaction, values):
+    settings.update_currents(interaction=interaction)
+    if interaction.guild:
+      if not interaction.message.author.guild_permissions.manage_messages:
+        return await interaction.response.send_message(settings.lang_string("manage_messages"), delete_after=settings.message_delete_delay)
+    try:
+      settings.lang_code = values[0]
+      await interaction.message.delete()
+      await interaction.response.send_message(settings.lang_string("lang_change_success"), delete_after=settings.message_delete_delay)
+    except Exception as e:
+      print("Changing language failed: "+str(e))
+      await interaction.response.send_message(settings.lang_string("lang_change_failed"), delete_after=settings.message_delete_delay)
+  
   @commands.hybrid_command(name='lang', brief=settings.lang_string("lang_desc"), description=settings.lang_string("lang_desc"))
-  async def _lang(self, ctx: commands.Context, *, lang_code: str = commands.parameter(default=None, description=settings.lang_string("lang_code_desc"))):
-
-    supported_langs = settings.supported_langs
-    if lang_code:
-      if settings.is_guild(ctx):
-        if not ctx.message.author.guild_permissions.manage_messages:
-          return await ctx.send(settings.lang_string("manage_messages"), delete_after=settings.message_delete_delay)
-      if lang_code in supported_langs:
-        try:
-          settings.lang_code = lang_code
-          await ctx.send(settings.lang_string("lang_changed"), delete_after=settings.message_delete_delay)
-        except Exception as e:
-          print(str(e))
-          await ctx.send(settings.lang_string("lang_not_changed"), delete_after=settings.message_delete_delay)
-      else:
-        await ctx.send(settings.lang_string("lang_not_supported").format(lang_code, ctx.clean_prefix, "supported_langs"), delete_after=settings.message_delete_delay)
-    else:
-      await ctx.send(settings.lang_string("lang_current"), delete_after=settings.message_delete_delay)
-      
-  @_lang.autocomplete('lang_code')
-  async def _lang_autocomplete(self,
-        interaction: discord.Interaction,
-        current: str,
-    ) -> list[app_commands.Choice[str]]:
-    langs = settings.supported_langs
-    return [
-        app_commands.Choice(name=lang, value=lang)
-        for lang in langs if current.lower() in lang.lower()
-    ]
-  @commands.hybrid_command(name='supported_langs', brief=settings.lang_string("supported_langs_desc"), description=settings.lang_string("supported_langs_desc"))
-  async def _supported_langs(self, ctx: commands.Context):
-
-    await ctx.send(settings.lang_string("supported_langs").format(", ".join(settings.supported_langs)), delete_after=settings.message_delete_delay)
+  async def _lang(self, ctx: commands.Context):
+    if settings.is_guild(ctx):
+      if ctx.message.author.guild_permissions.manage_messages:
+        options = []
+        for lang in settings.supported_langs:
+          options.append(
+            discord.SelectOption(
+              label=settings.lang_string(
+                "lang", 
+                lang_code=lang
+              ),
+              value=lang,
+              description=settings.lang_string(
+                "lang_select_desc", 
+                lang_code=lang
+              )
+            )
+          )
+        view = views.DropdownView(
+          options=options,
+          placeholder=settings.lang_string("lang_choose"),
+          on_select=self.change_language
+        )
+        return await ctx.send(settings.lang_string("lang_current"), view=view)
+    await ctx.send(settings.lang_string("lang_current"))
 
   @commands.hybrid_command(name='chat_translate', brief=settings.lang_string("chat_translate_desc"), description=settings.lang_string("chat_translate_desc"))
   async def _translate(self, ctx: commands.Context):
