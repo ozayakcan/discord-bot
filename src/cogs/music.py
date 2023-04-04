@@ -3,8 +3,7 @@ import math
 import discord
 from discord.ext import commands
 
-from utils import settings
-import utils.music
+from utils import music, settings
 
 class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   def __init__(self, bot: commands.Bot):
@@ -15,7 +14,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   def get_voice_state(self, ctx: commands.Context):
     state = self.voice_states.get(ctx.guild.id)
     if not state:
-      state = utils.music.VoiceState(self.bot, ctx)
+      state = music.VoiceState(self.bot, ctx)
       self.voice_states[ctx.guild.id] = state
 
     return state
@@ -84,7 +83,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   async def _summon(self, ctx: commands.Context, *, channel: discord.VoiceChannel = commands.parameter(default=None, description=settings.lang_string("summon_channel_desc"))):
 
     if not channel and not ctx.author.voice:
-      raise utils.music.st.VoiceError(settings.lang_string("not_connected_voice_ch_or_not_specified"))
+      raise music.VoiceError(settings.lang_string("not_connected_voice_ch_or_not_specified"))
 
     destination = channel or ctx.author.voice.channel
     if ctx.voice_state.voice:
@@ -250,25 +249,29 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
 
   @commands.hybrid_command(name='play', aliases=['p'], brief=settings.lang_string("play_desc"), description=settings.lang_string("play_desc"))
   async def _play(self, ctx: commands.Context, *, link_or_query: str = commands.parameter(description=settings.lang_string("play_search_desc"))):
-    if link_or_query is not None:
-      if not ctx.voice_state.voice:
-        self.display_join_message = False
-        await ctx.invoke(self._join)
-        self.display_join_message = True
-  
-      async with ctx.typing():
-        try:
-          source = await utils.music.ytdl.YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
-        except utils.music.st.YTDLError as e:
-          await ctx.send(settings.lang_string("an_error_ocurred").format(str(e)), delete_after=settings.message_delete_delay)
-        else:
-          song = utils.music.ytdl.Song(source)
-  
-          await ctx.voice_state.songs.put(song)
-          await ctx.send(settings.lang_string("enqueued").format(str(source)), delete_after=settings.message_delete_delay)
-    else:
-      async with ctx.typing():
-        ctx.send(settings.lang_string("play_search_req_desc"))
+    try:
+      if link_or_query is not None:
+        if not ctx.voice_state.voice:
+          self.display_join_message = False
+          await ctx.invoke(self._join)
+          self.display_join_message = True
+    
+        async with ctx.typing():
+          try:
+            source = await music.YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
+          except music.YTDLError as e:
+            await ctx.send(settings.lang_string("an_error_ocurred").format(str(e)), delete_after=settings.message_delete_delay)
+          else:
+            song = music.Song(source)
+    
+            await ctx.voice_state.songs.put(song)
+            await ctx.send(settings.lang_string("enqueued").format(str(source)), delete_after=settings.message_delete_delay)
+      else:
+        async with ctx.typing():
+          await ctx.send(settings.lang_string("play_search_req_desc"))
+    except Exception as e:
+      print(str(e))
+      await ctx.send(settings.lang_string("play_search_req_desc"))
 
   @_join.before_invoke
   @_play.before_invoke

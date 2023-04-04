@@ -4,7 +4,12 @@ import json
 import discord
 from discord.ext import commands
 
-from .env import get as getenv
+from .env import getenv
+
+__all__ = [
+  "settings",
+  "Settings",
+]
 
 class Settings:
   def __init__(self):

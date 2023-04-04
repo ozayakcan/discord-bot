@@ -1,5 +1,9 @@
 import os
 
+__all__ = [
+  "get_extensions"
+]
+
 def get_extensions():
   extensions = []
   for filename in os.listdir("./src/cogs"):

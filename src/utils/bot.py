@@ -1,14 +1,17 @@
 import asyncio
 import difflib
-import re
 
 import discord
 from discord.ext import commands
 
 from ._extensions import get_extensions
 from ._settings import settings
-from .message import bot as chat_bot
-from .env import get as getenv
+from .chat_bot import chat_bot
+from .env import getenv
+
+__all__ = (
+    'MyBot',
+)
 
 command_prefix = getenv("COMMAND_PREFIX")
 if command_prefix is None:

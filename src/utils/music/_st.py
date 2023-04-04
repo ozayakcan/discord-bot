@@ -5,6 +5,12 @@ from discord.ext import commands
 from ._queue import SongQueue
 from utils import settings
 
+__all__ = (
+    'parse_duration',
+    'VoiceError',
+    'YTDLError',
+    'VoiceState',
+)
 def parse_duration(duration: int):
     minutes, seconds = divmod(duration, 60)
     hours, minutes = divmod(minutes, 60)

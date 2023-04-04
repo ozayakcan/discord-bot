@@ -2,7 +2,10 @@ from discord.ext import commands
 
 from ._settings import Settings
 
-class Command(commands.DefaultHelpCommand):
+__all__ = (
+    'HelpCommand',
+)
+class HelpCommand(commands.DefaultHelpCommand):
   def __init__(self, prefix: str, settings: Settings):
     self.prefix = prefix
     self.settings = settings

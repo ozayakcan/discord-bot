@@ -2,6 +2,9 @@ from flask import Flask
 from threading import Thread
 import random
 
+__all__ = [
+  "keep_alive"
+]
 
 app = Flask('')
 

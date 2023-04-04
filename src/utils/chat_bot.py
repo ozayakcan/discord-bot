@@ -6,6 +6,10 @@ import discord
 
 from ._settings import Settings
 
+__all__ = (
+    'chat_bot',
+)
+
 def brainshop(message, userid, token):
   resp = requests.get("http://api.brainshop.ai/get?bid=173774&key=" + token + "&uid="+str(userid)+"&msg="+message)
   resp = resp.json()
@@ -17,7 +21,7 @@ apis = {
     "function": brainshop
   }
 }
-async def bot(message: discord.Message, settings: Settings, api = "brainshop", mention = True):
+async def chat_bot(message: discord.Message, settings: Settings, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:

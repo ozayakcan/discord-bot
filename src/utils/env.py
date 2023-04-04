@@ -1,4 +1,8 @@
 import os
 
-def get(key: str):
+__all__ = (
+    'getenv',
+)
+
+def getenv(key: str):
   return os.environ.get(key)

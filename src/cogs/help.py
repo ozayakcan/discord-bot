@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 #from extensions.extensions import get_extensions
-from utils import settings, help
+from utils import settings, HelpCommand
 
 class Help(commands.Cog, description=settings.lang_string("")):
   def __init__(self, bot: commands.Bot):
@@ -21,7 +21,7 @@ class Help(commands.Cog, description=settings.lang_string("")):
   async def _help(self, ctx: commands.Context, *, command_name_or_category: str = commands.parameter(default=None, description=settings.lang_string("help_command_name_or_category_desc"))):
 
     async with ctx.typing():
-      self.bot.help_command = help.Command(ctx.clean_prefix, settings)
+      self.bot.help_command = HelpCommand(ctx.clean_prefix, settings)
       if command_name_or_category:
         command_def = self.bot.get_cog(command_name_or_category) or self.bot.get_command(command_name_or_category)
         if command_def is None:
