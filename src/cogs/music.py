@@ -286,7 +286,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
                   s_index += 1
                   s_list += settings.lang_string("queue_pattern").format(s_index, song, "")
                 embed = (discord.Embed(description=settings.lang_string("choose_song").format(s_list)))
-                await ctx.send(embed=embed, view=view)
+                await ctx.send(embed=embed, view=view, delete_after=60)
             else:
               await ctx.send(settings.lang_string("yt_could_not_find").format(link_or_query))
       else:
