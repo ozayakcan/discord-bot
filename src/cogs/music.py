@@ -21,7 +21,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
 
   async def clear_music(self, ctx: commands.Context):
     if not ctx.voice_state.voice:
-      await ctx.send(settings.lang_string("not_connected_voice_ch"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("not_connected_voice_ch"))
       return False
     try:
       ctx.voice_state.songs.clear()
@@ -30,10 +30,10 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
       else:
         await ctx.voice_state.voice.disconnect()
       del self.voice_states[ctx.guild.id]
-      await ctx.send(settings.lang_string("stop_leave_success"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("stop_leave_success"))
     except Exception as e:
       print("Stop/Leave failed: "+str(e))
-      await ctx.send(settings.lang_string("stop_leave_failed"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("stop_leave_failed"))
       return False
     return True
 
@@ -57,15 +57,6 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
     ctx.voice_state = self.get_voice_state(ctx)
     settings.update_currents(ctx=ctx)
 
-  async def cog_after_invoke(self, ctx: commands.Context):
-    if settings.is_guild(ctx):
-      member = ctx.message.guild.get_member(self.bot.user.id)
-      if member.guild_permissions.manage_messages:
-        try:
-          await ctx.message.delete(delay=settings.message_delete_delay)
-        except Exception as e:
-          print(e)
-
   @commands.hybrid_command(name='join', aliases=['j'], invoke_without_subcommand=True, brief=settings.lang_string("join_desc"), description=settings.lang_string("join_desc"))
   async def _join(self, ctx: commands.Context):
 
@@ -76,7 +67,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
 
     ctx.voice_state.voice = await destination.connect()
     if self.display_join_message:
-      await ctx.send(settings.lang_string("join_success"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("join_success"))
 
   @commands.hybrid_command(name='summon', aliases=['sum'], brief=settings.lang_string("summon_desc"), description=settings.lang_string("summon_desc_full"))
   @commands.has_permissions(manage_guild=True)
@@ -88,17 +79,17 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
     destination = channel or ctx.author.voice.channel
     if ctx.voice_state.voice:
       await ctx.voice_state.voice.move_to(destination)
-      return await ctx.send(settings.lang_string("summon_success").format(f"<#{destination.id}>"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("summon_success").format(f"<#{destination.id}>"))
 
     ctx.voice_state.voice = await destination.connect()
-    await ctx.send(settings.lang_string("summon_success").format(f"<#{destination.id}>"), delete_after=settings.message_delete_delay)
+    await ctx.send(settings.lang_string("summon_success").format(f"<#{destination.id}>"))
 
   @commands.hybrid_command(name='leave', aliases=['l', 'disconnect', 'd'], brief=settings.lang_string("stop_leave_desc"), description=settings.lang_string("stop_leave_desc"))
   @commands.has_permissions(manage_guild=True)
   async def _leave(self, ctx: commands.Context):
 
     #if not ctx.voice_state.voice:
-    #    return await ctx.send(settings.lang_string("not_connected_voice_ch"), delete_after=settings.message_delete_delay)
+    #    return await ctx.send(settings.lang_string("not_connected_voice_ch"))
 
     #await ctx.voice_state.stop()
     #del self.voice_states[ctx.guild.id]
@@ -115,18 +106,18 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
       volume = -1
 
     if not ctx.voice_state.is_playing:
-      return await ctx.send(settings.lang_string("not_playing"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("not_playing"))
 
     if 0 > volume or volume > 100:
-      return await ctx.send(settings.lang_string("vol_err"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("vol_err"))
 
     ctx.voice_state.volume = volume / 100
-    await ctx.send(settings.lang_string("vol_set").format(volume), delete_after=settings.message_delete_delay)
+    await ctx.send(settings.lang_string("vol_set").format(volume))
 
   @commands.hybrid_command(name='now', aliases=['current', 'playing', 'n', 'c'], brief=settings.lang_string("now_desc"), description=settings.lang_string("now_desc"))
   async def _now(self, ctx: commands.Context):
     if not ctx.voice_state.is_playing:
-      return await ctx.send(settings.lang_string("not_playing"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("not_playing"))
 
     await ctx.send(embed=ctx.voice_state.current.create_embed())
 
@@ -137,9 +128,9 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
     if ctx.voice_state.is_playing and ctx.voice_state.voice.is_playing():
       ctx.voice_state.voice.pause()
       await ctx.message.add_reaction('⏯')
-      await ctx.send(settings.lang_string("pause_success"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("pause_success"))
     else:
-      await ctx.send(settings.lang_string("pause_fail"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("pause_fail"))
 
   @commands.hybrid_command(name='resume', aliases=['res', 'r'], brief=settings.lang_string("resume_desc"), description=settings.lang_string("resume_desc"))
   @commands.has_permissions(manage_guild=True)
@@ -148,9 +139,9 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
     if ctx.voice_state.is_playing and ctx.voice_state.voice.is_paused():
       ctx.voice_state.voice.resume()
       await ctx.message.add_reaction('⏯')
-      await ctx.send(settings.lang_string("resume_success"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("resume_success"))
     else:
-      await ctx.send(settings.lang_string("resume_fail"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("resume_fail"))
 
   @commands.hybrid_command(name='stop', brief=settings.lang_string("stop_leave_desc"), description=settings.lang_string("stop_leave_desc"))
   @commands.has_permissions(manage_guild=True)
@@ -169,13 +160,13 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   async def _skip(self, ctx: commands.Context):
 
     if not ctx.voice_state.is_playing:
-      return await ctx.send(settings.lang_string("not_playing"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("not_playing"))
 
     voter = ctx.message.author
     if voter == ctx.voice_state.current.requester:
       await ctx.message.add_reaction('⏭')
       ctx.voice_state.skip()
-      await ctx.send(settings.lang_string("skip_success"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("skip_success"))
     elif voter.id not in ctx.voice_state.skip_votes:
       ctx.voice_state.skip_votes.add(voter.id)
       total_votes = len(ctx.voice_state.skip_votes)
@@ -183,18 +174,18 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
       if total_votes >= 3:
         await ctx.message.add_reaction('⏭')
         ctx.voice_state.skip()
-        await ctx.send(settings.lang_string("skip_success"), delete_after=settings.message_delete_delay)
+        await ctx.send(settings.lang_string("skip_success"))
       else:
-        await ctx.send(settings.lang_string("skip_vote_added").format(total_votes), delete_after=settings.message_delete_delay)
+        await ctx.send(settings.lang_string("skip_vote_added").format(total_votes))
 
     else:
-      await ctx.send(settings.lang_string("skip_already_voted"), delete_after=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("skip_already_voted"))
 
   @commands.hybrid_command(name='queue', aliases=['q'], brief=settings.lang_string("queue_desc"), description=settings.lang_string("queue_desc"))
   async def _queue(self, ctx: commands.Context, *, page: int = commands.parameter(default=1, description=settings.lang_string("queue_page_desc"))):
 
     if ctx.voice_state.songs.len_all() == 0:
-      return await ctx.send(settings.lang_string("empty_queue"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("empty_queue"))
 
     items_per_page = 10
     pages = math.ceil(ctx.voice_state.songs.len_all() / items_per_page)
@@ -214,7 +205,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   async def _shuffle(self, ctx: commands.Context):
 
     if ctx.voice_state.songs.len_all() == 0:
-      return await ctx.send(settings.lang_string("empty_queue"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("empty_queue"))
 
     ctx.voice_state.songs.shuffle()
     await ctx.message.add_reaction('✅')
@@ -226,33 +217,33 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
       index = 0
 
     if index <= 0:
-      return await ctx.send(settings.lang_string("remove_index_err"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("remove_index_err"))
     if ctx.voice_state.songs.len_all() == 0:
-      return await ctx.send(settings.lang_string("empty_queue"), delete_after=settings.message_delete_delay)
+      return await ctx.send(settings.lang_string("empty_queue"))
 
     removed_song = ctx.voice_state.songs.remove(index - 1, ctx.voice_state)
     await ctx.message.add_reaction('✅')
-    await ctx.send(settings.lang_string("track_removed").format(f"**{str(removed_song.source.title)}**"), delete_after=settings.message_delete_delay)
+    await ctx.send(settings.lang_string("track_removed").format(f"**{str(removed_song.source.title)}**"))
 
   #@commands.hybrid_command(name='loop',  aliases=['repeat', 'rep'], brief=settings.lang_string("loop_desc"), description=settings.lang_string("loop_desc_full"))
   #async def _loop(self, ctx: commands.Context):
 
   #  if not ctx.voice_state.is_playing:
-  #    return await ctx.send(settings.lang_string("not_playing"), delete_after=settings.message_delete_delay)
+  #    return await ctx.send(settings.lang_string("not_playing"))
 
     # Inverse boolean value to loop and unloop.
   #  ctx.voice_state.loop = not ctx.voice_state.loop
   #  if ctx.voice_state.loop:
-  #    await ctx.send(settings.lang_string("loop_enabled"), delete_after=settings.message_delete_delay)
+  #    await ctx.send(settings.lang_string("loop_enabled"))
   #  else:
-  #    await ctx.send(settings.lang_string("loop_disabled"), delete_after=settings.message_delete_delay)
+  #    await ctx.send(settings.lang_string("loop_disabled"))
 
   async def put_song(self, ctx: commands.Context, value, interaction: discord.Interaction = None):
     settings.update_currents(interaction=interaction)
     ctx.voice_state = self.get_voice_state(ctx)
     await ctx.voice_state.songs.put(value)
     msg = settings.lang_string("enqueued").format(str(value.source))
-    await ctx.send(msg, delete_after=settings.message_delete_delay)
+    await ctx.send(msg)
     if interaction is not None:
       await interaction.message.delete()
   
