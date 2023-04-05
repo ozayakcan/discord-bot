@@ -75,6 +75,7 @@
   "play_search_req_desc": "Arama terimi ya da url gerekli.",
   "enqueued": "Sıraya Eklendi: {}",
   "choose_song": "**Alttaki butonlardan numarasına göre eklenecek parçayı seçin:**\n\n{}",
+  "only_requester_warning": "{0}, sadece komutu kullanan kişi seçim yapabilir!",
   "already_in_voice_channel": "Bot zaten bir ses kanalında.",
   "lang_desc": "Dili değiştirir ve geçerli dili gösterir.",
   "lang_select_desc": "Dili Türkçe olarak ayarla.",

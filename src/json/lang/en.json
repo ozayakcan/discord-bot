@@ -75,6 +75,7 @@
   "play_search_req_desc": "Search query or url required.",
   "enqueued": "Enqueued {}",
   "choose_song": "**Choose track to play by index:**\n\n{}",
+  "only_requester_warning": "{0}, only the requester can choose!",
   "already_in_voice_channel": "Bot is already in a voice channel.",
   "lang_desc": "Changes and shows current language.",
   "lang_select_desc": "Change your lang to english.",
