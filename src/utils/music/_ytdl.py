@@ -1,5 +1,6 @@
 import asyncio
 import functools
+import validators
 
 import yt_dlp as youtube_dl
 import discord
@@ -68,43 +69,27 @@ class YTDLSource(discord.PCMVolumeTransformer):
   @classmethod
   async def create_source(cls, ctx: commands.Context, search: str, *, loop: asyncio.BaseEventLoop = None):
     loop = loop or asyncio.get_event_loop()
-
-    partial = functools.partial(cls.ytdl.extract_info, search, download=False, process=False)
+    
+    if validators.url(search):
+      partial = functools.partial(cls.ytdl.extract_info, search, download=False)
+    else:
+      partial = functools.partial(cls.ytdl.extract_info, f"ytsearch5:{search}", download=False)
+      
     data = await loop.run_in_executor(None, partial)
 
     if data is None:
       raise YTDLError(settings.lang_string("yt_could_not_find").format(search))
 
+    sources = []
     if 'entries' not in data:
-      process_info = data
+      sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(data['url'], **cls.FFMPEG_OPTIONS), data=data)))
     else:
-      process_info = None
-      for entry in data['entries']:
-        if entry:
-          process_info = entry
-          break
-
-      if process_info is None:
-        raise YTDLError(settings.lang_string("yt_could_not_find").format(search))
-
-    webpage_url = process_info['webpage_url']
-    partial = functools.partial(cls.ytdl.extract_info, webpage_url, download=False)
-    processed_info = await loop.run_in_executor(None, partial)
-
-    if processed_info is None:
-      raise YTDLError(settings.lang_string("yt_could_not_fetch").format(webpage_url))
-
-    if 'entries' not in processed_info:
-      info = processed_info
-    else:
-      info = None
-      while info is None:
-        try:
-          info = processed_info['entries'].pop(0)
-        except IndexError:
-          raise YTDLError(settings.lang_string("yt_could_not_retrieve").format(webpage_url))
-
-    return cls(ctx, discord.FFmpegPCMAudio(info['url'], **cls.FFMPEG_OPTIONS), data=info)
+      #entries = list(data["entries"])
+      for source in data["entries"]:
+        sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(source['url'], **cls.FFMPEG_OPTIONS), data=source)))
+    if len(sources) == 0:
+      raise YTDLError(settings.lang_string("yt_could_not_fetch").format(search))
+    return sources
 
 class Song:
   __slots__ = ('source', 'requester')

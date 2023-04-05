@@ -3,7 +3,7 @@ import math
 import discord
 from discord.ext import commands
 
-from utils import music, settings
+from utils import music, settings, views
 
 class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   def __init__(self, bot: commands.Bot):
@@ -247,6 +247,15 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   #  else:
   #    await ctx.send(settings.lang_string("loop_disabled"), delete_after=settings.message_delete_delay)
 
+  async def put_song(self, ctx: commands.Context, value, interaction: discord.Interaction = None):
+    settings.update_currents(interaction=interaction)
+    ctx.voice_state = self.get_voice_state(ctx)
+    await ctx.voice_state.songs.put(value)
+    msg = settings.lang_string("enqueued").format(str(value.source))
+    await ctx.send(msg, delete_after=settings.message_delete_delay)
+    if interaction is not None:
+      await interaction.message.delete()
+  
   @commands.hybrid_command(name='play', aliases=['p'], brief=settings.lang_string("play_desc"), description=settings.lang_string("play_desc"))
   async def _play(self, ctx: commands.Context, *, link_or_query: str = commands.parameter(description=settings.lang_string("play_search_desc"))):
     try:
@@ -258,14 +267,25 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
     
         async with ctx.typing():
           try:
-            source = await music.YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
+            sources = await music.YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
           except music.YTDLError as e:
-            await ctx.send(settings.lang_string("an_error_ocurred").format(str(e)), delete_after=settings.message_delete_delay)
+            await ctx.send(settings.lang_string("an_error_ocurred").format(ctx.clean_prefix, "play", str(e)))
           else:
-            song = music.Song(source)
-    
-            await ctx.voice_state.songs.put(song)
-            await ctx.send(settings.lang_string("enqueued").format(str(source)), delete_after=settings.message_delete_delay)
+            if len(sources) > 1:
+              view = views.SongButtons(
+                on_select = self.put_song,
+                values = sources,
+                ctx = ctx
+              )
+              song_list = ''
+              s_index = 0
+              for song in sources:
+                s_index += 1
+                song_list += settings.lang_string("queue_pattern").format(s_index, song, "")
+              embed = (discord.Embed(description=settings.lang_string("choose_song").format(song_list)))
+              await ctx.send(embed=embed, view=view)
+            else:
+              await self.put_song(ctx, sources[0])
       else:
         async with ctx.typing():
           await ctx.send(settings.lang_string("play_search_req_desc"))
