@@ -69,24 +69,32 @@ class YTDLSource(discord.PCMVolumeTransformer):
   @classmethod
   async def create_source(cls, ctx: commands.Context, search: str, *, loop: asyncio.BaseEventLoop = None):
     loop = loop or asyncio.get_event_loop()
-    
-    if validators.url(search):
-      partial = functools.partial(cls.ytdl.extract_info, search, download=False)
-    else:
-      partial = functools.partial(cls.ytdl.extract_info, f"ytsearch5:{search}", download=False)
-      
-    data = await loop.run_in_executor(None, partial)
 
+    if validators.url(search):
+      partial = functools.partial(cls.ytdl.extract_info, search, download=False, process=False)
+    else:
+      partial = functools.partial(cls.ytdl.extract_info, f"ytsearch5:{search}", download=False, process=False)
+
+    data = await loop.run_in_executor(None, partial)
     if data is None:
       raise YTDLError(settings.lang_string("yt_could_not_find").format(search))
 
+    webpage_url = data['webpage_url']
+    partial = functools.partial(cls.ytdl.extract_info, webpage_url, download=False)
+    
+    processed_info = await loop.run_in_executor(None, partial)
+
+    if processed_info is None:
+      raise YTDLError(settings.lang_string("yt_could_not_fetch").format(webpage_url))
+
     sources = []
-    if 'entries' not in data:
-      sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(data['url'], **cls.FFMPEG_OPTIONS), data=data)))
+    if 'entries' not in processed_info:
+      sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(processed_info['url'], **cls.FFMPEG_OPTIONS), data=processed_info)))
     else:
       #entries = list(data["entries"])
-      for source in data["entries"]:
+      for source in processed_info["entries"]:
         sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(source['url'], **cls.FFMPEG_OPTIONS), data=source)))
+
     if len(sources) == 0:
       raise YTDLError(settings.lang_string("yt_could_not_fetch").format(search))
     return sources
