@@ -12,6 +12,7 @@ from ._st import YTDLError, parse_duration
 __all__ = (
     'YTDLSource',
     'Song',
+    'SongList',
 )
 
 # Silence useless bug reports messages
@@ -24,7 +25,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     'audioformat': 'mp3',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
     'restrictfilenames': True,
-    'noplaylist': True,
+    'noplaylist': False,
     'nocheckcertificate': True,
     'ignoreerrors': False,
     'logtostderr': False,
@@ -78,7 +79,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     data = await loop.run_in_executor(None, partial)
     if data is None:
       raise YTDLError(settings.lang_string("yt_could_not_find").format(search))
-
+      
     webpage_url = data['webpage_url']
     partial = functools.partial(cls.ytdl.extract_info, webpage_url, download=False)
     
@@ -97,15 +98,15 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     if len(sources) == 0:
       raise YTDLError(settings.lang_string("yt_could_not_fetch").format(search))
-    return sources
+    return SongList(sources, is_playlist=True if processed_info["webpage_url_basename"] == "playlist" else False, playlist_title = processed_info["title"])
 
 class Song:
-  __slots__ = ('source', 'requester')
+  __slots__ = ('source', 'requester', 'is_playlist', 'playlist_title')
 
   def __init__(self, source: YTDLSource):
     self.source = source
     self.requester = source.requester
-
+  
   def create_embed(self):
     embed = (discord.Embed(title=settings.lang_string("now_playing"),
                            description='```css\n{0.source.title}\n```'.format(self),
@@ -117,3 +118,10 @@ class Song:
              .set_thumbnail(url=self.source.thumbnail))
 
     return embed
+
+class SongList:
+
+  def __init__(self, sources : list[Song], is_playlist: bool = False, playlist_title: str = ""):
+    self.sources = sources
+    self.is_playlist = is_playlist
+    self.playlist_title = playlist_title

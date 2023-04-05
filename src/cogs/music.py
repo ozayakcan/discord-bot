@@ -238,12 +238,19 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
   #  else:
   #    await ctx.send(settings.lang_string("loop_disabled"))
 
-  async def put_song(self, ctx: commands.Context, value, interaction: discord.Interaction = None):
+  async def put_songs(self, ctx: commands.Context, song_list, interaction: discord.Interaction = None):
     settings.update_currents(interaction=interaction)
     ctx.voice_state = self.get_voice_state(ctx)
-    await ctx.voice_state.songs.put(value)
-    msg = settings.lang_string("enqueued").format(str(value.source))
-    await ctx.send(msg)
+    if isinstance(song_list, music.SongList):
+      for source in song_list.sources:
+        await ctx.voice_state.songs.put(source)
+      if song_list.is_playlist:
+        await ctx.send(settings.lang_string("enqueued").format(song_list.playlist_title))
+      else:
+        await ctx.send(settings.lang_string("enqueued").format(str(song_list.sources[0].source)))
+    else:
+      await ctx.voice_state.songs.put(song_list)
+      await ctx.send(settings.lang_string("enqueued").format(str(song_list.source)))
     if interaction is not None:
       await interaction.message.delete()
   
@@ -258,25 +265,30 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
     
         async with ctx.typing():
           try:
-            sources = await music.YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
+            song_list = await music.YTDLSource.create_source(ctx, link_or_query, loop=self.bot.loop)
           except music.YTDLError as e:
             await ctx.send(settings.lang_string("an_error_ocurred").format(ctx.clean_prefix, "play", str(e)))
           else:
-            if len(sources) > 1:
-              view = views.SongButtons(
-                on_select = self.put_song,
-                values = sources,
-                ctx = ctx
-              )
-              song_list = ''
-              s_index = 0
-              for song in sources:
-                s_index += 1
-                song_list += settings.lang_string("queue_pattern").format(s_index, song, "")
-              embed = (discord.Embed(description=settings.lang_string("choose_song").format(song_list)))
-              await ctx.send(embed=embed, view=view)
+            if len(song_list.sources) > 0:
+              if song_list.is_playlist:
+                await self.put_songs(ctx, song_list)
+              elif len(song_list.sources) == 1:
+                await self.put_songs(ctx, song_list.sources[0])
+              else:
+                view = views.SongButtons(
+                  on_select = self.put_songs,
+                  song_list = song_list,
+                  ctx = ctx
+                )
+                s_list = ''
+                s_index = 0
+                for song in song_list.sources[0:5]:
+                  s_index += 1
+                  s_list += settings.lang_string("queue_pattern").format(s_index, song, "")
+                embed = (discord.Embed(description=settings.lang_string("choose_song").format(s_list)))
+                await ctx.send(embed=embed, view=view)
             else:
-              await self.put_song(ctx, sources[0])
+              await ctx.send(settings.lang_string("yt_could_not_find").format(link_or_query))
       else:
         async with ctx.typing():
           await ctx.send(settings.lang_string("play_search_req_desc"))
