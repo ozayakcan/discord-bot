@@ -275,7 +275,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
               elif len(song_list.sources) == 1:
                 await self.put_songs(ctx, song_list.sources[0])
               else:
-                view = views.SongButtons(
+                view = views.ButtonsSong(
                   on_select = self.put_songs,
                   song_list = song_list,
                   ctx = ctx

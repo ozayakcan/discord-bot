@@ -4,10 +4,10 @@ from utils import settings
 from utils.music import SongList
 
 __all__ = [
-  "SongButtons"
+  "ButtonsSong",
 ]
 
-class SongButtons(discord.ui.View):
+class ButtonsSong(discord.ui.View):
   def __init__(self, on_select, ctx: commands.Context, song_list: SongList):
     super().__init__()
     self.on_select = on_select
