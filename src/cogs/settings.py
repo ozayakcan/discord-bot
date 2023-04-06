@@ -3,43 +3,6 @@ from discord.ext import commands
 
 from utils import settings, views
 
-class LangDropdown(discord.ui.Select):
-  def __init__(self):
-
-    options = []
-
-    for lang in settings.supported_langs:
-      options.append(discord.SelectOption(
-          label=settings.lang_string(
-            "lang", 
-            lang_code=lang
-          ),
-          value=lang,
-          description=settings.lang_string(
-            "lang_select_desc", 
-            lang_code=lang
-          )
-        ))
-    super().__init__(placeholder=settings.lang_string("lang_choose"), min_values=1, max_values=1, options=options)
-
-  async def callback(self, interaction: discord.Interaction):
-    settings.update_currents(interaction=interaction)
-    if interaction.guild:
-      if not interaction.message.author.guild_permissions.manage_messages:
-        return await interaction.response.send_message(settings.lang_string("manage_messages"), delete_after=settings.message_delete_delay)
-    try:
-      settings.lang_code = self.values[0]
-      await interaction.response.send_message(settings.lang_string("lang_change_success"), delete_after=settings.message_delete_delay)
-    except Exception as e:
-      print("Changing language failed: "+str(e))
-      await interaction.response.send_message(settings.lang_string("lang_change_failed"), delete_after=settings.message_delete_delay)
-
-
-class LangDropdownView(discord.ui.View):
-  def __init__(self):
-    super().__init__()
-    self.add_item(LangDropdown())
-
 class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc")):
   def __init__(self, bot: commands.Bot):
     self.bot = bot
@@ -59,15 +22,15 @@ class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc
         except Exception as e:
           print(e)
 
-  async def change_language(self, interaction: discord.Interaction, values):
+  async def change_language(self, interaction: discord.Interaction, ctx: commands.Context, values):
     settings.update_currents(interaction=interaction)
     if interaction.guild:
       if not interaction.message.author.guild_permissions.manage_messages:
         return await interaction.response.send_message(settings.lang_string("manage_messages"), delete_after=settings.message_delete_delay)
     try:
       settings.lang_code = values[0]
-      await interaction.response.send_message(settings.lang_string("lang_change_success"), delete_after=settings.message_delete_delay)
-      await interaction.message.delete(delay=settings.message_delete_delay)
+      await ctx.send(settings.lang_string("lang_change_success"), delete_after=settings.message_delete_delay)
+      await interaction.message.delete()
     except Exception as e:
       print("Changing language failed: "+str(e))
       await interaction.response.send_message(settings.lang_string("lang_change_failed"), delete_after=settings.message_delete_delay)
@@ -92,6 +55,7 @@ class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc
             )
           )
         view = views.DropdownView(
+          ctx=ctx,
           options=options,
           placeholder=settings.lang_string("lang_choose"),
           on_select=self.change_language
