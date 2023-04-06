@@ -294,7 +294,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
           await ctx.send(settings.lang_string("play_search_req_desc"))
     except Exception as e:
       print(str(e))
-      await ctx.send(settings.lang_string("play_search_req_desc"))
+      await ctx.send(settings.lang_string("an_error_ocurred").format(ctx.clean_prefix, 'play', str(e)))
 
   @_join.before_invoke
   @_play.before_invoke
