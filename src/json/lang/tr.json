@@ -56,7 +56,7 @@
   "skip_success": "Parça atlandı.",
   "queue_desc": "Oynatıcıdaki parçaları gösterir.",
   "queue_page_desc": "Sayfa numarası belirle.",
-  "queue_pattern": "`{0}.` [**{1.source.title}**]({1.source.url}){2}\n",
+  "queue_pattern": "`{0}.` [**{1}**]({2}){3}\n",
   "queue_current": " (Şuanda çalan)",
   "empty_queue": "Sıra boş.",
   "track_removed": "Kaldırılan parça: {}",
@@ -103,5 +103,6 @@
   "no_user_leave_msg": "{} içinde kanalda herhangi bir kullanıcı bulunmadığı için kanaldan çıkılıyor.",
   "settings_cog_desc": "Ayar komutları.",
   "command_not_found": "{0}{1} komutu bulunamadı.{2}",
-  "did_you_mean": "Bunu mu demek istediniz: {0}"
+  "did_you_mean": "Bunu mu demek istediniz: {0}",
+  "error_msg": "Bir hata oluştu!"
 }

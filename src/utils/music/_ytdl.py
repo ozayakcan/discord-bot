@@ -1,6 +1,7 @@
 import asyncio
 import functools
 import validators
+import json
 
 import yt_dlp as youtube_dl
 import discord
@@ -81,24 +82,33 @@ class YTDLSource(discord.PCMVolumeTransformer):
       raise YTDLError(settings.lang_string("yt_could_not_find").format(search))
       
     webpage_url = data['webpage_url']
-    partial = functools.partial(cls.ytdl.extract_info, webpage_url, download=False)
-    
-    processed_info = await loop.run_in_executor(None, partial)
-
-    if processed_info is None:
-      raise YTDLError(settings.lang_string("yt_could_not_fetch").format(webpage_url))
-
-    sources = []
-    if 'entries' not in processed_info:
-      sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(processed_info['url'], **cls.FFMPEG_OPTIONS), data=processed_info)))
+    if validators.url(webpage_url):
+      partial = functools.partial(cls.ytdl.extract_info, webpage_url, download=False)
+      
+      processed_info = await loop.run_in_executor(None, partial)
+  
+      if processed_info is None:
+        raise YTDLError(settings.lang_string("yt_could_not_fetch").format(webpage_url))
+  
+      sources = []
+      if 'entries' not in processed_info:
+        sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(processed_info['url'], **cls.FFMPEG_OPTIONS), data=processed_info)))
+      else:
+        #entries = list(data["entries"])
+        for source in processed_info["entries"]:
+          sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(source['url'], **cls.FFMPEG_OPTIONS), data=source)))
+  
+      if len(sources) == 0:
+        raise YTDLError(settings.lang_string("yt_could_not_fetch").format(search))
+      return SongList(sources, is_playlist=True if processed_info["webpage_url_basename"] == "playlist" else False, playlist_title = processed_info["title"])
     else:
-      #entries = list(data["entries"])
-      for source in processed_info["entries"]:
-        sources.append(Song(cls(ctx, discord.FFmpegPCMAudio(source['url'], **cls.FFMPEG_OPTIONS), data=source)))
-
-    if len(sources) == 0:
-      raise YTDLError(settings.lang_string("yt_could_not_fetch").format(search))
-    return SongList(sources, is_playlist=True if processed_info["webpage_url_basename"] == "playlist" else False, playlist_title = processed_info["title"])
+      s_list = []
+      if "entries" in data:
+        for sng in data["entries"]:
+          s_list.append({"title":sng["title"], "url":sng["url"], "requester": ctx.author})
+      else:
+        s_list.append({"title":data["title"], "url":data["url"], "requester": ctx.author})
+      return s_list
 
 class Song:
   __slots__ = ('source', 'requester', 'is_playlist', 'playlist_title')

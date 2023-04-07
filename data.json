@@ -1,0 +1,133 @@
+{
+    "id": "usman\u0131m",
+    "title": "usman\u0131m",
+    "_type": "playlist",
+    "entries": [
+        {
+            "_type": "url",
+            "ie_key": "Youtube",
+            "id": "0ZPg9GwExFg",
+            "url": "https://www.youtube.com/watch?v=0ZPg9GwExFg",
+            "title": "Usman\u0131m Nereye Gidersin",
+            "description": null,
+            "duration": 13.0,
+            "channel_id": "UCieH_N2fd3EUZ7a9g_XgAaw",
+            "channel": "KimPempe",
+            "channel_url": "https://www.youtube.com/channel/UCieH_N2fd3EUZ7a9g_XgAaw",
+            "thumbnails": [
+                {
+                    "url": "https://i.ytimg.com/vi/0ZPg9GwExFg/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCaUrHRatfJ7QKIwuiLzczdPIJUxQ",
+                    "height": 270,
+                    "width": 480
+                }
+            ],
+            "timestamp": null,
+            "release_timestamp": null,
+            "availability": null,
+            "view_count": 1654588,
+            "live_status": null
+        },
+        {
+            "_type": "url",
+            "ie_key": "Youtube",
+            "id": "DLFM-MaTcks",
+            "url": "https://www.youtube.com/shorts/DLFM-MaTcks",
+            "title": "Osmanl\u0131",
+            "description": null,
+            "duration": null,
+            "channel_id": null,
+            "channel": null,
+            "channel_url": null,
+            "thumbnails": [
+                {
+                    "url": "https://i.ytimg.com/vi/DLFM-MaTcks/hq720_2.jpg?sqp=-oaymwEdCJUDENAFSFXyq4qpAw8IARUAAIhCcAHAAQbQAQE=&rs=AOn4CLDW357XBGreofBYK2CelEYB9JLxcA",
+                    "height": 720,
+                    "width": 405
+                }
+            ],
+            "timestamp": null,
+            "release_timestamp": null,
+            "availability": null,
+            "view_count": 1900000,
+            "live_status": null
+        },
+        {
+            "_type": "url",
+            "ie_key": "Youtube",
+            "id": "jTLZuJXRgYE",
+            "url": "https://www.youtube.com/shorts/jTLZuJXRgYE",
+            "title": "Usman\u0131m Nereye Gidersin \u00c7ghb Cenan Usman Aga Taklidi #shorts #komedi #akasyadura\u011f\u0131 #\u00e7ghb",
+            "description": null,
+            "duration": null,
+            "channel_id": null,
+            "channel": null,
+            "channel_url": null,
+            "thumbnails": [
+                {
+                    "url": "https://i.ytimg.com/vi/jTLZuJXRgYE/hq720_2.jpg?sqp=-oaymwEdCI4CEOADSFXyq4qpAw8IARUAAIhCcAHAAQbQAQE=&rs=AOn4CLAyYYzHg3p-3KoYgKRga0zfcuAGkw",
+                    "height": 480,
+                    "width": 270
+                }
+            ],
+            "timestamp": null,
+            "release_timestamp": null,
+            "availability": null,
+            "view_count": 164000,
+            "live_status": null
+        },
+        {
+            "_type": "url",
+            "ie_key": "Youtube",
+            "id": "Giq_NiNh1nI",
+            "url": "https://www.youtube.com/shorts/Giq_NiNh1nI",
+            "title": "Uberkuloz Usman\u0131m Nereye Gidersin",
+            "description": null,
+            "duration": null,
+            "channel_id": null,
+            "channel": null,
+            "channel_url": null,
+            "thumbnails": [
+                {
+                    "url": "https://i.ytimg.com/vi/Giq_NiNh1nI/hq720_2.jpg?sqp=-oaymwEdCJUDENAFSFXyq4qpAw8IARUAAIhCcAHAAQbQAQE=&rs=AOn4CLA9keEAK1K2Ltq0sgecA1lXLknvoQ",
+                    "height": 720,
+                    "width": 405
+                }
+            ],
+            "timestamp": null,
+            "release_timestamp": null,
+            "availability": null,
+            "view_count": 9300,
+            "live_status": null
+        },
+        {
+            "_type": "url",
+            "ie_key": "Youtube",
+            "id": "7YV3kPeNSlM",
+            "url": "https://www.youtube.com/shorts/7YV3kPeNSlM",
+            "title": "10 Farkl\u0131 \u015eekilde Usman\u0131m Nereye Giders\u0131n Ses Efekti",
+            "description": null,
+            "duration": null,
+            "channel_id": null,
+            "channel": null,
+            "channel_url": null,
+            "thumbnails": [
+                {
+                    "url": "https://i.ytimg.com/vi/7YV3kPeNSlM/hq720_2.jpg?sqp=-oaymwEdCOQBEOADSFXyq4qpAw8IARUAAIhCcAHAAQbQAQE=&rs=AOn4CLB0VQTEVEQHj7q7-06Gt98XcfWJzw",
+                    "height": 480,
+                    "width": 228
+                }
+            ],
+            "timestamp": null,
+            "release_timestamp": null,
+            "availability": null,
+            "view_count": 17000,
+            "live_status": null
+        }
+    ],
+    "webpage_url": "ytsearch5:usman\u0131m",
+    "original_url": "ytsearch5:usman\u0131m",
+    "webpage_url_basename": "usman\u0131m",
+    "webpage_url_domain": null,
+    "extractor": "youtube:search",
+    "extractor_key": "YoutubeSearch"
+}

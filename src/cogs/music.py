@@ -195,7 +195,7 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
 
     queue = ''
     for i, song in enumerate(ctx.voice_state.songs.get_all(slice(start, end)), start=start):
-      queue += settings.lang_string("queue_pattern").format(i + 1, song, settings.lang_string("queue_current") if song == ctx.voice_state.songs.current else "")
+      queue += settings.lang_string("queue_pattern").format(i + 1, song.source.title, song.source.url, settings.lang_string("queue_current") if song == ctx.voice_state.songs.current else "")
 
     embed = (discord.Embed(description=settings.lang_string("tracks").format(ctx.voice_state.songs.len_all(), queue))
              .set_footer(text=settings.lang_string("viewing_page").format(page, pages)))
@@ -269,12 +269,17 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
           except music.YTDLError as e:
             await ctx.send(settings.lang_string("an_error_ocurred").format(ctx.clean_prefix, "play", str(e)))
           else:
-            if len(song_list.sources) > 0:
-              if song_list.is_playlist:
-                await self.put_songs(ctx, song_list)
-              elif len(song_list.sources) == 1:
-                await self.put_songs(ctx, song_list.sources[0])
+            if isinstance(song_list, music.SongList):
+              if len(song_list.sources) > 0:
+                if song_list.is_playlist:
+                  await self.put_songs(ctx, song_list)
+                elif len(song_list.sources) == 1:
+                  await self.put_songs(ctx, song_list.sources[0])
+                
               else:
+                await ctx.send(settings.lang_string("yt_could_not_find").format(link_or_query))
+            else:
+              if len(song_list) > 0:
                 view = views.ButtonsSong(
                   on_select = self.put_songs,
                   song_list = song_list,
@@ -282,13 +287,13 @@ class Music(commands.Cog, description= settings.lang_string("music_cog_desc")):
                 )
                 s_list = ''
                 s_index = 0
-                for song in song_list.sources[0:5]:
+                for song in song_list[0:5]:
                   s_index += 1
-                  s_list += settings.lang_string("queue_pattern").format(s_index, song, "")
+                  s_list += settings.lang_string("queue_pattern").format(s_index, song["title"], song["url"], "")
                 embed = (discord.Embed(description=settings.lang_string("choose_song").format(s_list)))
                 await ctx.send(embed=embed, view=view, delete_after=60)
-            else:
-              await ctx.send(settings.lang_string("yt_could_not_find").format(link_or_query))
+              else:
+                await ctx.send(settings.lang_string("yt_could_not_find").format(link_or_query))
       else:
         async with ctx.typing():
           await ctx.send(settings.lang_string("play_search_req_desc"))

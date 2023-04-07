@@ -56,7 +56,7 @@
   "skip_success": "Track skipped.",
   "queue_desc": "Shows the player's queue.",
   "queue_page_desc": "Set page number.",
-  "queue_pattern": "`{0}.` [**{1.source.title}**]({1.source.url}){2}\n",
+  "queue_pattern": "`{0}.` [**{1}**]({2}){3}\n",
   "queue_current": " (Currently playing)",
   "empty_queue": "Empty queue.",
   "track_removed": "Removed track: {}",
@@ -101,5 +101,6 @@
   "no_user_leave_msg": "No users in voice channel for the past {}, leaving.",
   "settings_cog_desc": "Settings commands.",
   "command_not_found": "{0}{1} command not found.{2}",
-  "did_you_mean": "Did you mean: {0}"
+  "did_you_mean": "Did you mean: {0}",
+  "error_msg": "An error occurred!"
 }
