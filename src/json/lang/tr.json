@@ -104,5 +104,7 @@
   "settings_cog_desc": "Ayar komutları.",
   "command_not_found": "{0}{1} komutu bulunamadı.{2}",
   "did_you_mean": "Bunu mu demek istediniz: {0}",
-  "error_msg": "Bir hata oluştu!"
+  "error_msg": "Bir hata oluştu!",
+  "translate_desc": "Girilen veriyi dilinize çevirir.",
+  "translate_arg_desc": "Kelime, cümle ya da paragraf."
 }

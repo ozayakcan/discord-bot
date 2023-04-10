@@ -102,5 +102,7 @@
   "settings_cog_desc": "Settings commands.",
   "command_not_found": "{0}{1} command not found.{2}",
   "did_you_mean": "Did you mean: {0}",
-  "error_msg": "An error occurred!"
+  "error_msg": "An error occurred!",
+  "translate_desc": "Translates given argument to your language.",
+  "translate_arg_desc": "Word, sentence or paragraph."
 }
