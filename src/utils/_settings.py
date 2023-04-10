@@ -1,5 +1,7 @@
 import os
 import json
+import lxml.etree
+import xmltodict as xd
 
 import discord
 from discord.ext import commands
@@ -18,9 +20,9 @@ class Settings:
     self.__current_id__ = 0
 
     # Settings files
-    self.__settings_file__ = "./src/json/settings/{0}/{1}.json"
+    self.__settings_file__ = "./src/configs/settings/{0}/{1}.json"
     # Localization
-    self.__lang_folder__ = "./src/json/lang"
+    self.__lang_folder__ = "./src/configs/lang"
     self.__default_lang_code__ = getenv("DEFAULT_LANGUAGE")
     if self.__default_lang_code__ is None or self.__default_lang_code__ == "":
       self.__default_lang_code__ = "en"
@@ -121,28 +123,24 @@ class Settings:
 
   # Localizations
 
-  @property
-  def lang_dict(self):
-    langs = {}
-    supported_langs = self.supported_langs
-    for supported_lang in supported_langs:
-      file = open(self.__lang_folder__+"/"+supported_lang+".json")
-      langs[supported_lang] = json.load(file)
-      file.close()
-    return langs
+  def lang_dict(self, lang_code):
+    if lang_code is None:
+      lang_code = self.__default_lang_code__
+    with open(self.__lang_folder__+"/"+lang_code+".xml",'r') as f:
+      dict = xd.parse(f.read())
+      return dict["langs"]
 
   @property
   def supported_langs(self):
     supported_langs = []
     for filename in os.listdir(self.__lang_folder__):
-      if filename.endswith(".json"):
-        supported_langs.append(filename[:-5])
+      if filename.endswith(".xml"):
+        supported_langs.append(filename[:-4])
     return supported_langs
 
   def lang_from_text(self, text: str):
     try:
-      langs = self.lang_dict
-      lang = langs[self.__default_lang_code__]
+      lang = self.lang_dict(self.__default_lang_code__)
       keys = [k for k, v in lang.items() if v == text]
       if len(keys) > 0:
         lang_string = self.lang_string(keys[0])
@@ -158,14 +156,14 @@ class Settings:
 
   def lang_string(self, key: str, lang_code: str = None, is_default = False):
     try:
-      langs = self.lang_dict
       if is_default:
-        return langs[self.__default_lang_code__][key]
+        lang = self.lang_dict()
       else:
-        if lang_code is not None:
-          return langs[lang_code][key]
+        if lang_code is None:
+          lang = self.lang_dict(self.lang_code)
         else:
-          return langs[self.lang_code][key]
+          lang = self.lang_dict(lang_code)
+      return lang[key]
     except Exception as e:
       print("Could not get lang string: "+str(e))
       return key

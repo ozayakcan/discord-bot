@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<langs>
+
+  <lang>English</lang>
+
+  <no_category>No category</no_category>
+
+  <help_cog_desc>Help commands.</help_cog_desc>
+
+  <help_desc>Shows this message</help_desc>
+
+  <help_desc_full>Shows command list.</help_desc_full>
+
+  <help_arg_desc>No description specified.</help_arg_desc>
+
+  <arguments_heading>Arguments:</arguments_heading>
+
+  <commands_heading>Commands:</commands_heading>
+
+  <!-- {0} is command prefix -->
+  <help_ending_note>Type {0}help command for more info on a command.\nYou can also type {0}help category for more info on a category.</help_ending_note>
+
+  <!-- {0} is categori or command name (in help command) -->
+  <help_not_found>{} command/category not found.</help_not_found>
+
+  <help_command_name_or_category_desc>Command or category name.</help_command_name_or_category_desc>
+
+  <music_cog_desc>Music</music_cog_desc>
+
+  <!-- Will be replaced track info -->
+  <!-- **text** makes text bold in discord. -->
+  <!-- Example: **Imagine Dragons - Bones (Official Lyric Video)** by **ImagineDragons**-->
+  <yt_uploader>**{0.title}** by **{0.uploader}**</yt_uploader>
+
+  <!-- {0} is url or query in music bot -->
+  <yt_could_not_find>Couldn't find anything that matches `{0}`</yt_could_not_find>
+
+  <!-- {0} is url or query in music bot -->
+  <yt_could_not_fetch>Couldn't fetch `{0}`</yt_could_not_fetch>
+
+  <!-- {0} is url or query in music bot -->
+  <yt_could_not_retrieve>Couldn't retrieve any matches for `{0}`</yt_could_not_retrieve>
+
+  <!-- For parsing durations. -->
+  <days>{0} days</days>
+  <hours>{0} hours</hours>
+  <minutes>{0} minutes</minutes>
+  <seconds>{0} seconds</seconds>
+
+  <now_playing>Now playing</now_playing>
+
+  <duration>Duration</duration>
+
+  <requested_by>Requested by</requested_by>
+
+  <uploader>Uploader</uploader>
+
+  <url>Url</url>
+
+  <!-- {0.source.url} is tracks url. -->
+  <!-- Do not remove [] and () symbols-->
+  <!-- Just change 'Click' text -->
+  <url_content>[Click]({0.source.url})</url_content>
+
+  <command_dm>This command can't be used in DM channels.</command_dm>
+
+  <!-- {0} is command prefix -->
+  <!-- {1} is command name -->
+  <!-- {2} is error text -->
+  <an_error_ocurred>An error occurred while invoking {0}{1} command. Error: {2}</an_error_ocurred>
+
+  <join_desc>Joins a voice channel.</join_desc>
+
+  <join_success>I joined your channel.</join_success>
+
+  <summon_desc>Summons the bot to a voice channel.</summon_desc>
+
+  <summon_desc_full>Summons the bot to a voice channel. If no channel was specified, it joins your channel.</summon_desc_full>
+
+  <!-- {0} is channel name. -->
+  <summon_success>I summoned {0} channel.</summon_success>
+
+  <summon_channel_desc>Mention a voice channel.</summon_channel_desc>
+
+  <not_connected_voice_ch_or_not_specified>You are neither connected to a voice channel nor specified a channel to join.</not_connected_voice_ch_or_not_specified>
+
+  <not_connected_voice_ch>Not connected to any voice channel.</not_connected_voice_ch>
+
+  <stop_leave_desc>Clears the queue and leaves the voice channel.</stop_leave_desc>
+
+  <stop_leave_success>Cleared queue and leaved.</stop_leave_success>
+
+  <stop_leave_failed>Leaving/Stoping failed.</stop_leave_failed>
+
+  <volume_desc>Sets the volume of the player.</volume_desc>
+
+  <volume_level_desc>Set volume level between 0 and 100.</volume_level_desc>
+
+  <not_playing>Nothing being played at the moment.</not_playing>
+
+  <vol_err>Volume must be between 0 and 100.</vol_err>
+
+  <!-- {0} is volume level. -->
+  <vol_set>Volume of the player set to {0}%</vol_set>
+
+  <now_desc>Displays the currently playing song.</now_desc>
+
+  <pause_desc>Pauses the currently playing song.</pause_desc>
+
+  <pause_success>Player paused.</pause_success>
+
+  <pause_fail>Player already paused or queue empty.</pause_fail>
+
+  <resume_desc>Resumes a currently paused song.</resume_desc>
+
+  <resume_success>Player resumed.</resume_success>
+
+  <resume_fail>Player already playing.</resume_fail>
+
+  <skip_desc>Vote to skip a song. The requester can automatically skip.</skip_desc>
+
+  <!-- {0} is current votes. -->
+  <skip_vote_added>Skip vote added, currently at **{0}/3**</skip_vote_added>
+
+  <skip_already_voted>You have already voted to skip this song.</skip_already_voted>
+
+  <skip_success>Track skipped.</skip_success>
+
+  <queue_desc>Shows the player's queue.</queue_desc>
+
+  <queue_page_desc>Set page number.</queue_page_desc>
+
+  <!-- {0} is track index -->
+  <!-- {1} is track name -->
+  <!-- {2} is track url -->
+  <!-- {3} is queue_current text. Only visible if its currently playing -->
+  <!-- Example: 1. Imagine Dragons - Bones -->
+  <!-- If currenly playing: 1. Imagine Dragons - Bones (Currently playing) -->
+  <queue_pattern>`{0}.` [**{1}**]({2}){3}\n</queue_pattern>
+
+  <queue_current> (Currently playing)</queue_current>
+
+  <empty_queue>Empty queue.</empty_queue>
+
+  <!-- {0} is track name -->
+  <track_removed>Removed track: {0}</track_removed>
+
+  <!-- {0} is tracks length -->
+  <!-- {1} is track list -->
+  <tracks>**{0} tracks:**\n\n{1}</tracks>
+
+  <!-- {0} is current page -->
+  <!-- {1} is total page -->
+  <viewing_page>Viewing page {0}/{1}</viewing_page>
+
+  <shuffle_desc>Shuffles the queue.</shuffle_desc>
+
+  <remove_desc>Removes a song from the queue at a given index.</remove_desc>
+
+  <remove_index_desc>Set index of song start from 1</remove_index_desc>
+
+  <remove_index_err>index value must start from 1</remove_index_err>
+
+  <loop_desc>Loops the currently playing song.</loop_desc>
+
+  <loop_desc_full>Loops the currently playing song. Invoke this command again to unloop the song.</loop_desc_full>
+
+  <loop_enabled>Loop is enabled.</loop_enabled>
+
+  <loop_disabled>Loop is disabled.</loop_disabled>
+
+  <play_desc>Plays a song.</play_desc>
+
+  <play_search_desc>Search query or url.</play_search_desc>
+
+  <play_search_req_desc>Search query or url required.</play_search_req_desc>
+
+  <!-- {0} is track name -->
+  <enqueued>Enqueued {0}</enqueued>
+
+  <!-- {0} is track list -->
+  <choose_song>**Choose track to play by index:**\n\n{0}</choose_song>
+
+  <!-- {0} is user mention. -->
+  <only_requester_warning>{0}, only the requester can choose!</only_requester_warning>
+
+  <already_in_voice_channel>Bot is already in a voice channel.</already_in_voice_channel>
+
+  <lang_desc>Changes and shows current language.</lang_desc>
+
+  <lang_select_desc>Change your lang to english.</lang_select_desc>
+
+  <lang_choose>Choose your language.</lang_choose> 
+
+  <lang_current>Current language is English.</lang_current>
+
+  <lang_change_success>Language change to english.</lang_change_success>
+
+  <lang_change_failed>Language change failed.</lang_change_failed>
+
+  <chat_translate_desc>Toggles chat message translation.</chat_translate_desc>
+
+  <chat_translate_enabled>Chat message translation enabled.</chat_translate_enabled>
+
+  <chat_translate_disabled>Chat message translation disabled.</chat_translate_disabled>
+
+  <manage_messages>You need to manage messages permission to use this command.</manage_messages>
+
+  <chat_desc>Toggles chat bot in current channel. (Only in guilds. In dm's it's always enabled.)</chat_desc>
+
+  <chat_in_dm>Chat bot always enabled in dm's.</chat_in_dm>
+
+  <chat_bot_enabled>Enabled chat bot in this channel.</chat_bot_enabled>
+
+  <chat_bot_disabled>Disabled chat bot in this channel.</chat_bot_disabled>
+
+  <debug_desc>Toggles debug mode. (Shows details for errors if enabled.)</debug_desc>
+
+  <debug_enabled>Debug mode enabled.</debug_enabled>
+
+  <debug_disabled>Debug mode disabled.</debug_disabled>
+
+  <sync_desc>Sync slash commands to your guild.</sync_desc>
+
+  <sync_success>Slash commands successfully synced.</sync_success>
+
+  <admin_permission_err>You should have admin permission to use this command.</admin_permission_err>
+
+  <!-- {0} is duration -->
+  <no_track_leave_msg>No tracks have been playing for the past {0}, leaving.</no_track_leave_msg>
+
+  <!-- {0} is duration -->
+  <no_user_leave_msg>No users in voice channel for the past {0}, leaving.</no_user_leave_msg>
+
+  <settings_cog_desc>Settings commands.</settings_cog_desc>
+
+  <!-- {0} is command prefix -->
+  <!-- {1} is command name -->
+  <!-- {2} shows only if found matches closest command using did_you_mean text -->
+  <!-- Example: !hel command not found. Did you mean: !help" -->
+  <command_not_found>{0}{1} command not found.{2}</command_not_found>
+
+  <!-- {0} is a command or command list -->
+  <!-- If found matched closest commands -->
+  <!-- Example: Did you mean: !play, !playing -->
+  <did_you_mean>Did you mean: {0}</did_you_mean>
+
+  <error_msg>An error occurred!</error_msg>
+
+  <translate_desc>Translates given argument to your language.</translate_desc>
+
+  <translate_arg_desc>Word, sentence or paragraph.</translate_arg_desc>
+</langs>

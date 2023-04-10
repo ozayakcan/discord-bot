@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<langs>
+
+  <lang>Türkçe</lang>
+
+  <no_category>Kategori yok</no_category>
+
+  <help_cog_desc>Yardım komutları.</help_cog_desc>
+
+  <help_desc>Bu mesajı gösterir.</help_desc>
+
+  <help_desc_full>Komut listesini gösterir.</help_desc_full>
+
+  <help_arg_desc>Açıklama belirtilmemiş.</help_arg_desc>
+
+  <arguments_heading>Argümanlar:</arguments_heading>
+
+  <commands_heading>Komutlar:</commands_heading>
+
+  <!-- {0} is command prefix -->
+  <help_ending_note>Bir komut hakkında detaylı bilgi almak için '{0}help komut_adi' komutunu kullanın.\nBir kategori hakkında detaylı bilgi almak için '{0}help kategori_adi' komutunu kullanın.</help_ending_note>
+
+  <!-- {0} is categori or command name (in help command) -->
+  <help_not_found>{0} isimli komut/kategori bulunamadı.</help_not_found>
+
+  <help_command_name_or_category_desc>Komut ya da kategori adı.</help_command_name_or_category_desc>
+
+  <music_cog_desc>Müzik komutları.</music_cog_desc>
+
+  <!-- Will be replaced track info -->
+  <!-- **text** makes text bold in discord. -->
+  <!-- Example: **Imagine Dragons - Bones (Official Lyric Video)** by **ImagineDragons**-->
+  <yt_uploader>**{0.title}**, Yükleyen: **{0.uploader}**.</yt_uploader>
+
+  <!-- {0} is url or query in music bot -->
+  <yt_could_not_find>`{0}` ile eşleşen sonuç bulunamadı.</yt_could_not_find>
+
+  <!-- {0} is url or query in music bot -->
+  <yt_could_not_fetch>`{0}` getirilemedi</yt_could_not_fetch>
+
+  <!-- {0} is url or query in music bot -->
+  <yt_could_not_retrieve>`{0}` ile eşleşen sonuçlar getirilemedi.</yt_could_not_retrieve>
+
+  <!-- For parsing durations. -->
+  <days>{0} gün</days>
+  <hours>{0} saat</hours>
+  <minutes>{0} dakika</minutes>
+  <seconds>{0} saniye</seconds>
+
+  <now_playing>Çalan Parça</now_playing>
+
+  <duration>Süre</duration>
+
+  <requested_by>Ekleyen</requested_by>
+
+  <uploader>Yükleyen</uploader>
+
+  <url>Url</url>
+
+  <!-- {0.source.url} is tracks url. -->
+  <!-- Do not remove [] and () symbols-->
+  <!-- Just change 'Click' text -->
+  <url_content>[Tıklayın]({0.source.url})</url_content>
+
+  <command_dm>Bu komut direkt mesajlarda kullanılamaz.</command_dm>
+
+  <!-- {0} is command prefix -->
+  <!-- {1} is command name -->
+  <!-- {2} is error text -->
+  <an_error_ocurred>{0}{1} komutu kullanılırken bir hata oluştu. Hata: {2}</an_error_ocurred>
+
+  <join_desc>Ses kanalına katılır.</join_desc>
+
+  <join_success>Geçerli kanala girildi.</join_success>
+
+  <summon_desc>Botu bir ses kanalına çağırır.</summon_desc>
+
+  <summon_desc_full>Botu bir ses kanalına çağırır. Eğer bir kanal belirtilmemişse bulunduğunuz kanala katılır.</summon_desc_full>
+
+  <!-- {0} is channel name. -->
+  <summon_success>{0} kanalına girildi.</summon_success>
+
+  <summon_channel_desc>Bir ses kanalından bahsedin.</summon_channel_desc>
+
+  <not_connected_voice_ch_or_not_specified>Bir ses kanalında değilsiniz veya bir kanal belirtmediniz.</not_connected_voice_ch_or_not_specified>
+
+  <not_connected_voice_ch>Herhangi bir ses kanalına bağlı değil.</not_connected_voice_ch>
+
+  <stop_leave_desc>Sırayı temizler ve ses kanalından ayrılır.</stop_leave_desc>
+
+  <stop_leave_success>Sıra temizlendi ve kanaldan çıkıldı.</stop_leave_success>
+
+  <stop_leave_failed>Ayrılma/Durdurma başarısız.</stop_leave_failed>
+
+  <volume_desc>Oynatıcının ses seviyesini belirler.</volume_desc>
+
+  <volume_level_desc>0 ile 100 arası bir ses seviyesi belirleyin.</volume_level_desc>
+
+  <not_playing>Şuanda çalan bir parça yok.</not_playing>
+
+  <vol_err>Ses seviyesi 0 ile 100 arasında olmalı.</vol_err>
+
+  <!-- {0} is volume level. -->
+  <vol_set>Ses seviyesi {0}% olarak ayarlandı</vol_set>
+
+  <now_desc>Şuanda çalan parçayı gösterir.</now_desc>
+
+  <pause_desc>Oynatmayı duraklatır.</pause_desc>
+
+  <pause_success>Oynatıcı durduruldu.</pause_success>
+
+  <pause_fail>Oynatıcı zaten durdurulmuş veya sıra boş.</pause_fail>
+
+  <resume_desc>Oynatmayı devam ettirir.</resume_desc>
+
+  <resume_success>Oynatıcı devam ettirildi.</resume_success>
+
+  <resume_fail>Oynatıcı zaten çalıyor.</resume_fail>
+
+  <skip_desc>Parçayı atlamayı oylar. Ekleyen kişi direkt olarak atlayabilir.</skip_desc>
+
+  <!-- {0} is current votes. -->
+  <skip_vote_added>Atlama oyu eklendi. Şuanda **{0}/3** oy mevcut.</skip_vote_added>
+
+  <skip_already_voted>Bu parçayı atlamayı zaten oyladın.</skip_already_voted>
+
+  <skip_success>Parça atlandı.</skip_success>
+
+  <queue_desc>Oynatıcıdaki parçaları gösterir.</queue_desc>
+
+  <queue_page_desc>Sayfa numarası belirle.</queue_page_desc>
+
+  <!-- {0} is track index -->
+  <!-- {1} is track name -->
+  <!-- {2} is track url -->
+  <!-- {3} is queue_current text. Only visible if its currently playing -->
+  <!-- Example: 1. Imagine Dragons - Bones -->
+  <!-- If currenly playing: 1. Imagine Dragons - Bones (Currently playing) -->
+  <queue_pattern>`{0}.` [**{1}**]({2}){3}\n</queue_pattern>
+
+  <queue_current> (Şuanda çalan)</queue_current>
+
+  <empty_queue>Sıra boş.</empty_queue>
+
+  <!-- {0} is track name -->
+  <track_removed>Kaldırılan parça: {0}</track_removed>
+
+  <!-- {0} is tracks length -->
+  <!-- {1} is track list -->
+  <tracks>**{0} parça:**\n\n{1}</tracks>
+
+  <!-- {0} is current page -->
+  <!-- {1} is total page -->
+  <viewing_page>Sayfa görüntüleniyor {0}/{1}</viewing_page>
+
+  <shuffle_desc>Parçaları karıştırır.</shuffle_desc>
+
+  <remove_desc>Belirtilen sıradaki parçayı kaldırır.</remove_desc>
+
+  <remove_index_desc>1 den başlayarak bir parça sırası belirtin</remove_index_desc>
+
+  <remove_index_err>Parça sırası en az 1 olmalı.</remove_index_err>
+
+  <loop_desc>Şuanda çalan parçaları tekrarlar.</loop_desc>
+
+  <loop_desc_full>Şuanda çalan parçaları tekrarlar. Tekrarlamayı durdurmak için komutu tekrar kullanın.</loop_desc_full>
+
+  <loop_enabled>Tekrarlama etkin.</loop_enabled>
+
+  <loop_disabled>Tekrarlama devredışı.</loop_disabled>
+
+  <play_desc>Parça çalar.</play_desc>
+
+  <play_search_desc>Arama terimi ya da url.</play_search_desc>
+
+  <play_search_req_desc>Arama terimi ya da url gerekli.</play_search_req_desc>
+
+  <!-- {0} is track name -->
+  <enqueued>Sıraya Eklendi: {0}</enqueued>
+
+  <!-- {0} is track name -->
+  <choose_song>**Alttaki butonlardan numarasına göre eklenecek parçayı seçin:**\n\n{0}</choose_song>
+
+  <!-- {0} is user mention. -->
+  <only_requester_warning>{0}, sadece komutu kullanan kişi seçim yapabilir!</only_requester_warning>
+
+  <already_in_voice_channel>Bot zaten bir ses kanalında.</already_in_voice_channel>
+
+  <lang_desc>Dili değiştirir ve geçerli dili gösterir.</lang_desc>
+
+  <lang_select_desc>Dili Türkçe olarak ayarla.</lang_select_desc>
+
+  <lang_choose>Dil seçin.</lang_choose> 
+
+  <lang_current>Şuanki dil Türkçe.</lang_current>
+
+  <lang_change_success>Dil Türkçe olarak ayarlandı.</lang_change_success>
+
+  <lang_change_failed>Dil değiştirilemedi.</lang_change_failed>
+
+  <chat_translate_desc>Sohbet mesajı çevirisini açar/kapatır.</chat_translate_desc>
+
+  <chat_translate_enabled>Sohbet mesajı çevirisi etkinleştirildi.</chat_translate_enabled>
+
+  <chat_translate_disabled>Sohbet mesajı çevirisi devredışı bırakıldı.</chat_translate_disabled>
+
+  <manage_messages>Bu komutu kullanabilmek için mesajları düzenleme yetkinizin bulunması gerekiyor.</manage_messages>
+
+  <chat_desc>Geçerli kanalda sohbet botunu etkinleştirir/devredışı bırakır. (Sadece sunucularda. Direkt mesajlar her zaman etkindir.)</chat_desc>
+
+  <chat_in_dm>Direkt mesajlarda sohbet botu her zaman etkindir.</chat_in_dm>
+
+  <chat_bot_enabled>Sohbet botu bu kanalda etkinleştirildi.</chat_bot_enabled>
+
+  <chat_bot_disabled>Sohbet botu bu kanalda devredışı bırakıldı.</chat_bot_disabled>
+
+  <debug_desc>Hata ayıklama modunu etkinleştirir/devredışı bırakır. (Etkinken hatalardaki ayrıntıları gösterir.)</debug_desc>
+
+  <debug_enabled>Hata ayıklama modu etkinleştirildi.</debug_enabled>
+
+  <debug_disabled>Hata ayıklama modu devredışı bırakıldı.</debug_disabled>
+
+  <sync_desc>Eğik çizgi komutlarını sunucun ile senkronize et.</sync_desc>
+
+  <sync_success>Eğik çizgi komutları başarıyla senkronize edildi.</sync_success>
+
+  <admin_permission_err>Bu komutu kullanabilmek için yönetici yetkiniz bulunmalıdır.</admin_permission_err>
+
+  <no_track_leave_msg>{} içinde herhangi bir parça çalınmadı. Kanaldan çıkılıyor.</no_track_leave_msg>
+
+  <no_user_leave_msg>Ses kanalında hiç kullanıcı yok. Kanaldan çıkılıyor.</no_user_leave_msg>
+
+  <!-- {0} is duration -->
+  <no_track_leave_msg>{0} içinde herhangi bir parça çalınmadığı için kanaldan çıkılıyor.</no_track_leave_msg>
+
+  <!-- {0} is duration -->
+  <no_user_leave_msg>{0} içinde kanalda herhangi bir kullanıcı bulunmadığı için kanaldan çıkılıyor.</no_user_leave_msg>
+
+  <settings_cog_desc>Ayar komutları.</settings_cog_desc>
+
+  <!-- {0} is command prefix -->
+  <!-- {1} is command name -->
+  <!-- {2} shows only if found matches closest command using did_you_mean text -->
+  <!-- Example: !hel command not found. Did you mean: !help" -->
+  <command_not_found>{0}{1} komutu bulunamadı.{2}</command_not_found>
+
+  <!-- {0} is a command or command list -->
+  <!-- If found matched closest commands -->
+  <!-- Example: Did you mean: !play, !playing -->
+  <did_you_mean>Bunu mu demek istediniz: {0}</did_you_mean>
+
+  <error_msg>Bir hata oluştu!</error_msg>
+
+  <translate_desc>Girilen veriyi dilinize çevirir.</translate_desc>
+
+  <translate_arg_desc>Kelime, cümle ya da paragraf.</translate_arg_desc>
+</langs>
