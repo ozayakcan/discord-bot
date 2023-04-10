@@ -55,8 +55,8 @@ class MyBot(commands.Bot):
       return
     if not message.content.startswith(command_prefix):
       settings.update_currents(message=message)
-      if message.channel.id in settings.chat_channels or isinstance(message.channel, discord.channel.DMChannel):
-        await chat_bot(message=message, settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
+      if self.user.mentioned_in(message) or isinstance(message.channel, discord.channel.DMChannel):
+        await chat_bot(bot=self, message=message, settings=settings, mention = not isinstance(message.channel, discord.channel.DMChannel))
     else:
       try:
         command_name = message.content.split('!', 1)[1].split(' ', 1)[0]

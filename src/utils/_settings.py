@@ -26,7 +26,6 @@ class Settings:
       self.__default_lang_code__ = "en"
     
     #Settings
-    self.__chat_channels_str__ = "chat_channels"
     self.__lang_str__ = "lang"
     self.__translate_str__ = "translate"
     self.__debug_str__ = "debug"
@@ -119,16 +118,6 @@ class Settings:
       return settings_model[key]
     except:
       return default
-
-  # Chat
-
-  @property
-  def chat_channels(self):
-    return self.get_key(self.__chat_channels_str__, [])
-    
-  @chat_channels.setter
-  def chat_channels(self, channel_ids: list = []):
-    self.set(self.__chat_channels_str__, channel_ids)
 
   # Localizations
 

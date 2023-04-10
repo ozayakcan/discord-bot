@@ -76,21 +76,6 @@ class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc
     else:
       await ctx.send(settings.lang_string("chat_translate_disabled"), delete_after=settings.message_delete_delay)
 
-  @commands.hybrid_command(name='chat', brief=settings.lang_string("chat_desc"), description=settings.lang_string("chat_desc"))
-  async def _chat(self, ctx: commands.Context):
-
-    if isinstance(ctx.channel, discord.channel.DMChannel):
-      return await ctx.send(settings.lang_string("chat_in_dm"), delete_after=settings.message_delete_delay)
-    channel_ids = settings.chat_channels
-    channel_id = ctx.channel.id
-    if channel_id in channel_ids:
-      channel_ids.remove(channel_id)
-      settings.chat_channels = channel_ids
-      await ctx.send(settings.lang_string("chat_bot_disabled"), delete_after=settings.message_delete_delay)
-    else:
-      channel_ids.append(channel_id)
-      settings.chat_channels = channel_ids
-      await ctx.send(settings.lang_string("chat_bot_enabled"), delete_after=settings.message_delete_delay)
 
   #@commands.hybrid_command(name='debug', brief=settings.lang_string("debug_desc"), description=settings.lang_string("debug_desc"))
   #async def _debug(self, ctx: commands.Context):

@@ -6,11 +6,17 @@
 
 Keys | Values | Description
 --- | --- | --- 
-AI_BRAINSHOP_TOKEN | VG......W1 | Get from [https://brainshop.ai/](https://brainshop.ai/)
+AI_BRAINSHOP_TOKEN | VG......W1 | Get from [https://brainshop.ai/](https://brainshop.ai/). See [Chat bot](#chat-bot)
 COMMAND_PREFIX | ! | Your command prefix.
 DISCORD_BOT_SECRET | MTA.......86CQ | Your discord bot token. [https://discord.com/developers/applications](https://discord.com/developers/applications)
 FFMPEG_PATH | ffmpeg path | See [installing ffmpeg in replit](#installing-ffmpeg-in-replit)
 DEFAULT_LANGUAGE | en | Default language json file name. See [localization](#localization) (If not spefied or empty it will be 'en'.)
+
+## Chat Bot
+
+- Bot responses when mentioned.
+- Get chat ai token from [https://brainshop.ai/](https://brainshop.ai/) and add token as AI_BRAINSHOP_TOKEN to your secrets.
+- For different ai you can customize src/utils/chat_bot.py
 
 ## Music Bot
 

@@ -3,6 +3,7 @@ import requests
 
 import translators as ts
 import discord
+from discord.ext import commands
 
 from ._settings import Settings
 
@@ -21,12 +22,12 @@ apis = {
     "function": brainshop
   }
 }
-async def chat_bot(message: discord.Message, settings: Settings, api = "brainshop", mention = True):
+async def chat_bot(bot: commands.Bot, message: discord.Message, settings: Settings, api = "brainshop", mention = True):
   async with message.channel.typing():
     resp = ""
     try:
       if api in apis:
-        resp = apis[api]["function"](message.content, message.author.id, apis[api]["token"])
+        resp = apis[api]["function"](message.content.replace(bot.user.mention, ""), message.author.id, apis[api]["token"])
       if settings.lang_code != "en" and settings.translate:
         resp = ts.translate_text(resp, translator= "google", to_language=settings.lang_code) 
       #for resp in resps['choices']:
