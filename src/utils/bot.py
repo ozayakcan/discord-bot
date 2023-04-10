@@ -46,7 +46,7 @@ class MyBot(commands.Bot):
       if not self.synced:
         await self.tree.sync()
         self.synced = True
-      await self.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"play - "+command_prefix+"p"))
+      await self.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"help"))
       print(f"We have logged in as {self.user}")
     except Exception as e:
       print("on_ready error: "+str(e))
