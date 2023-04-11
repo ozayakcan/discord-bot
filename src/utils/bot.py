@@ -45,6 +45,9 @@ class MyBot(commands.Bot):
       await self.wait_until_ready()
       if not self.synced:
         await self.tree.sync()
+        test_guild = getenv("TEST_GUILD")
+        if test_guild is not None:
+          await self.tree.sync(guild=discord.Object(int(test_guild)))
         self.synced = True
       await self.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=command_prefix+"help"))
       print(f"We have logged in as {self.user}")
