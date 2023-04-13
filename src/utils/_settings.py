@@ -22,10 +22,10 @@ class Settings:
     # Settings files
     self.__settings_file__ = "./src/configs/settings/{0}/{1}.json"
     # Localization
-    self.__lang_folder__ = "./src/configs/lang"
+    self.__lang_folder__ = "./src/configs/langs"
     self.__default_lang_code__ = getenv("DEFAULT_LANGUAGE")
     if self.__default_lang_code__ is None or self.__default_lang_code__ == "":
-      self.__default_lang_code__ = "en"
+      self.__default_lang_code__ = "en-US"
     
     #Settings
     self.__lang_str__ = "lang"

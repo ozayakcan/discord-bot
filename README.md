@@ -10,7 +10,7 @@ AI_BRAINSHOP_TOKEN | VG......W1 | Get from [https://brainshop.ai/](https://brain
 COMMAND_PREFIX | ! | Your command prefix.
 DISCORD_BOT_SECRET | MTA.......86CQ | Your discord bot token. [https://discord.com/developers/applications](https://discord.com/developers/applications)
 FFMPEG_PATH | ffmpeg path | See [installing ffmpeg in replit](#installing-ffmpeg-in-replit)
-DEFAULT_LANGUAGE | en | Default language json file name. See [localization](#localization) (If not spefied or empty it will be 'en'.)
+DEFAULT_LANGUAGE | en-US | Default language json file name. See [localization](#localization) (If not spefied or empty it will be 'en-US'.)
 
 ## Chat Bot
 
@@ -61,9 +61,9 @@ python3 -m poetry install
 
 - Localization files:
 ```
-src/json/lang/
+src/configs/langs/
 ```
-- Just copy en.json and rename as your desired language. Bot will automatically load on start.
+- Just copy en-US.xml and rename as your desired language. Bot will automatically load on start. See [supported languages](https://discord.com/developers/docs/reference#locales) for slash commands
 - For changing default language update your [secrets](#secrets).
 
 ### Commands
@@ -91,7 +91,7 @@ class MyCog(commands.Cog, description=settings.lang_string("your_description_lan
   # and it's id for getting user/guild settings from later.
   # Example: 
   #   For guild group (if command used in guild):
-  #   loads setting from src/json/guilds/guild_id.json
+  #   loads setting from src/configs/settings/guilds/guild_id.json
   # You should use this in cog_before_invoke function 
   # or settings doesn't know which user or guild 
   # used command and only gets default settings.
