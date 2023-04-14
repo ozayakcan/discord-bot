@@ -1,5 +1,6 @@
 import asyncio
 import difflib
+import json
 
 import discord
 from discord.ext import commands
@@ -64,9 +65,11 @@ class MyBot(commands.Bot):
       try:
         command_name = message.content.split('!', 1)[1].split(' ', 1)[0]
         command_found = False
+        excluded_commands = getenv("EXCLUDED_COMMANDS") or "[]"
+        excluded_commands = json.loads(excluded_commands)
         command_names = []
         for cmd in self.commands:
-          if command_name == cmd.name:
+          if command_name == cmd.name or command_name in excluded_commands:
             command_found = True
             break
           command_names.append(cmd.name)
