@@ -1,6 +1,5 @@
 import os
 import json
-import lxml.etree
 import xmltodict as xd
 
 import discord
@@ -31,6 +30,7 @@ class Settings:
     self.__lang_str__ = "lang"
     self.__translate_str__ = "translate"
     self.__debug_str__ = "debug"
+    self.__log_str__ = "log"
 
   async def send_cog_error(self, ctx: commands.Context, error: commands.CommandError):
     await ctx.send(f"{ctx.message.author.mention}, {str(error)}")
@@ -38,22 +38,6 @@ class Settings:
     #  await ctx.send(str(error), delete_after=self.message_delete_delay)
     #else:
     #  await ctx.send(get_lang_string(group=group, id=id, key="an_error_ocurred").format(ctx.clean_prefix, ctx.invoked_with), delete_after=self.message_delete_delay)
-
-  @property
-  def current_group(self):
-    return self.__current_group__
-
-  @current_group.setter
-  def current_group(self, value: str):
-    self.__current_group__ = value
-
-  @property
-  def current_id(self):
-    return self.__current_id__
-
-  @current_id.setter
-  def current_id(self, value: id):
-    self.__current_id__ = value
 
   def update_currents(self, ctx: commands.Context = None, message: discord.Message = None, interaction: discord.Interaction = None):
     if ctx is None and message is None and interaction is None:
@@ -80,7 +64,23 @@ class Settings:
         settings.current_id = ctx.message.author.id
       else:
         settings.current_id = interaction.message.author.id
-    
+
+  @property
+  def current_group(self):
+    return self.__current_group__
+
+  @current_group.setter
+  def current_group(self, value: str):
+    self.__current_group__ = value
+
+  @property
+  def current_id(self):
+    return self.__current_id__
+
+  @current_id.setter
+  def current_id(self, value: id):
+    self.__current_id__ = value
+
   # Guild
   def is_guild(self, ctx: commands.Context):
     if not ctx.guild:
@@ -89,7 +89,7 @@ class Settings:
       return True
 
   # Settings
-  def get(self):
+  def __get__(self):
     file = self.__settings_file__.format(self.__current_group__, str(self.__current_id__))
     if not os.path.isfile(file) and not os.access(file, os.R_OK):
       os.makedirs(os.path.dirname(file), exist_ok=True)
@@ -100,22 +100,29 @@ class Settings:
       data = json.load(json_file)
       json_file.close()
       return data
-  
-  def set(self, key: str, value: any):
-    settings_model = self.get()
-    if f"{key}" not in settings_model:
-      settings_model.update({
-        f"{key}": value
-      })
-    else:
-      settings_model[f"{key}"] = value
+  def __update__(self, key: str, value: any = None, remove: bool = False):
+    settings_model = self.__get__()
+    if remove:
+      if f"{key}" in settings_model:
+        del settings_model[f"{key}"]
+    elif value is not None:
+      if f"{key}" not in settings_model:
+        settings_model.update({
+          f"{key}": value
+        })
+      else:
+        settings_model[f"{key}"] = value
     dumped = json.dumps(settings_model, indent=4)
     with open(self.__settings_file__.format(self.__current_group__, str(self.__current_id__)), "w") as _data:
       _data.write(dumped)
       _data.close()
+  def __set__(self, key: str, value: any):
+    self.__update__(key, value)
+  def __remove__(self, key: str):
+    self.__update__(key, remove=True)
 
-  def get_key(self, key: str, default: any):
-    settings_model = self.get()
+  def __get_key__(self, key: str, default: any):
+    settings_model = self.__get__()
     try:
       return settings_model[key]
     except:
@@ -123,7 +130,7 @@ class Settings:
 
   # Localizations
 
-  def lang_dict(self, lang_code):
+  def __lang_dict__(self, lang_code):
     if lang_code is None:
       lang_code = self.__default_lang_code__
     with open(self.__lang_folder__+"/"+lang_code+".xml",'r') as f:
@@ -140,7 +147,7 @@ class Settings:
 
   def lang_from_text(self, text: str):
     try:
-      lang = self.lang_dict(self.__default_lang_code__)
+      lang = self.__lang_dict__(self.__default_lang_code__)
       keys = [k for k, v in lang.items() if v == text]
       if len(keys) > 0:
         lang_string = self.lang_string(keys[0])
@@ -157,12 +164,12 @@ class Settings:
   def lang_string(self, key: str, lang_code: str = None, is_default = False):
     try:
       if is_default:
-        lang = self.lang_dict()
+        lang = self.__lang_dict__()
       else:
         if lang_code is None:
-          lang = self.lang_dict(self.lang_code)
+          lang = self.__lang_dict__(self.lang_code)
         else:
-          lang = self.lang_dict(lang_code)
+          lang = self.__lang_dict__(lang_code)
       return lang[key].replace('\\n', '\n')
     except Exception as e:
       print("Could not get lang string: "+str(e))
@@ -170,27 +177,48 @@ class Settings:
 
   @property
   def lang_code(self):
-    return self.get_key(self.__lang_str__, self.__default_lang_code__)
+    return self.__get_key__(self.__lang_str__, self.__default_lang_code__)
 
   @lang_code.setter
-  def lang_code(self, lang: str):
-    self.set(self.__lang_str__, lang)
+  def lang_code(self, lang: str = None):
+    if lang is None:
+      self.__remove__(self.__lang_str__)
+    else:
+      self.__set__(self.__lang_str__, lang)
   
   @property
   def translate(self):
-    return self.get_key(self.__translate_str__, False)
+    return self.__get_key__(self.__translate_str__, False)
   
   @translate.setter
-  def translate(self, translate: bool):
-    self.set(self.__translate_str__, translate)
+  def translate(self, translate: bool = None):
+    if translate is None:
+      self.__remove__(self.__translate_str__)
+    else:
+      self.__set__(self.__translate_str__, translate)
     
   # Debug
   @property
   def debug(self):
-    return self.get_key(self.__debug_str__, False)
+    return self.__get_key__(self.__debug_str__, False)
     
   @debug.setter
-  def debug(self, debug: bool):
-    self.set(self.__debug_str__, debug)
+  def debug(self, debug: bool = None):
+    if debug is None:
+      self.__remove__(self.__debug_str__)
+    else:
+      self.__set__(self.__debug_str__, debug)
+
+  # Log
+  @property
+  def log(self):
+    return self.__get_key__(self.__log_str__, 0)
+  
+  @log.setter
+  def log(self, channel: int = None):
+    if channel is None:
+      self.__remove__(self.__log_str__)
+    else:
+      self.__set__(self.__log_str__, channel)
 
 settings = Settings()
