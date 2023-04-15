@@ -163,7 +163,7 @@ class Settings:
           lang = self.lang_dict(self.lang_code)
         else:
           lang = self.lang_dict(lang_code)
-      return lang[key]
+      return lang[key].replace('\\n', '\n')
     except Exception as e:
       print("Could not get lang string: "+str(e))
       return key
