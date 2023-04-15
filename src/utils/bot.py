@@ -69,7 +69,7 @@ class MyBot(commands.Bot):
         excluded_commands = json.loads(excluded_commands)
         command_names = []
         for cmd in self.commands:
-          if command_name == cmd.name or command_name in excluded_commands:
+          if command_name == cmd.name or command_name in excluded_commands or command_name in cmd.aliases:
             command_found = True
             break
           command_names.append(cmd.name)
