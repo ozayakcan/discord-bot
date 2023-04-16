@@ -85,58 +85,91 @@ class MyBot(commands.Bot):
         print(str(e))
         
     await super().process_commands(message)
-    
-  
-  async def on_raw_message_delete(self, payload):
-    try:
-      guild = self.get_guild(payload.guild_id)
-      settings.update_currents(guild=guild)
-      if settings.log_channel == payload.channel_id or settings.log_channel == 0:
-        return
-      log_channel = self.get_channel(settings.log_channel)
-      channel = self.get_channel(payload.channel_id)
-      async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
-        if entry.user.bot:
-          break
-        print(f"{entry.target}")
-        embed = discord.Embed(title= settings.lang_string("message_deleted"))
-        embed.add_field(name=settings.lang_string("deleted_by"), value=f"{entry.user.mention}")
-        embed.add_field(name=settings.lang_string("channel"), value=f"<#{channel.id}>")
-        message = payload.cached_message
-        if message is not None:
-          content = message.content
-          if len(content) >= 1010:
-            content = settings.lang_string("message_short").format(content[0:1005])
-          embed.add_field(name=settings.lang_string("message"), value=settings.lang_string("message_content_with_user").format(f"{entry.target.mention}", content) , inline=False)
-        await log_channel.send(embed=embed)
-    except Exception as e:
-      print("on_raw_message_delete(): "+str(e))
 
-  async def on_raw_message_edit(self, payload):
+  # Logs
+  def log_channel_exists(self, settings, current_channel_id: int = None):
+    if current_channel_id is None:
+      return settings.log_channel != 0
+    else:
+      return settings.log_channel != 0 and settings.log_channel != current_channel_id
+
+  # Member Logs
+  async def on_member_join(self, member):
     try:
-      guild = self.get_guild(payload.guild_id)
-      settings.update_currents(guild=guild)
-      if settings.log_channel == payload.channel_id or settings.log_channel == 0:
+      settings.update_currents(guild=member.guild)
+      if not self.log_channel_exists(settings):
         return
+      embed = discord.Embed(title=settings.lang_string("joined_guild"), description=f"{member.mention}")
       log_channel = self.get_channel(settings.log_channel)
-      channel = self.get_channel(payload.channel_id)
-      message = await channel.fetch_message(payload.message_id)
-      if message.author.bot:
-        return
-      embed = discord.Embed(title= settings.lang_string("message_updated"))
-      embed.add_field(name=settings.lang_string("updated_by"), value=f"{message.author.mention}")
-      embed.add_field(name=settings.lang_string("channel"), value=f"<#{channel.id}>")
-      embed.add_field(name=settings.lang_string("url"), value=settings.lang_string("click").format(message.jump_url), inline=False)
-      cached_m = payload.cached_message
-      if cached_m is not None:
-        old_content = cached_m.content
-        if len(old_content) >= 1010:
-          old_content = settings.lang_string("message_short").format(old_content[0:1005])
-        new_content = message.content
-        if len(new_content) >= 1010:
-          new_content = settings.lang_string("message_short").format(new_content[0:1005])
-        embed.add_field(name=settings.lang_string("old_message"), value=old_content)
-        embed.add_field(name=settings.lang_string("new_message"), value=new_content)
       await log_channel.send(embed=embed)
     except Exception as e:
-      print("on_raw_message_edit(): "+str(e))
+      print("on_member_join(): "+str(e))
+      
+  async def on_raw_member_remove(self, payload):
+    try:
+      guild = self.get_guild(payload.guild_id)
+      settings.update_currents(guild=guild)
+      if not self.log_channel_exists(settings):
+        return
+      embed = discord.Embed(title=settings.lang_string("leaved_guild"), description=f"{payload.user.mention}")
+      log_channel = self.get_channel(settings.log_channel)
+      await log_channel.send(embed=embed)
+    except Exception as e:
+      print("on_raw_member_remove(): "+str(e))
+      
+  async def on_member_update(self, before, after):
+    try:
+      guild = self.get_guild(after.guild.id)
+      settings.update_currents(guild=guild)
+      if not self.log_channel_exists(settings):
+        return
+      if before.roles == after.roles:
+        return
+      async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.member_update):
+        description = ""
+        for role_after in after.roles:
+          if role_after not in before.roles:
+            description = description+settings.lang_string("added_role_description").format(f"{after.mention}", f"{role_after.mention}", f"{entry.user.mention}")
+        for role_before in before.roles:
+          if role_before not in after.roles:
+            description = description+settings.lang_string("removed_role_description").format(f"{before.mention}", f"{role_before.mention}", f"{entry.user.mention}")
+        if description != "":
+          embed = discord.Embed(title= settings.lang_string("role_updated"), description=description)
+          log_channel = self.get_channel(settings.log_channel)
+          await log_channel.send(embed=embed)
+    except Exception as e:
+      print("on_member_update(): "+str(e))
+
+  async def ban_log(self, guild, user, action: discord.AuditLogAction, title: str, description: str):
+    settings.update_currents(guild=guild)
+    log_channel = self.get_channel(settings.log_channel)
+    if not self.log_channel_exists(settings):
+      return
+    async for entry in guild.audit_logs(limit=1, action=action):
+      embed = discord.Embed(title=settings.lang_string(title), description=settings.lang_string(description).format(f"{user.mention}", f"{entry.user.mention}"))
+      if entry.reason is not None:
+        embed.add_field(name=settings.lang_string("reason"), value=f"{entry.reason}", inline=False)
+      await log_channel.send(embed=embed)
+
+  async def on_member_ban(self, guild, user):
+    try:
+      await self.ban_log(guild, user, discord.AuditLogAction.ban, "user_banned", "banned_description")
+    except Exception as e:
+      print("on_member_ban(): "+str(e))
+
+  async def on_member_unban(self, guild, user):
+    try:
+      await self.ban_log(guild, user, discord.AuditLogAction.unban, "user_unbanned", "unbanned_description")
+    except Exception as e:
+      print("on_member_unban(): "+str(e))
+
+  # Role logs
+  async def guild_role_update_log(self, role, action: discord.AuditLogAction, title: str, description: str):
+    if not self.log_channel_exists(settings):
+      return
+    async for entry in guild.audit_logs(limit=1, action=action):
+      log_channel = self.get_channel(settings.log_channel)
+  async def on_guild_role_create(self, role):
+    guild = role.guild
+    settings.update_currents(guild=role.guild)
+    self.guild_role_update_log(role, discord.AuditLogAction.role_create, title, description)

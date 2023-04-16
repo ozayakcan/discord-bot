@@ -261,29 +261,34 @@
   
   <log_disabled>Geçerli kanal artık log kanalı değil.</log_disabled>
 
-  <message_deleted>Mesaj Silindi</message_deleted>
+  <joined_server>Sunucudan Ayrıldı</joined_server>
+
+  <leaved_guild>Sunucuya Katıldı</leaved_guild>
+
+  <role_updated>Rol Güncellendi</role_updated>
+
+  <!-- {0} users name -->
+  <!-- {1} role name -->
+  <!-- {2} admin name -->
+  <added_role_description>{0} isimli üyeye {1} rolü {2} tarafından eklendi.\m</added_role_description>
+
+  <!-- {0} users name -->
+  <!-- {1} role name -->
+  <!-- {2} admin name -->
+  <removed_role_description>{0} isimli üyenin {1} rolü {2} tarafından kaldırıldı.\n</removed_role_description>
   
-  <deleted_by>Silen</deleted_by>
+  <user_banned>Üye Banlandı</user_banned>
+
+  <!-- {0} is banned user's name -->
+  <!-- {1} is admin name -->
+  <banned_description>{0} isimli üye {1} tarafından banlandı.</banned_description>
   
-  <channel>Kanal</channel>
+  <reason>Neden</reason>
   
-  <message>Mesaj</message>
+  <user_unbanned>Üye Banı Kaldırıldı</user_unbanned>
 
-  <!-- {0} is short message -->
-  <message_short>{0}...</message_short>
-
-  <!-- {0} is user -->
-  <!-- {1} is message -->
-  <message_content_with_user>{0}: {1}</message_content_with_user>
-
-  <message_updated>Mesaj Düzenlendi</message_updated>
-  
-  <updated_by>Düzenleyen</updated_by>
-
-  <click>[Görmek için tıklayın]({0})</click>
-
-  <old_message>Eski Mesaj</old_message>
-
-  <new_message>Yeni Mesaj</new_message>
+  <!-- {0} is banned user's name -->
+  <!-- {1} is admin name -->
+  <unbanned_description>{0} isimli üyenin banı {1} tarafından kaldırıldı.</unbanned_description>
 
 </langs>

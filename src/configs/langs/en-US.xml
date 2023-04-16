@@ -257,29 +257,34 @@
   
   <log_disabled>Current channel is not log channel anymore.</log_disabled>
 
-  <message_deleted>Message Deleted</message_deleted>
+  <joined_server>Joined to Server</joined_server>
+
+  <leaved_guild>Leaved from Server</leaved_guild>
+
+  <role_updated>Role Updated</role_updated>
+
+  <!-- {0} users name -->
+  <!-- {1} role name -->
+  <!-- {2} admin name -->
+  <added_role_description>{0}'s {1} role has been added by {2}.\n</added_role_description>
+
+  <!-- {0} users name -->
+  <!-- {1} role name -->
+  <!-- {2} admin name -->
+  <removed_role_description>{0}'s {1} role has been removed by {2}.\n</removed_role_description>
   
-  <deleted_by>Deleted By</deleted_by>
+  <user_banned>User Banned</user_banned>
+
+  <!-- {0} is banned user's name -->
+  <!-- {1} is admin name -->
+  <banned_description>{0} banned by {1}.</banned_description>
   
-  <channel>Channel</channel>
+  <reason>Reason</reason>
   
-  <message>Message</message>
+  <user_unbanned>User Unbanned</user_unbanned>
 
-  <!-- {0} is short message -->
-  <message_short>{0}...</message_short>
-
-  <!-- {0} is user -->
-  <!-- {1} is message -->
-  <message_content_with_user>{0}: {1}</message_content_with_user>
-
-  <message_updated>Message Updated</message_updated>
-  
-  <updated_by>Updated By</updated_by>
-
-  <click>[Click to see]({0})</click>
-
-  <old_message>Old Message</old_message>
-
-  <new_message>New Message</new_message>
+  <!-- {0} is banned user's name -->
+  <!-- {1} is admin name -->
+  <unbanned_description>{0} unbanned by {1}.</unbanned_description>
 
 </langs>
