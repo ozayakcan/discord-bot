@@ -30,7 +30,7 @@ class Settings:
     self.__lang_str__ = "lang"
     self.__translate_str__ = "translate"
     self.__debug_str__ = "debug"
-    self.__log_str__ = "log"
+    self.__log_channel_str__ = "log_channel"
 
   async def send_cog_error(self, ctx: commands.Context, error: commands.CommandError):
     await ctx.send(f"{ctx.message.author.mention}, {str(error)}")
@@ -39,10 +39,12 @@ class Settings:
     #else:
     #  await ctx.send(get_lang_string(group=group, id=id, key="an_error_ocurred").format(ctx.clean_prefix, ctx.invoked_with), delete_after=self.message_delete_delay)
 
-  def update_currents(self, ctx: commands.Context = None, message: discord.Message = None, interaction: discord.Interaction = None):
-    if ctx is None and message is None and interaction is None:
+  def update_currents(self, ctx: commands.Context = None, message: discord.Message = None, interaction: discord.Interaction = None, guild: discord.Guild = None):
+    if ctx is None and message is None and interaction is None and guild is None:
       return
-    if message is not None:
+    if guild is not None:
+      is_guild = True
+    elif message is not None:
       is_guild = message.guild
     elif ctx is not None:
       is_guild = ctx.guild
@@ -54,8 +56,10 @@ class Settings:
         settings.current_id = message.guild.id
       elif ctx is not None:
         settings.current_id = ctx.guild.id
-      else:
+      elif interaction is not None:
         settings.current_id = interaction.guild.id
+      else:
+        settings.current_id = guild.id
     else:
       settings.current_group = "users"
       if message is not None:
@@ -211,14 +215,14 @@ class Settings:
 
   # Log
   @property
-  def log(self):
-    return self.__get_key__(self.__log_str__, 0)
+  def log_channel(self):
+    return self.__get_key__(self.__log_channel_str__, 0)
   
-  @log.setter
-  def log(self, channel: int = None):
+  @log_channel.setter
+  def log_channel(self, channel: int = None):
     if channel is None:
-      self.__remove__(self.__log_str__)
+      self.__remove__(self.__log_channel_str__)
     else:
-      self.__set__(self.__log_str__, channel)
+      self.__set__(self.__log_channel_str__, channel)
 
 settings = Settings()

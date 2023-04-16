@@ -85,3 +85,58 @@ class MyBot(commands.Bot):
         print(str(e))
         
     await super().process_commands(message)
+    
+  
+  async def on_raw_message_delete(self, payload):
+    try:
+      guild = self.get_guild(payload.guild_id)
+      settings.update_currents(guild=guild)
+      if settings.log_channel == payload.channel_id or settings.log_channel == 0:
+        return
+      log_channel = self.get_channel(settings.log_channel)
+      channel = self.get_channel(payload.channel_id)
+      async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
+        if entry.user.bot:
+          break
+        print(f"{entry.target}")
+        embed = discord.Embed(title= settings.lang_string("message_deleted"))
+        embed.add_field(name=settings.lang_string("deleted_by"), value=f"{entry.user.mention}")
+        embed.add_field(name=settings.lang_string("channel"), value=f"<#{channel.id}>")
+        message = payload.cached_message
+        if message is not None:
+          content = message.content
+          if len(content) >= 1010:
+            content = settings.lang_string("message_short").format(content[0:1005])
+          embed.add_field(name=settings.lang_string("message"), value=settings.lang_string("message_content_with_user").format(f"{entry.target.mention}", content) , inline=False)
+        await log_channel.send(embed=embed)
+    except Exception as e:
+      print("on_raw_message_delete(): "+str(e))
+
+  async def on_raw_message_edit(self, payload):
+    try:
+      guild = self.get_guild(payload.guild_id)
+      settings.update_currents(guild=guild)
+      if settings.log_channel == payload.channel_id or settings.log_channel == 0:
+        return
+      log_channel = self.get_channel(settings.log_channel)
+      channel = self.get_channel(payload.channel_id)
+      message = await channel.fetch_message(payload.message_id)
+      if message.author.bot:
+        return
+      embed = discord.Embed(title= settings.lang_string("message_updated"))
+      embed.add_field(name=settings.lang_string("updated_by"), value=f"{message.author.mention}")
+      embed.add_field(name=settings.lang_string("channel"), value=f"<#{channel.id}>")
+      embed.add_field(name=settings.lang_string("url"), value=settings.lang_string("click").format(message.jump_url), inline=False)
+      cached_m = payload.cached_message
+      if cached_m is not None:
+        old_content = cached_m.content
+        if len(old_content) >= 1010:
+          old_content = settings.lang_string("message_short").format(old_content[0:1005])
+        new_content = message.content
+        if len(new_content) >= 1010:
+          new_content = settings.lang_string("message_short").format(new_content[0:1005])
+        embed.add_field(name=settings.lang_string("old_message"), value=old_content)
+        embed.add_field(name=settings.lang_string("new_message"), value=new_content)
+      await log_channel.send(embed=embed)
+    except Exception as e:
+      print("on_raw_message_edit(): "+str(e))

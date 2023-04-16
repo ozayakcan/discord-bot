@@ -99,5 +99,21 @@ class Settings(commands.Cog, description=settings.lang_string("settings_cog_desc
         print(str(e))
         raise commands.CommandError(str(e))
 
+  @commands.command(name='log', hidden=True, brief=settings.lang_string("log_desc"), description=settings.lang_string("log_desc"))
+  async def _log(self, ctx: commands.Context):
+    async with ctx.typing():
+      if settings.is_guild(ctx):
+        if not ctx.message.author.guild_permissions.administrator:
+          return await ctx.send(settings.lang_string("admin_permission_err"), delete_after=settings.message_delete_delay)
+        if settings.log_channel != ctx.message.channel.id:
+          settings.log_channel = ctx.message.channel.id
+          await ctx.send(settings.lang_string("log_enabled"), delete_after=settings.message_delete_delay)
+        else:
+          settings.log_channel = None
+          await ctx.send(settings.lang_string("log_disabled"), delete_after=settings.message_delete_delay)
+      else:
+        await ctx.send(settings.lang_string("command_dm"), delete_after=settings.message_delete_delay)
+        
+
 async def setup(bot):
   await bot.add_cog(Settings(bot))

@@ -250,4 +250,36 @@
   <translate_desc>Translates given argument to your language.</translate_desc>
 
   <translate_arg_desc>Word, sentence or paragraph.</translate_arg_desc>
+
+  <log_desc>Toggle current channel as log channel.</log_desc>
+  
+  <log_enabled>Current channel set as log channel.</log_enabled>
+  
+  <log_disabled>Current channel is not log channel anymore.</log_disabled>
+
+  <message_deleted>Message Deleted</message_deleted>
+  
+  <deleted_by>Deleted By</deleted_by>
+  
+  <channel>Channel</channel>
+  
+  <message>Message</message>
+
+  <!-- {0} is short message -->
+  <message_short>{0}...</message_short>
+
+  <!-- {0} is user -->
+  <!-- {1} is message -->
+  <message_content_with_user>{0}: {1}</message_content_with_user>
+
+  <message_updated>Message Updated</message_updated>
+  
+  <updated_by>Updated By</updated_by>
+
+  <click>[Click to see]({0})</click>
+
+  <old_message>Old Message</old_message>
+
+  <new_message>New Message</new_message>
+
 </langs>

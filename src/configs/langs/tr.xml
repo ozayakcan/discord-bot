@@ -254,4 +254,36 @@
   <translate_desc>Girilen veriyi dilinize çevirir.</translate_desc>
 
   <translate_arg_desc>Kelime, cümle ya da paragraf.</translate_arg_desc>
+
+  <log_desc>Geçerli kanalı log kanalı olarak ayarlar.</log_desc>
+  
+  <log_enabled>Geçerli kanal log kanalı olarak ayarlandı.</log_enabled>
+  
+  <log_disabled>Geçerli kanal artık log kanalı değil.</log_disabled>
+
+  <message_deleted>Mesaj Silindi</message_deleted>
+  
+  <deleted_by>Silen</deleted_by>
+  
+  <channel>Kanal</channel>
+  
+  <message>Mesaj</message>
+
+  <!-- {0} is short message -->
+  <message_short>{0}...</message_short>
+
+  <!-- {0} is user -->
+  <!-- {1} is message -->
+  <message_content_with_user>{0}: {1}</message_content_with_user>
+
+  <message_updated>Mesaj Düzenlendi</message_updated>
+  
+  <updated_by>Düzenleyen</updated_by>
+
+  <click>[Görmek için tıklayın]({0})</click>
+
+  <old_message>Eski Mesaj</old_message>
+
+  <new_message>Yeni Mesaj</new_message>
+
 </langs>
