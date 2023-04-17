@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from ._extensions import get_extensions
-from ._settings import settings
+from ._settings import settings, Log_Voice_State
 from .chat_bot import chat_bot
 from .env import getenv
 
@@ -206,4 +206,62 @@ class MyBot(commands.Bot):
         await log_channel.send(embed=embed)
     except Exception as e:
       print("on_guild_role_update(): "+str(e))
-      
+
+  def voice_state_embed(self, settings, entry):
+    try:
+      title = ""
+      description = ""
+      if entry.action == discord.AuditLogAction.member_move:
+        title = settings.lang_string("member_moved")
+        description = settings.lang_string("member_moved_description").format(f"{entry.user.mention}", str(entry.extra.count), f"{entry.extra.channel.mention}")
+      elif entry.action == discord.AuditLogAction.member_disconnect:
+        title = settings.lang_string("member_disconnected")
+        description = settings.lang_string("member_disconnected_description").format(f"{entry.user.mention}", str(entry.extra.count))
+      if title != "" and description != "":
+        embed = discord.Embed(title=title, description=description)
+        return embed
+      else:
+        return None
+    except Exception as e:
+      print("voice_state_embed(): "+str(e))
+      return None
+  
+  async def on_audit_log_entry_create(self, entry):
+    try:
+      if entry.action == discord.AuditLogAction.member_move or entry.action == discord.AuditLogAction.member_disconnect:
+        guild = entry.guild
+        settings.update_currents(guild=guild)
+        embed = self.voice_state_embed(settings, entry)
+        if embed is not None:
+          log_channel = await guild.fetch_channel(settings.log_channel)
+          message = await log_channel.send(embed=embed)
+          settings.add_log_vcs(entry.id, Log_Voice_State(entry.extra.count or 0, message.id, str(entry.action)))
+    except Exception as e:
+      print("on_audit_log_entry_create(): "+str(e))
+
+  async def on_voice_state_update(self, member, before, after):
+    try:
+      action = None
+      if before.channel is not None and after.channel is None:
+        action = discord.AuditLogAction.member_disconnect
+      elif before.channel is not None and after.channel is not None:
+        if before.channel.id != after.channel.id:
+          action = discord.AuditLogAction.member_move
+      if action is not None:
+        guild = member.guild
+        settings.update_currents(guild=guild)
+        async for entry in guild.audit_logs(limit=None, action= action):
+          guild = entry.guild
+          log_v = settings.log_vcs
+          if f"{entry.id}" in log_v:
+            a_log = log_v[f"{entry.id}"]
+            if a_log.action == str(entry.action) and entry.extra.count != a_log.count:
+              embed = self.voice_state_embed(settings, entry)
+              if embed is not None:
+                log_channel = await guild.fetch_channel(settings.log_channel)
+                message = await log_channel.fetch_message(a_log.message_id)
+                if message is not None:
+                  await message.edit(embed=embed)
+                  settings.add_log_vcs(entry.id, Log_Voice_State(entry.extra.count or 0, message.id, str(entry.action)))
+    except Exception as e:
+      print("on_voice_state_update(): "+str(e))

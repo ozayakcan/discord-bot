@@ -306,5 +306,18 @@
   <old_name>Old Name</old_name>
   
   <old_name_value>**{0}**</old_name_value>
+  
+  <member_moved>Member Moved</member_moved>
+
+  <!-- {0} is admin name -->
+  <!-- {1} is user count -->
+  <!-- {2} is target channel name -->
+  <member_moved_description>{0} moved **{1} users** to {2}</member_moved_description>
+  
+  <member_disconnected>Disconnected From Voice</member_disconnected>
+
+  <!-- {0} is admin name -->
+  <!-- {1} is user count -->
+  <member_disconnected_description>{0} disconnected **{1} users** from voice</member_disconnected_description>
 
 </langs>

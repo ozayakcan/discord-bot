@@ -10,7 +10,41 @@ from .env import getenv
 __all__ = [
   "settings",
   "Settings",
+  "Log_Voice_State"
 ]
+
+class Log_Voice_State:
+  def __init__(self, count, message_id, action):
+    self.__count__ = count
+    self.__message_id__ = message_id
+    self.__action__ = action
+  
+  @property
+  def count(self):
+    return self.__count__
+  
+  @property
+  def message_id(self):
+    return self.__message_id__
+
+  @property
+  def action(self):
+    return self.__action__
+
+  def to_dict(self):
+    items = {
+      "count": self.count,
+      "message_id": self.message_id,
+      "action": self.action
+    }
+    return items
+    
+  @classmethod
+  def from_dict(cls, items:dict):
+    try:
+      return cls(items["count"], items["message_id"], items["action"])
+    except:
+      return None
 
 class Settings:
   def __init__(self):
@@ -31,6 +65,7 @@ class Settings:
     self.__translate_str__ = "translate"
     self.__debug_str__ = "debug"
     self.__log_channel_str__ = "log_channel"
+    self.__log_vcs_str__ = "log_vcs"
 
   async def send_cog_error(self, ctx: commands.Context, error: commands.CommandError):
     await ctx.send(f"{ctx.message.author.mention}, {str(error)}")
@@ -225,4 +260,12 @@ class Settings:
     else:
       self.__set__(self.__log_channel_str__, channel)
 
+  @property
+  def log_vcs(self):
+    return {k: Log_Voice_State.from_dict(v) for k,v in self.__get_key__(self.__log_vcs_str__, {}).items()}
+
+  def add_log_vcs(self, id:int, item:Log_Voice_State):
+    log_v = self.log_vcs
+    log_v[f"{id}"] = item
+    self.__set__(self.__log_vcs_str__, {k: v.to_dict() for k,v in log_v.items()})
 settings = Settings()

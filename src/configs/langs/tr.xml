@@ -310,5 +310,19 @@
   <old_name>Rolün Önceki Adı</old_name>
   
   <old_name_value>**{0}**</old_name_value>
+  
+  <member_moved>Kullanıcı Taşındı</member_moved>
+
+  <!-- {0} is admin name -->
+  <!-- {1} is user count -->
+  <!-- {2} is target channel name -->
+  <member_moved_description>{0}, **{1} kullanıcıyı** {2} kanalına taşıdı.</member_moved_description>
+  
+  <member_disconnected>Ses Kanalından Atıldı</member_disconnected>
+
+  <!-- {0} is admin name -->
+  <!-- {1} is user count -->
+  <member_disconnected_description>{0}, **{1} kullanıcıyı**  ses kanalından attı.</member_disconnected_description>
+
 
 </langs>
