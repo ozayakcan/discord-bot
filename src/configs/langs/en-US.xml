@@ -299,9 +299,12 @@
   <!-- {1} is admin name -->
   <role_deleted_description>**{0}** role deleted by {1}.</role_deleted_description>
 
-  <!-- {0} old role name -->
-  <!-- {1} new role name -->
-  <!-- {2} admin name -->
-  <role_renamed_description>**{0}** role renamed as {1} by {2}.</role_renamed_description>
+  <!-- {0} role name -->
+  <!-- {1} admin name -->
+  <role_updated_description>{0} role updated by {1}.</role_updated_description>
+  
+  <old_name>Old Name</old_name>
+  
+  <old_name_value>**{0}**</old_name_value>
 
 </langs>

@@ -96,11 +96,12 @@ class MyBot(commands.Bot):
   # Member Logs
   async def on_member_join(self, member):
     try:
-      settings.update_currents(guild=member.guild)
+      guild = member.guild
+      settings.update_currents(guild=guild)
       if not self.log_channel_exists(settings):
         return
       embed = discord.Embed(title=settings.lang_string("joined_guild"), description=f"{member.mention}")
-      log_channel = self.get_channel(settings.log_channel)
+      log_channel = await guild.fetch_channel(settings.log_channel)
       await log_channel.send(embed=embed)
     except Exception as e:
       print("on_member_join(): "+str(e))
@@ -112,7 +113,7 @@ class MyBot(commands.Bot):
       if not self.log_channel_exists(settings):
         return
       embed = discord.Embed(title=settings.lang_string("leaved_guild"), description=f"{payload.user.mention}")
-      log_channel = self.get_channel(settings.log_channel)
+      log_channel = await guild.fetch_channel(settings.log_channel)
       await log_channel.send(embed=embed)
     except Exception as e:
       print("on_raw_member_remove(): "+str(e))
@@ -135,20 +136,20 @@ class MyBot(commands.Bot):
             description = description+settings.lang_string("removed_role_description").format(f"{before.mention}", f"{role_before.mention}", f"{entry.user.mention}")
         if description != "":
           embed = discord.Embed(title= settings.lang_string("role_updated"), description=description)
-          log_channel = self.get_channel(settings.log_channel)
+          log_channel = await guild.fetch_channel(settings.log_channel)
           await log_channel.send(embed=embed)
     except Exception as e:
       print("on_member_update(): "+str(e))
 
   async def ban_log(self, guild, user, action: discord.AuditLogAction, title: str, description: str):
     settings.update_currents(guild=guild)
-    log_channel = self.get_channel(settings.log_channel)
     if not self.log_channel_exists(settings):
       return
     async for entry in guild.audit_logs(limit=1, action=action):
       embed = discord.Embed(title=settings.lang_string(title), description=settings.lang_string(description).format(f"{user.mention}", f"{entry.user.mention}"))
       if entry.reason is not None:
         embed.add_field(name=settings.lang_string("reason"), value=f"{entry.reason}", inline=False)
+      log_channel = await guild.fetch_channel(settings.log_channel)
       await log_channel.send(embed=embed)
 
   async def on_member_ban(self, guild, user):
@@ -176,7 +177,7 @@ class MyBot(commands.Bot):
         description = settings.lang_string(description).format(f"{role.mention}", f"{entry.user.mention}")
   
       embed = discord.Embed(title=settings.lang_string(title), description=description)
-      log_channel = self.get_channel(settings.log_channel)
+      log_channel = await guild.fetch_channel(settings.log_channel)
       await log_channel.send(embed=embed)
   
   async def on_guild_role_create(self, role):
@@ -192,14 +193,17 @@ class MyBot(commands.Bot):
       print("on_guild_role_delete(): "+str(e))
 
   async def on_guild_role_update(self, before, after):
-    guild = after.guild
-    settings.update_currents(guild=after.guild)
-    if not self.log_channel_exists(settings):
-      return
-    if before.name == after.name:
-      return
-    async for entry in guild.audit_logs(limit=1, action= discord.AuditLogAction.role_update):
-      embed = discord.Embed(title=settings.lang_string("role_updated"), description=settings.lang_string("role_renamed_description").format(f"{before.name}", f"{after.mention}", f"{entry.user.mention}"))
-      log_channel = self.get_channel(settings.log_channel)
-      await log_channel.send(embed=embed)
+    try:
+      guild = after.guild
+      settings.update_currents(guild=after.guild)
+      if not self.log_channel_exists(settings):
+        return
+      async for entry in guild.audit_logs(limit=1, action= discord.AuditLogAction.role_update):
+        embed = discord.Embed(title=settings.lang_string("role_updated"), description=settings.lang_string("role_updated_description").format(f"{after.mention}", f"{entry.user.mention}"))
+        if before.name != after.name:
+          embed.add_field(name=settings.lang_string("old_name"), value=settings.lang_string("old_name_value").format(f"{before.name}"))
+        log_channel = await guild.fetch_channel(settings.log_channel)
+        await log_channel.send(embed=embed)
+    except Exception as e:
+      print("on_guild_role_update(): "+str(e))
       

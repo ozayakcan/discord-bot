@@ -261,16 +261,16 @@
   
   <log_disabled>Geçerli kanal artık log kanalı değil.</log_disabled>
 
-  <joined_server>Sunucudan Ayrıldı</joined_server>
+  <joined_guild>Sunucuya Katıldı</joined_guild>
 
-  <leaved_guild>Sunucuya Katıldı</leaved_guild>
+  <leaved_guild>Sunucudan Ayrıldı</leaved_guild>
 
   <role_updated>Rol Güncellendi</role_updated>
 
   <!-- {0} users name -->
   <!-- {1} role name -->
   <!-- {2} admin name -->
-  <added_role_description>{0} isimli üyeye {1} rolü {2} tarafından eklendi.\m</added_role_description>
+  <added_role_description>{0} isimli üyeye {1} rolü {2} tarafından verildi.\n</added_role_description>
 
   <!-- {0} users name -->
   <!-- {1} role name -->
@@ -303,9 +303,12 @@
   <!-- {1} is admin name -->
   <role_deleted_description>**{0}** rolü {1} tarafından silindi.</role_deleted_description>
 
-  <!-- {0} old role name -->
-  <!-- {1} new role name -->
-  <!-- {2} admin name -->
-  <role_renamed_description>**{0}** rolü, {2} tarafından {1} olarak yeniden adlandırıldı.</role_renamed_description>
+  <!-- {0} role name -->
+  <!-- {1} admin name -->
+  <role_updated_description>{0} rolü, {1} tarafından güncellendi.</role_updated_description>
+  
+  <old_name>Rolün Önceki Adı</old_name>
+  
+  <old_name_value>**{0}**</old_name_value>
 
 </langs>
