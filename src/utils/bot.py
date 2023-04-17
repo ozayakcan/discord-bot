@@ -165,11 +165,41 @@ class MyBot(commands.Bot):
 
   # Role logs
   async def guild_role_update_log(self, role, action: discord.AuditLogAction, title: str, description: str):
+    guild = role.guild
+    settings.update_currents(guild=role.guild)
     if not self.log_channel_exists(settings):
       return
     async for entry in guild.audit_logs(limit=1, action=action):
+      if action == discord.AuditLogAction.role_delete:
+        description = settings.lang_string(description).format(f"{role.name}", f"{entry.user.mention}")
+      else:
+        description = settings.lang_string(description).format(f"{role.mention}", f"{entry.user.mention}")
+  
+      embed = discord.Embed(title=settings.lang_string(title), description=description)
       log_channel = self.get_channel(settings.log_channel)
+      await log_channel.send(embed=embed)
+  
   async def on_guild_role_create(self, role):
-    guild = role.guild
-    settings.update_currents(guild=role.guild)
-    self.guild_role_update_log(role, discord.AuditLogAction.role_create, title, description)
+    try:
+      await self.guild_role_update_log(role, discord.AuditLogAction.role_create, "role_created", "role_created_description")
+    except Exception as e:
+      print("on_guild_role_create(): "+str(e))
+
+  async def on_guild_role_delete(self, role):
+    try:
+      await self.guild_role_update_log(role, discord.AuditLogAction.role_delete, "role_deleted", "role_deleted_description")
+    except Exception as e:
+      print("on_guild_role_delete(): "+str(e))
+
+  async def on_guild_role_update(self, before, after):
+    guild = after.guild
+    settings.update_currents(guild=after.guild)
+    if not self.log_channel_exists(settings):
+      return
+    if before.name == after.name:
+      return
+    async for entry in guild.audit_logs(limit=1, action= discord.AuditLogAction.role_update):
+      embed = discord.Embed(title=settings.lang_string("role_updated"), description=settings.lang_string("role_renamed_description").format(f"{before.name}", f"{after.mention}", f"{entry.user.mention}"))
+      log_channel = self.get_channel(settings.log_channel)
+      await log_channel.send(embed=embed)
+      

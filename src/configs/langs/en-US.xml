@@ -286,5 +286,22 @@
   <!-- {0} is banned user's name -->
   <!-- {1} is admin name -->
   <unbanned_description>{0} unbanned by {1}.</unbanned_description>
+  
+  <role_created>Role Created</role_created>
+
+  <!-- {0} is role name -->
+  <!-- {1} is admin name -->
+  <role_created_description>**{0}** role created by {1}.</role_created_description>
+
+  <role_deleted>Role Deleted</role_deleted>
+
+  <!-- {0} is role name -->
+  <!-- {1} is admin name -->
+  <role_deleted_description>**{0}** role deleted by {1}.</role_deleted_description>
+
+  <!-- {0} old role name -->
+  <!-- {1} new role name -->
+  <!-- {2} admin name -->
+  <role_renamed_description>**{0}** role renamed as {1} by {2}.</role_renamed_description>
 
 </langs>

@@ -290,5 +290,22 @@
   <!-- {0} is banned user's name -->
   <!-- {1} is admin name -->
   <unbanned_description>{0} isimli üyenin banı {1} tarafından kaldırıldı.</unbanned_description>
+  
+  <role_created>Rol Oluşturuldu</role_created>
+
+  <!-- {0} is role name -->
+  <!-- {1} is admin name -->
+  <role_created_description>{0} rolü {1} tarafından oluşturuldu.</role_created_description>
+
+  <role_deleted>Rol Silindi</role_deleted>
+
+  <!-- {0} is role name -->
+  <!-- {1} is admin name -->
+  <role_deleted_description>**{0}** rolü {1} tarafından silindi.</role_deleted_description>
+
+  <!-- {0} old role name -->
+  <!-- {1} new role name -->
+  <!-- {2} admin name -->
+  <role_renamed_description>**{0}** rolü, {2} tarafından {1} olarak yeniden adlandırıldı.</role_renamed_description>
 
 </langs>
