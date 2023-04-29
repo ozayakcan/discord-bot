@@ -72,7 +72,7 @@ class Settings:
     #if get_debug(group=group, id=id):
     #  await ctx.send(str(error), delete_after=self.message_delete_delay)
     #else:
-    #  await ctx.send(get_lang_string(group=group, id=id, key="an_error_ocurred").format(ctx.clean_prefix, ctx.invoked_with), delete_after=self.message_delete_delay)
+    #  await ctx.send(get_lang_string(group=group, id=id, key="an_error_ocurred").format(""), delete_after=self.message_delete_delay)
 
   def update_currents(self, ctx: commands.Context = None, message: discord.Message = None, interaction: discord.Interaction = None, guild: discord.Guild = None):
     if ctx is None and message is None and interaction is None and guild is None:

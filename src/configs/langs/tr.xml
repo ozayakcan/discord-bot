@@ -66,10 +66,8 @@
 
   <command_dm>Bu komut direkt mesajlarda kullanılamaz.</command_dm>
 
-  <!-- {0} is command prefix -->
-  <!-- {1} is command name -->
-  <!-- {2} is error text -->
-  <an_error_ocurred>{0}{1} komutu kullanılırken bir hata oluştu. Hata: {2}</an_error_ocurred>
+  <!-- {0} is error text -->
+  <an_error_ocurred>Bir hata oluştu. {0}</an_error_ocurred>
 
   <join_desc>Ses kanalına katılır.</join_desc>
 

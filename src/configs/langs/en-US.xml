@@ -66,10 +66,8 @@
 
   <command_dm>This command can't be used in DM channels.</command_dm>
 
-  <!-- {0} is command prefix -->
-  <!-- {1} is command name -->
-  <!-- {2} is error text -->
-  <an_error_ocurred>An error occurred while invoking {0}{1} command. Error: {2}</an_error_ocurred>
+  <!-- {0} is error text -->
+  <an_error_ocurred>An error occurred. {0}</an_error_ocurred>
 
   <join_desc>Joins a voice channel.</join_desc>
 
