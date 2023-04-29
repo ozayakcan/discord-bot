@@ -15,5 +15,5 @@ try:
   bot.run_async()
 except discord.errors.HTTPException:
     print("\n\n\nBLOCKED BY RATE LIMITS\nRESTARTING NOW\n\n\n")
-    system('kill 1')
     system("python3 ./src/utils/restarter.py")
+    system('kill 1')

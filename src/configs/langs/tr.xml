@@ -226,10 +226,6 @@
 
   <admin_permission_err>Bu komutu kullanabilmek için yönetici yetkiniz bulunmalıdır.</admin_permission_err>
 
-  <no_track_leave_msg>{} içinde herhangi bir parça çalınmadı. Kanaldan çıkılıyor.</no_track_leave_msg>
-
-  <no_user_leave_msg>Ses kanalında hiç kullanıcı yok. Kanaldan çıkılıyor.</no_user_leave_msg>
-
   <!-- {0} is duration -->
   <no_track_leave_msg>{0} içinde herhangi bir parça çalınmadığı için kanaldan çıkılıyor.</no_track_leave_msg>
 
