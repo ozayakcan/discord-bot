@@ -38,6 +38,8 @@
   <!-- {0} is url or query in music bot -->
   <yt_could_not_fetch>`{0}` getirilemedi</yt_could_not_fetch>
 
+  <mix_not_supported>Mix türü desteklenmiyor. Lütfen bir playlist, parça ya da arama terimi gönderin.</mix_not_supported>
+
   <!-- {0} is url or query in music bot -->
   <yt_could_not_retrieve>`{0}` ile eşleşen sonuçlar getirilemedi.</yt_could_not_retrieve>
 

@@ -38,6 +38,8 @@
   <!-- {0} is url or query in music bot -->
   <yt_could_not_fetch>Couldn't fetch `{0}`</yt_could_not_fetch>
 
+  <mix_not_supported>Mix not supported. Please enter playlis or track url or search query.</mix_not_supported>
+
   <!-- {0} is url or query in music bot -->
   <yt_could_not_retrieve>Couldn't retrieve any matches for `{0}`</yt_could_not_retrieve>
 
